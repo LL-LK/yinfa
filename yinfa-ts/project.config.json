@@ -40,7 +40,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
-  "appid": "wx1234567890123456",
+  "appid": "YOUR_APPID_HERE",
   "projectname": "yinfa",
   "debugOptions": {
     "hidedInDevtools": []
