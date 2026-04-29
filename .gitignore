@@ -131,3 +131,35 @@ dmypy.json
 # IDE
 .vscode/
 .idea/
+
+# Node.js
+node_modules/
+yinfa-ts/frontend/node_modules/
+yinfa-ts/backend/server/node_modules/
+
+# Build output
+yinfa-ts/frontend/dist/
+
+# Database files
+yinfa-ts/backend/data/
+yinfa-ts/data/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
