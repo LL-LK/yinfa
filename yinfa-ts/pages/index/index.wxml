@@ -1,7 +1,7 @@
 <view class="home">
   <swiper class="swiper" indicator-dots autoplay circular interval="3000">
     <swiper-item wx:for="{{imgUrls}}" wx:key="index">
-      <image src="{{item}}" class="slide-image" mode="aspectFill" />
+      <image src="{{item}}" class="slide-image" mode="aspectFill" lazy-load />
     </swiper-item>
   </swiper>
 
@@ -19,7 +19,7 @@
     <view class="newest-box">
       <view class="newest-list" wx:for="{{modules}}" wx:key="index" bindtap="goPage" data-path="{{item.path}}">
         <view class="icon-box">
-          <image src="{{item.icon}}" class="icon-image" mode="aspectFit" />
+          <image src="{{item.icon}}" class="icon-image" mode="aspectFit" lazy-load />
         </view>
         <view class="newest-text">{{item.name}}</view>
       </view>
@@ -30,10 +30,14 @@
     <view class="newest-title">
       <text>热门商品</text>
     </view>
-    <view class="products-box">
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+    <view wx:else class="products-box">
       <view class="product-item" wx:for="{{products}}" wx:key="index" bindtap="goDetails" data-id="{{item.id}}">
         <view class="product-image">
-          <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+          <image src="{{item.image}}" class="product-img" mode="aspectFill" lazy-load />
         </view>
         <view class="product-info">
           <view class="product-name">{{item.name}}</view>

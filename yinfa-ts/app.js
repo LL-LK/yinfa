@@ -29,6 +29,7 @@ App({
           'content-type': 'application/json',
           ...header
         },
+        timeout: 5000,
         success: (res) => {
           if (res.data.code === 0) {
             resolve(res.data.data)
