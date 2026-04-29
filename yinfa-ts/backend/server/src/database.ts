@@ -3,7 +3,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 let db: Database | null = null;
-const dbPath = path.join(__dirname, '..', '..', 'data', 'shop.db');
+// 数据库路径：指向项目根目录的 data 文件夹
+const dataDir = path.join(__dirname, '..', '..', '..', 'data');
+const dbPath = path.join(dataDir, 'shop.db');
 
 export async function initDatabase(): Promise<Database> {
   if (db) return db;
@@ -109,11 +111,10 @@ function insertSampleData(database: Database): void {
   ensureDataDir();
   const data = database.export();
   const buffer = Buffer.from(data);
-  fs.writeFileSync(path.join(__dirname, '..', '..', 'data', 'shop.db'), buffer);
+  fs.writeFileSync(dbPath, buffer);
 }
 
 function ensureDataDir(): void {
-  const dataDir = path.join(__dirname, '..', '..', 'data');
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
@@ -131,6 +132,6 @@ export function saveDatabase(): void {
     ensureDataDir();
     const data = db.export();
     const buffer = Buffer.from(data);
-    fs.writeFileSync(path.join(__dirname, '..', '..', 'data', 'shop.db'), buffer);
+    fs.writeFileSync(dbPath, buffer);
   }
 }
