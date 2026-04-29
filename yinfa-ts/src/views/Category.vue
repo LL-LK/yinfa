@@ -1,0 +1,168 @@
+<template>
+  <div class="category">
+    <div class="category-header">
+      <h1>商品分类</h1>
+    </div>
+    <div class="category-content">
+      <div class="sidebar">
+        <div v-for="cat in categories" :key="cat.id"
+             :class="['category-item', { active: selectedCategory === cat.id }]"
+             @click="selectedCategory = cat.id">
+          {{ cat.name }}
+        </div>
+      </div>
+      <div class="main">
+        <div class="product-grid">
+          <div class="product-item" v-for="product in filteredProducts" :key="product.id">
+            <router-link :to="`/details?id=${product.id}`">
+              <div class="product-image">
+                <img :src="product.image" :alt="product.name" loading="lazy" />
+              </div>
+              <div class="product-name">{{ product.name }}</div>
+              <div class="product-price">¥{{ product.price }}</div>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const selectedCategory = ref(1)
+
+const categories = [
+  { id: 1, name: '门票' },
+  { id: 2, name: '酒店' },
+  { id: 3, name: '美食' },
+  { id: 4, name: '线路' },
+  { id: 5, name: '其他' }
+]
+
+const products = [
+  { id: 1, name: '故宫门票', price: 60, categoryId: 1, image: new URL('../assets/image/1.jpg', import.meta.url).href },
+  { id: 2, name: '长城门票', price: 45, categoryId: 1, image: new URL('../assets/image/2.jpg', import.meta.url).href },
+  { id: 3, name: '颐和园门票', price: 30, categoryId: 1, image: new URL('../assets/image/3.jpg', import.meta.url).href },
+  { id: 4, name: '北京饭店', price: 800, categoryId: 2, image: new URL('../assets/image/4.jpg', import.meta.url).href },
+  { id: 5, name: '王府井酒店', price: 450, categoryId: 2, image: new URL('../assets/image/5.jpg', import.meta.url).href },
+  { id: 6, name: '北京一日游', price: 299, categoryId: 4, image: new URL('../assets/image/6.jpg', import.meta.url).href },
+  { id: 7, name: '北京烤鸭', price: 198, categoryId: 3, image: new URL('../assets/image/72.png', import.meta.url).href },
+  { id: 8, name: '故宫书签', price: 38, categoryId: 5, image: new URL('../assets/image/82.png', import.meta.url).href }
+]
+
+const filteredProducts = computed(() => {
+  return products.filter(p => p.categoryId === selectedCategory.value)
+})
+</script>
+
+<style scoped>
+.category {
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-header {
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.category-header h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.category-content {
+  flex: 1;
+  display: flex;
+}
+
+.sidebar {
+  width: 100px;
+  background-color: #fff;
+  border-right: 1px solid #eee;
+}
+
+.category-item {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.category-item.active {
+  background-color: #fff;
+  color: #ff6b00;
+  font-weight: 600;
+  border-left: 3px solid #ff6b00;
+}
+
+.main {
+  flex: 1;
+  padding: 16px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.product-item {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.product-item:hover {
+  transform: translateY(-2px);
+}
+
+.product-item a {
+  text-decoration: none;
+  color: inherit;
+  padding: 12px;
+  display: block;
+}
+
+.product-image {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-name {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff6b00;
+}
+</style>

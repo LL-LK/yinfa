@@ -1,0 +1,8 @@
+<view class="category">
+  <view class="category-list">
+    <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="goList" data-slug="{{item.slug}}" data-name="{{item.name}}">
+      <view class="category-icon">📦</view>
+      <view class="category-name">{{item.name}}</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,26 @@
+<view class="search-page">
+  <view class="search-bar">
+    <input class="search-input" placeholder="请输入搜索关键词" value="{{keyword}}" bindinput="inputChange" confirm-type="search" bindconfirm="search" />
+    <view class="search-btn" bindtap="search">搜索</view>
+  </view>
+
+  <view class="search-result" wx:if="{{products.length > 0}}">
+    <view class="result-count">找到{{products.length}}个结果</view>
+    <view class="products-box">
+      <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
+        <view class="product-image">
+          <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+        </view>
+        <view class="product-info">
+          <view class="product-name">{{item.name}}</view>
+          <view class="product-desc">{{item.description}}</view>
+          <view class="product-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text>暂无搜索结果</text>
+  </view>
+</view>

@@ -1,0 +1,46 @@
+<view class="address">
+  <view class="address-list" wx:if="{{addresses.length > 0}}">
+    <view class="address-item" wx:for="{{addresses}}" wx:key="id">
+      <view class="address-header">
+        <text class="address-name">{{item.full_name}}</text>
+        <text class="address-phone">{{item.phone}}</text>
+        <text class="address-default" wx:if="{{item.is_default}}">默认</text>
+      </view>
+      <view class="address-detail">
+        <text>{{item.city}} {{item.address_line}}</text>
+      </view>
+      <view class="address-postal" wx:if="{{item.postal_code}}">邮编: {{item.postal_code}}</view>
+    </view>
+  </view>
+
+  <view class="address-form">
+    <view class="form-title">添加新地址</view>
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入收货人姓名" value="{{formData.full_name}}" bindinput="inputChange" data-field="full_name" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">联系电话</text>
+      <input class="form-input" placeholder="请输入联系电话" value="{{formData.phone}}" bindinput="inputChange" data-field="phone" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">所在城市</text>
+      <input class="form-input" placeholder="请输入城市" value="{{formData.city}}" bindinput="inputChange" data-field="city" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">详细地址</text>
+      <textarea class="form-textarea" placeholder="请输入详细地址" value="{{formData.address_line}}" bindinput="inputChange" data-field="address_line" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">邮政编码</text>
+      <input class="form-input" placeholder="请输入邮编" value="{{formData.postal_code}}" bindinput="inputChange" data-field="postal_code" />
+    </view>
+    <view class="form-item checkbox-item">
+      <text class="form-label">设为默认地址</text>
+      <checkbox-group bindchange="checkboxChange">
+        <checkbox value="1" checked="{{formData.is_default}}" />
+      </checkbox-group>
+    </view>
+    <view class="submit-btn" bindtap="submitAddress">保存地址</view>
+  </view>
+</view>

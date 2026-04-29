@@ -1,0 +1,26 @@
+<view class="details" wx:if="{{product}}">
+  <view class="product-image">
+    <image src="{{product.image_url}}" class="detail-img" mode="widthFix" />
+  </view>
+  
+  <view class="product-info">
+    <view class="product-name">{{product.name}}</view>
+    <view class="product-price">¥{{product.price}}</view>
+    <view class="product-desc">{{product.description}}</view>
+    <view class="product-stock">库存: {{product.stock}}件</view>
+  </view>
+
+  <view class="quantity-section">
+    <text class="quantity-label">数量:</text>
+    <view class="quantity-control">
+      <view class="quantity-btn" bindtap="decrease">-</view>
+      <text class="quantity-value">{{quantity}}</text>
+      <view class="quantity-btn" bindtap="increase">+</view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="bottom-btn cart-btn" bindtap="addToCart">加入购物车</view>
+    <view class="bottom-btn buy-btn" bindtap="buyNow">立即购买</view>
+  </view>
+</view>

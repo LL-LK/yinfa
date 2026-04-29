@@ -1,0 +1,14 @@
+<view class="map">
+  <map 
+    class="map-view"
+    :latitude="latitude"
+    :longitude="longitude"
+    :markers="markers"
+    @markertap="onMarkerTap"
+    scale="13"
+    show-location
+  />
+  <view class="map-tips">
+    <text>点击标记查看景点信息</text>
+  </view>
+</view>

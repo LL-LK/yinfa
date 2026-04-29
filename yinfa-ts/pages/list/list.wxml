@@ -1,0 +1,17 @@
+<view class="list">
+  <view class="list-header">
+    <text>{{name}}</text>
+  </view>
+  <view class="products-box">
+    <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
+      <view class="product-image">
+        <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+      </view>
+      <view class="product-info">
+        <view class="product-name">{{item.name}}</view>
+        <view class="product-desc">{{item.description}}</view>
+        <view class="product-price">¥{{item.price}}</view>
+      </view>
+    </view>
+  </view>
+</view>

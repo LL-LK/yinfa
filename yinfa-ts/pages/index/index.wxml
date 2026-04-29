@@ -1,0 +1,45 @@
+<view class="home">
+  <swiper class="swiper" indicator-dots autoplay circular interval="3000">
+    <swiper-item wx:for="{{imgUrls}}" wx:key="index">
+      <image src="{{item}}" class="slide-image" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <view class="search" bindtap="goSearch">
+    <view class="search-text">
+      <text class="search-icon">🔍</text>
+      <text>搜索商品、景点</text>
+    </view>
+  </view>
+
+  <view class="newest">
+    <view class="newest-title">
+      <text>功能模块</text>
+    </view>
+    <view class="newest-box">
+      <view class="newest-list" wx:for="{{modules}}" wx:key="index" bindtap="goPage" data-path="{{item.path}}">
+        <view class="icon-box">
+          <image src="{{item.icon}}" class="icon-image" mode="aspectFit" />
+        </view>
+        <view class="newest-text">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="products">
+    <view class="newest-title">
+      <text>热门商品</text>
+    </view>
+    <view class="products-box">
+      <view class="product-item" wx:for="{{products}}" wx:key="index" bindtap="goDetails" data-id="{{item.id}}">
+        <view class="product-image">
+          <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+        </view>
+        <view class="product-info">
+          <view class="product-name">{{item.name}}</view>
+          <view class="product-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
