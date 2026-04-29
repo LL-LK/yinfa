@@ -1,10 +1,10 @@
 <view class="map">
   <map 
     class="map-view"
-    :latitude="latitude"
-    :longitude="longitude"
-    :markers="markers"
-    @markertap="onMarkerTap"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
     scale="13"
     show-location
   />
