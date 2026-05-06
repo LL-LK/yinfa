@@ -2,11 +2,12 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "cd yinfa-ts/backend/server && npm install && npm run build"
+    "buildCommand": "cd yinfa-ts/backend/server && npm install && npx tsc"
   },
   "deploy": {
     "startCommand": "cd yinfa-ts/backend/server && node dist/index.js",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "restartPolicyMaxRetries": 10,
+    "healthcheckPath": "/health"
   }
 }
