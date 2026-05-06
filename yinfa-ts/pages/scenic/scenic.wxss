@@ -5,103 +5,156 @@
 
 .banner {
   background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%);
-  padding: 40rpx 30rpx;
+  padding: 36rpx 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.banner-icon-deco {
+  font-size: 52rpx;
+  margin-right: 20rpx;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .banner-title {
-  font-size: 42rpx;
+  font-size: 40rpx;
   font-weight: 700;
   color: #FFFFFF;
 }
 
 .banner-desc {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: rgba(255,255,255,0.8);
-  margin-top: 8rpx;
-  display: block;
+  margin-top: 4rpx;
 }
 
 .scenic-list {
-  padding: 20rpx 24rpx;
+  padding: 16rpx 20rpx;
 }
 
 .scenic-item {
   background-color: #FFFFFF;
-  border-radius: 20rpx;
+  border-radius: 18rpx;
   overflow: hidden;
-  margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 16rpx rgba(46,139,87,0.06);
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(46,139,87,0.05);
 }
 
 .scenic-image {
   width: 100%;
-  height: 340rpx;
+  height: 280rpx;
 }
 
 .scenic-body {
-  padding: 24rpx 28rpx;
+  padding: 20rpx 24rpx 12rpx;
 }
 
-.scenic-header {
+.scenic-row1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12rpx;
+  margin-bottom: 8rpx;
 }
 
 .scenic-name {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: #2C3E2D;
 }
 
 .scenic-level {
-  font-size: 22rpx;
-  padding: 4rpx 16rpx;
-  border-radius: 6rpx;
+  font-size: 20rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 4rpx;
 }
 
 .scenic-intro {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #5A7A5C;
-  line-height: 1.7;
+  line-height: 1.6;
   display: block;
-  margin-bottom: 16rpx;
+  margin-bottom: 12rpx;
 }
 
-.scenic-footer {
+.scenic-row3 {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 16rpx 0;
+  gap: 20rpx;
+  padding-top: 12rpx;
   border-top: 1rpx solid #E8F5E9;
-  border-bottom: 1rpx solid #E8F5E9;
-  margin-bottom: 20rpx;
-}
-
-.scenic-info {
-  display: flex;
-  flex-direction: column;
 }
 
 .scenic-price {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 700;
   color: #FF8C42;
 }
 
 .scenic-time {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #5A7A5C;
 }
 
 .slippery-warn {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #FF8C42;
   font-weight: 600;
 }
 
-.scenic-btn {
-  width: 100%;
-  font-size: 32rpx;
+.scenic-toggle {
+  text-align: center;
+  padding-top: 14rpx;
+}
+
+.scenic-toggle text {
+  font-size: 24rpx;
+  color: #2E8B57;
+  font-weight: 600;
+}
+
+.scenic-extra {
+  padding: 0 24rpx 20rpx;
+}
+
+.extra-card {
+  background-color: #FAFBFA;
+  border-radius: 10rpx;
+  padding: 16rpx 18rpx;
+  margin-bottom: 10rpx;
+}
+
+.extra-label {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #2C3E2D;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.label-warn {
+  color: #FF8C42;
+}
+
+.extra-text {
+  font-size: 24rpx;
+  color: #5A7A5C;
+  line-height: 1.7;
+}
+
+.scenic-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 6rpx;
+}
+
+.scenic-action-btn {
+  flex: 1;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+  text-align: center;
+  border-radius: 30rpx;
 }

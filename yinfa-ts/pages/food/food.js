@@ -1,20 +1,28 @@
 Page({
   data: {
+    featured: [
+      { name: '桂林米粉', sub: '本地人最爱', badge: 'TOP1' },
+      { name: '啤酒鱼', sub: '阳朔名菜', badge: '必吃' },
+      { name: '油茶', sub: '瑶族传统', badge: '养生' },
+      { name: '马蹄糕', sub: '清甜爽口', badge: '甜品' }
+    ],
     foods: [
       {
         name: '桂林米粉',
         type: '必尝',
-        image: '/image/11.png',
+        image: '/image/72.png',
         desc: '桂林最具代表性的美食，卤水香浓，米粉爽滑，配有锅烧、牛肉等多种配料，老少皆宜。',
         price: 10,
+        score: '4.8',
         address: '市区各大米粉店'
       },
       {
         name: '啤酒鱼',
         type: '特色',
-        image: '/image/12.png',
+        image: '/image/11.png',
         desc: '阳朔名菜，用漓江鲜鱼配上啤酒烹制，鱼肉鲜嫩入味，适合中老年游客品尝。',
         price: 68,
+        score: '4.7',
         address: '阳朔西街附近'
       },
       {
@@ -23,6 +31,7 @@ Page({
         image: '/image/21.png',
         desc: '桂林传统名菜，荔浦芋头与五花肉层层相叠，肥而不腻，入口即化，营养丰富。',
         price: 48,
+        score: '4.6',
         address: '市区老字号餐馆'
       },
       {
@@ -31,6 +40,7 @@ Page({
         image: '/image/22.png',
         desc: '瑶族传统饮品，用茶叶、生姜、大蒜捶打熬制，暖胃驱寒，适合老年人饮用。',
         price: 8,
+        score: '4.5',
         address: '恭城及市区茶店'
       },
       {
@@ -39,6 +49,7 @@ Page({
         image: '/image/31.png',
         desc: '用酸笋、辣椒等配料炒制的小吃，鲜辣开胃，在桂林夜市随处可见。',
         price: 25,
+        score: '4.4',
         address: '桂林夜市街'
       },
       {
@@ -47,6 +58,7 @@ Page({
         image: '/image/32.png',
         desc: '桂林传统甜品，用马蹄粉制成，晶莹剔透，清甜爽口，适合老年人食用。',
         price: 5,
+        score: '4.6',
         address: '各大市场'
       }
     ]

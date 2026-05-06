@@ -4,86 +4,203 @@
 }
 
 .banner {
-  background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%);
-  padding: 40rpx 30rpx;
+  background: linear-gradient(135deg, #FF8C42 0%, #FF9800 50%, #E65100 100%);
+  padding: 36rpx 30rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-decor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.decor-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+
+.c1 { width: 160rpx; height: 160rpx; bottom: -40rpx; right: -20rpx; }
+.c2 { width: 100rpx; height: 100rpx; top: -10rpx; left: -10rpx; }
+
+.banner-icon {
+  font-size: 52rpx;
+  margin-right: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .banner-title {
-  font-size: 42rpx;
+  font-size: 40rpx;
   font-weight: 700;
   color: #FFFFFF;
 }
 
 .banner-desc {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: rgba(255,255,255,0.8);
-  margin-top: 8rpx;
-  display: block;
+  margin-top: 4rpx;
 }
 
-.food-list {
-  padding: 20rpx 24rpx;
-}
-
-.food-item {
-  background-color: #FFFFFF;
-  border-radius: 20rpx;
-  overflow: hidden;
-  margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 16rpx rgba(46,139,87,0.06);
-}
-
-.food-image {
-  width: 100%;
-  height: 300rpx;
-}
-
-.food-body {
-  padding: 24rpx 28rpx;
-}
-
-.food-header {
+.food-featured {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12rpx;
+  margin: 16rpx 20rpx;
+  gap: 10rpx;
 }
 
-.food-name {
-  font-size: 36rpx;
+.featured-card {
+  flex: 1;
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+  border-radius: 14rpx;
+  padding: 16rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border: 1rpx solid #FFE0B2;
+}
+
+.fc-badge {
+  position: absolute;
+  top: 4rpx;
+  right: 6rpx;
+  font-size: 16rpx;
+  background: #FF8C42;
+  color: #FFF;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+  font-weight: 700;
+}
+
+.fc-name {
+  font-size: 24rpx;
   font-weight: 700;
   color: #2C3E2D;
 }
 
-.food-tag {
-  font-size: 24rpx;
-  padding: 4rpx 16rpx;
-  border-radius: 6rpx;
-}
-
-.food-desc {
-  font-size: 28rpx;
+.fc-sub {
+  font-size: 20rpx;
   color: #5A7A5C;
-  line-height: 1.7;
-  display: block;
-  margin-bottom: 16rpx;
+  margin-top: 4rpx;
 }
 
-.food-footer {
+.food-section {
+  padding: 0 20rpx;
+}
+
+.food-section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #2C3E2D;
+  margin-bottom: 14rpx;
+  padding-left: 8rpx;
+  border-left: 6rpx solid #FF8C42;
+}
+
+.food-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.food-card {
+  width: 48%;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+.food-card-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 180rpx;
+  overflow: hidden;
+}
+
+.food-card-img {
+  width: 100%;
+  height: 100%;
+}
+
+.food-card-badge {
+  position: absolute;
+  top: 8rpx;
+  left: 8rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 4rpx;
+  font-size: 20rpx;
+}
+
+.food-card-body {
+  padding: 14rpx;
+}
+
+.food-card-row1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16rpx;
-  border-top: 1rpx solid #E8F5E9;
+  margin-bottom: 6rpx;
 }
 
-.food-price {
-  font-size: 28rpx;
-  font-weight: 600;
+.food-card-name {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #2C3E2D;
+}
+
+.food-card-score {
+  font-size: 20rpx;
+  color: #FF9800;
+}
+
+.food-card-desc {
+  font-size: 22rpx;
+  color: #5A7A5C;
+  line-height: 1.5;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.food-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.food-card-meta {
+  display: flex;
+  justify-content: space-between;
+}
+
+.food-card-price {
+  font-size: 26rpx;
+  font-weight: 700;
   color: #FF8C42;
 }
 
-.food-address {
+.food-card-addr {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.food-card-action {
   font-size: 24rpx;
-  color: #5A7A5C;
+  padding: 10rpx 0;
+  border-radius: 24rpx;
+  text-align: center;
 }

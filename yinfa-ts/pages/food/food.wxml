@@ -1,21 +1,45 @@
 <view class="food">
   <view class="banner">
-    <text class="banner-title">桂林美食</text>
-    <text class="banner-desc">舌尖上的桂林 · 地道风味</text>
+    <view class="banner-decor">
+      <text class="decor-circle c1"></text>
+      <text class="decor-circle c2"></text>
+    </view>
+    <text class="banner-icon">🍜</text>
+    <view class="banner-text">
+      <text class="banner-title">桂林美食</text>
+      <text class="banner-desc">舌尖上的桂林 · 地道风味</text>
+    </view>
   </view>
 
-  <view class="food-list">
-    <view class="food-item" wx:for="{{foods}}" wx:key="index">
-      <image src="{{item.image}}" class="food-image" mode="aspectFill" lazy-load />
-      <view class="food-body">
-        <view class="food-header">
-          <text class="food-name">{{item.name}}</text>
-          <view class="food-tag tag-green">{{item.type}}</view>
+  <view class="food-featured">
+    <view class="featured-card" wx:for="{{featured}}" wx:key="index">
+      <view class="fc-badge">{{item.badge}}</view>
+      <text class="fc-name">{{item.name}}</text>
+      <text class="fc-sub">{{item.sub}}</text>
+    </view>
+  </view>
+
+  <view class="food-section">
+    <view class="food-section-title">🍽️ 全部美食</view>
+    <view class="food-grid">
+      <view class="food-card" wx:for="{{foods}}" wx:key="index">
+        <view class="food-card-img-wrapper">
+          <image src="{{item.image}}" class="food-card-img" mode="aspectFill" lazy-load />
+          <view class="food-card-badge tag-green">{{item.type}}</view>
         </view>
-        <text class="food-desc">{{item.desc}}</text>
-        <view class="food-footer">
-          <text class="food-price">约 ¥{{item.price}}/人</text>
-          <text class="food-address">📍 {{item.address}}</text>
+        <view class="food-card-body">
+          <view class="food-card-row1">
+            <text class="food-card-name">{{item.name}}</text>
+            <text class="food-card-score">⭐ {{item.score}}</text>
+          </view>
+          <text class="food-card-desc">{{item.desc}}</text>
+          <view class="food-card-bottom">
+            <view class="food-card-meta">
+              <text class="food-card-price">¥{{item.price}}起</text>
+              <text class="food-card-addr">{{item.address}}</text>
+            </view>
+            <view class="food-card-action btn-primary">了解详情</view>
+          </view>
         </view>
       </view>
     </view>

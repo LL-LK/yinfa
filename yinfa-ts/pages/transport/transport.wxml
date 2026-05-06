@@ -1,29 +1,44 @@
 <view class="transport">
   <view class="banner">
-    <text class="banner-title">便捷出行</text>
-    <text class="banner-desc">桂林交通指南 · 安全出行</text>
+    <text class="banner-icon-deco">🚌</text>
+    <view class="banner-text">
+      <text class="banner-title">便捷出行</text>
+      <text class="banner-desc">桂林交通指南 · 安全出行</text>
+    </view>
   </view>
 
   <view class="transport-grid">
     <view class="transport-card" wx:for="{{transports}}" wx:key="index">
-      <view class="transport-icon-box">
-        <text class="transport-emoji">{{item.emoji}}</text>
+      <view class="tc-icon-box" style="background: {{item.bg}};">
+        <text class="tc-emoji">{{item.emoji}}</text>
       </view>
-      <text class="transport-name">{{item.name}}</text>
-      <text class="transport-desc">{{item.desc}}</text>
-      <view class="transport-actions">
-        <view class="transport-btn btn-outline" wx:if="{{item.route}}" bindtap="viewInfo" data-item="{{item}}">
-          {{item.btnText}}
-        </view>
+      <text class="tc-name">{{item.name}}</text>
+      <text class="tc-desc">{{item.desc}}</text>
+      <view class="tc-footer">
+        <text class="tc-price">{{item.price}}</text>
+        <text class="tc-extra">{{item.extra}}</text>
+      </view>
+      <view class="tc-btn btn-primary" bindtap="viewInfo" data-item="{{item}}">
+        {{item.btnText}}
       </view>
     </view>
   </view>
 
-  <view class="tips-card">
-    <text class="tips-title">🚌 老年人出行提醒</text>
-    <text class="tips-item">· 桂林公交车对70岁以上老人免费，请携带身份证</text>
-    <text class="tips-item">· 漓江游船需提前一天预订，建议选择中午班次</text>
-    <text class="tips-item">· 阳朔方向公交在桂林汽车客运总站乘坐</text>
-    <text class="tips-item">· 桂林市区内共享单车/电动车需使用手机扫码</text>
+  <view class="tips-section">
+    <view class="tips-header">
+      <text class="tips-title">🚌 老年人出行贴士</text>
+    </view>
+    <view class="tips-grid-sm">
+      <view class="tip-chip" wx:for="{{quickTips}}" wx:key="index">
+        <text class="tip-chip-icon">{{item.icon}}</text>
+        <text class="tip-chip-text">{{item.text}}</text>
+      </view>
+    </view>
+    <view class="tips-detail">
+      <text class="tips-detail-item">· 70岁以上老人公交车免费，请携带身份证</text>
+      <text class="tips-detail-item">· 漓江游船需提前一天预订</text>
+      <text class="tips-detail-item">· 阳朔方向在汽车客运总站乘车</text>
+      <text class="tips-detail-item">· 桂林旅游热线：0773-XXXXXXX</text>
+    </view>
   </view>
 </view>

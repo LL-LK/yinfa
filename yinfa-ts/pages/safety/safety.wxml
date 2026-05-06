@@ -1,78 +1,66 @@
 <view class="safety">
   <view class="banner">
-    <text class="banner-title">安全出行指南</text>
+    <text class="banner-title">🛡️ 安全出行指南</text>
     <text class="banner-desc">防滑预警 · 为您的每一次出行保驾护航</text>
   </view>
 
-  <view class="weather-card">
-    <view class="weather-status">
-      <text class="weather-emoji">{{weather.icon}}</text>
-      <view class="weather-info">
-        <text class="weather-temp">{{weather.temp}}</text>
-        <text class="weather-condition">{{weather.condition}}</text>
-        <text class="weather-location">📍 桂林市</text>
+  <view class="safety-top-row">
+    <view class="weather-card-compact">
+      <view class="wc-top">
+        <text class="wc-emoji">{{weather.icon}}</text>
+        <text class="wc-temp">{{weather.temp}}</text>
       </view>
+      <text class="wc-cond">{{weather.condition}}</text>
+      <view class="wc-stats">
+        <text>💧 {{weather.humidity}}</text>
+        <text>💨 {{weather.wind}}</text>
+      </view>
+      <text class="wc-road {{weather.slippery === '危险' ? 'text-red' : weather.slippery === '注意' ? 'text-orange' : 'text-green'}}">路面：{{weather.slippery}}</text>
     </view>
-    <view class="weather-details">
-      <view class="weather-detail-item">
-        <text class="detail-label">湿度</text>
-        <text class="detail-value">{{weather.humidity}}</text>
-      </view>
-      <view class="weather-detail-item">
-        <text class="detail-label">风速</text>
-        <text class="detail-value">{{weather.wind}}</text>
-      </view>
-      <view class="weather-detail-item">
-        <text class="detail-label">路面</text>
-        <text class="detail-value {{weather.slippery === '危险' ? 'text-red' : weather.slippery === '注意' ? 'text-orange' : 'text-green'}}">{{weather.slippery}}</text>
-      </view>
+
+    <view class="level-card {{slipperyLevel === 1 ? 'level-safe' : slipperyLevel === 2 ? 'level-warn' : 'level-danger'}}">
+      <text class="level-num-big">{{slipperyLevel}}</text>
+      <text class="level-word">{{slipperyText.title}}</text>
     </view>
   </view>
 
-  <view class="slippery-level">
-    <view class="section-title">今日地面防滑等级</view>
-    <view class="level-display">
-      <view class="level-circle {{slipperyLevel === 1 ? 'level-safe' : slipperyLevel === 2 ? 'level-warn' : 'level-danger'}}">
-        <text class="level-num">{{slipperyLevel}}</text>
-      </view>
-      <view class="level-text">
-        <text class="level-title">{{slipperyText.title}}</text>
-        <text class="level-desc">{{slipperyText.desc}}</text>
-      </view>
-    </view>
-    <view class="level-indicators">
-      <view class="indicator safe {{slipperyLevel === 1 ? 'active' : ''}}">安全</view>
-      <view class="indicator warn {{slipperyLevel === 2 ? 'active' : ''}}">注意</view>
-      <view class="indicator danger {{slipperyLevel === 3 ? 'active' : ''}}">危险</view>
-    </view>
+  <view class="level-bar">
+    <view class="bar-safe {{slipperyLevel === 1 ? 'bar-active' : ''}}">① 安全</view>
+    <view class="bar-warn {{slipperyLevel === 2 ? 'bar-active' : ''}}">② 注意</view>
+    <view class="bar-danger {{slipperyLevel === 3 ? 'bar-active' : ''}}">③ 危险</view>
   </view>
+  <view class="level-detail-text">{{slipperyText.desc}}</view>
 
   <view class="scenic-warnings">
-    <view class="section-title">景区湿滑预警</view>
-    <view class="warning-list">
-      <view class="warning-item {{item.level === 'high' ? 'warning-high' : item.level === 'medium' ? 'warning-medium' : 'warning-low'}}" wx:for="{{warnings}}" wx:key="index">
-        <view class="warning-status">
-          <text class="warning-icon">{{item.level === 'high' ? '🔴' : item.level === 'medium' ? '🟡' : '🟢'}}</text>
-        </view>
-        <view class="warning-body">
-          <text class="warning-name">{{item.name}}</text>
-          <text class="warning-desc">{{item.desc}}</text>
-        </view>
-        <text class="warning-arrow">></text>
+    <view class="sw-title">⚠️ 景区湿滑预警</view>
+    <scroll-view scroll-x class="sw-scroll">
+      <view class="sw-chip {{item.level === 'high' ? 'chip-red' : item.level === 'medium' ? 'chip-orange' : 'chip-green'}}" wx:for="{{warnings}}" wx:key="index">
+        <text class="sw-chip-icon">{{item.level === 'high' ? '🔴' : item.level === 'medium' ? '🟡' : '🟢'}}</text>
+        <text class="sw-chip-name">{{item.name}}</text>
+        <text class="sw-chip-desc">{{item.desc}}</text>
       </view>
-    </view>
+    </scroll-view>
   </view>
 
   <view class="tips-section">
-    <view class="section-title">防滑安全小贴士</view>
-    <view class="tips-list">
-      <view class="tip-item card" wx:for="{{tips}}" wx:key="index">
-        <view class="tip-icon">{{item.icon}}</view>
-        <view class="tip-content">
-          <text class="tip-title">{{item.title}}</text>
-          <text class="tip-desc">{{item.desc}}</text>
-        </view>
+    <view class="tips-title">👴 防滑安全小贴士</view>
+    <view class="tips-grid">
+      <view class="tip-box" wx:for="{{tips}}" wx:key="index">
+        <text class="tip-box-icon">{{item.icon}}</text>
+        <text class="tip-box-title">{{item.title}}</text>
+        <text class="tip-box-desc">{{item.desc}}</text>
       </view>
+    </view>
+  </view>
+
+  <view class="accident-section">
+    <view class="acc-title">📋 常见滑倒场景及预防</view>
+    <view class="acc-item" wx:for="{{accidents}}" wx:key="index">
+      <view class="acc-header">
+        <text class="acc-scene">{{item.scene}}</text>
+        <text class="acc-risk {{item.risk === '高' ? 'text-red' : item.risk === '中' ? 'text-orange' : 'text-green'}}">风险{{item.risk}}</text>
+      </view>
+      <text class="acc-prevent">预防：{{item.prevent}}</text>
     </view>
   </view>
 </view>

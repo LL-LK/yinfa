@@ -1,28 +1,55 @@
 <view class="scenic">
   <view class="banner">
-    <text class="banner-title">桂林山水甲天下</text>
-    <text class="banner-desc">精选漓江沿线最美景点</text>
+    <text class="banner-icon-deco">🏞️</text>
+    <view class="banner-text">
+      <text class="banner-title">桂林山水甲天下</text>
+      <text class="banner-desc">精选漓江沿线最美景点</text>
+    </view>
   </view>
 
   <view class="scenic-list">
-    <view class="scenic-item" wx:for="{{scenics}}" wx:key="index">
-      <image src="{{item.image}}" class="scenic-image" mode="aspectFill" lazy-load />
-      <view class="scenic-body">
-        <view class="scenic-header">
-          <text class="scenic-name">{{item.name}}</text>
-          <view class="scenic-level tag-green">{{item.level}}</view>
-        </view>
-        <text class="scenic-intro">{{item.intro}}</text>
-        <view class="scenic-footer">
-          <view class="scenic-info">
+    <view class="scenic-item {{item.expanded ? 'expanded' : ''}}" wx:for="{{scenics}}" wx:for-item="item" wx:key="index">
+      <view class="scenic-main" bindtap="toggleExpand" data-idx="{{index}}">
+        <image src="{{item.image}}" class="scenic-image" mode="aspectFill" lazy-load />
+        <view class="scenic-body">
+          <view class="scenic-row1">
+            <text class="scenic-name">{{item.name}}</text>
+            <view class="scenic-level tag-green">{{item.level}}</view>
+          </view>
+          <view class="scenic-row2">
+            <text class="scenic-intro">{{item.intro}}</text>
+          </view>
+          <view class="scenic-row3">
             <text class="scenic-price">¥{{item.price}}起</text>
             <text class="scenic-time">游览约{{item.time}}</text>
+            <text wx:if="{{item.slippery}}" class="slippery-warn">⚠️湿滑</text>
           </view>
-          <view class="scenic-weather" wx:if="{{item.slippery}}">
-            <text class="slippery-warn">⚠️ 注意路面湿滑</text>
+          <view class="scenic-toggle">
+            <text>{{item.expanded ? '收起 ▲' : '展开更多 ▼'}}</text>
           </view>
         </view>
-        <view class="scenic-btn btn-primary" bindtap="goDetails" data-id="{{item.id}}">查看详情</view>
+      </view>
+      <view class="scenic-extra" wx:if="{{item.expanded}}">
+        <view class="extra-card">
+          <text class="extra-label">⭐ 推荐理由</text>
+          <text class="extra-text">{{item.highlight}}</text>
+        </view>
+        <view class="extra-card" wx:if="{{item.slippery}}">
+          <text class="extra-label label-warn">⚠️ 安全提示</text>
+          <text class="extra-text">{{item.safetyTips}}</text>
+        </view>
+        <view class="extra-card">
+          <text class="extra-label">🚌 交通方式</text>
+          <text class="extra-text">{{item.transport}}</text>
+        </view>
+        <view class="extra-card">
+          <text class="extra-label">🕐 开放时间</text>
+          <text class="extra-text">{{item.hours}}</text>
+        </view>
+        <view class="scenic-actions">
+          <view class="scenic-action-btn btn-primary">立即预订</view>
+          <view class="scenic-action-btn btn-outline">加入收藏</view>
+        </view>
       </view>
     </view>
   </view>

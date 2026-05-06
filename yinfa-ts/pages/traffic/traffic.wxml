@@ -1,74 +1,71 @@
 <view class="traffic">
   <view class="banner">
-    <text class="banner-title">实时路况</text>
-    <text class="banner-desc">桂林道路通行情况 · 助您畅通出行</text>
+    <text class="banner-icon">🚦</text>
+    <view class="banner-text">
+      <text class="banner-title">实时路况</text>
+      <text class="banner-desc">桂林道路通行 · 助您畅通出行</text>
+    </view>
   </view>
 
-  <view class="summary-card">
-    <view class="summary-status">
-      <text class="summary-icon">🚦</text>
-      <view class="summary-text">
-        <text class="summary-title">整体路况：{{summary.status}}</text>
-        <text class="summary-time">更新时间：{{summary.time}}</text>
+  <view class="t-status-bar">
+    <view class="ts-card">
+      <view class="ts-status">
+        <text class="ts-dot green"></text>
+        <text class="ts-num">{{summary.green}}</text>
+        <text class="ts-label">畅通</text>
       </view>
     </view>
-    <view class="summary-stats">
-      <view class="stat-item">
-        <text class="stat-num green">{{summary.green}}</text>
-        <text class="stat-label">畅通</text>
+    <view class="ts-card">
+      <view class="ts-status">
+        <text class="ts-dot orange"></text>
+        <text class="ts-num">{{summary.orange}}</text>
+        <text class="ts-label">缓行</text>
       </view>
-      <view class="stat-item">
-        <text class="stat-num orange">{{summary.orange}}</text>
-        <text class="stat-label">缓行</text>
+    </view>
+    <view class="ts-card">
+      <view class="ts-status">
+        <text class="ts-dot red"></text>
+        <text class="ts-num">{{summary.red}}</text>
+        <text class="ts-label">拥堵</text>
       </view>
-      <view class="stat-item">
-        <text class="stat-num red">{{summary.red}}</text>
-        <text class="stat-label">拥堵</text>
-      </view>
+    </view>
+    <view class="ts-card overall">
+      <text class="ts-overall-label">整体</text>
+      <text class="ts-overall-val">{{summary.status}}</text>
+      <text class="ts-overall-time">{{summary.time}}</text>
     </view>
   </view>
 
   <view class="road-list">
-    <view class="section-title">主要道路通行情况</view>
-    <view class="road-item" wx:for="{{roads}}" wx:key="index">
-      <view class="road-status {{item.status === '畅通' ? 'status-green' : item.status === '缓行' ? 'status-orange' : 'status-red'}}">
-        <text class="road-dot"></text>
-      </view>
-      <view class="road-info">
+    <view class="rl-title">🗺️ 主要道路</view>
+    <view class="road-item {{item.status === '畅通' ? 'road-green' : item.status === '缓行' ? 'road-orange' : 'road-red'}}" wx:for="{{roads}}" wx:key="index">
+      <view class="road-dot {{item.status === '畅通' ? 'dot-green' : item.status === '缓行' ? 'dot-orange' : 'dot-red'}}"></view>
+      <view class="road-mid">
         <text class="road-name">{{item.name}}</text>
         <text class="road-desc">{{item.desc}}</text>
       </view>
-      <view class="road-right">
-        <text class="road-speed {{item.status === '畅通' ? 'text-green' : item.status === '缓行' ? 'text-orange' : 'text-red'}}">{{item.speed}}</text>
-        <text class="road-status-text {{item.status === '畅通' ? 'text-green' : item.status === '缓行' ? 'text-orange' : 'text-red'}}">{{item.status}}</text>
-      </view>
+      <text class="road-speed {{item.status === '畅通' ? 'text-green' : item.status === '缓行' ? 'text-orange' : 'text-red'}}">{{item.speed}}</text>
     </view>
   </view>
 
-  <view class="scenic-traffic">
-    <view class="section-title">景区周边交通</view>
-    <view class="scenic-item" wx:for="{{scenicTraffic}}" wx:key="index">
-      <view class="scenic-header">
-        <text class="scenic-name">{{item.name}}</text>
-        <view class="tag {{item.parking === '充足' ? 'tag-green' : item.parking === '紧张' ? 'tag-orange' : 'tag-red'}}">停车{{item.parking}}</view>
+  <view class="scenic-parking">
+    <view class="sp-title">🅿️ 景区停车</view>
+    <view class="sp-grid">
+      <view class="sp-item" wx:for="{{scenicTraffic}}" wx:key="index">
+        <text class="sp-name">{{item.name}}</text>
+        <view class="sp-status {{item.parking === '充足' ? 'sp-full' : item.parking === '紧张' ? 'sp-tight' : 'sp-none'}}">{{item.parking}}</view>
       </view>
-      <view class="scenic-body">
-        <text class="scenic-desc">{{item.desc}}</text>
-        <view class="scenic-suggest" wx:if="{{item.suggest}}">
-          <text class="suggest-icon">💡</text>
-          <text class="suggest-text">{{item.suggest}}</text>
-        </view>
-      </view>
+    </view>
+    <view wx:if="{{scenicSuggest}}" class="sp-suggest">
+      <text class="sp-suggest-icon">💡</text>
+      <text class="sp-suggest-text">{{scenicSuggest}}</text>
     </view>
   </view>
 
-  <view class="tips-card">
-    <text class="tips-title">🚌 老年人出行建议</text>
-    <view class="tips-grid">
-      <view class="tip-block" wx:for="{{tips}}" wx:key="index">
-        <text class="tip-block-icon">{{item.icon}}</text>
-        <text class="tip-block-text">{{item.text}}</text>
-      </view>
+  <view class="t-tips">
+    <view class="t-tips-row" wx:for="{{tips}}" wx:key="index">
+      <text class="t-tips-icon">{{item.icon}}</text>
+      <text class="t-tips-text">{{item.text}}</text>
     </view>
   </view>
 </view>
