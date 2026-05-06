@@ -7,6 +7,7 @@ App({
 
   onLaunch: function () {
     console.log('App Launch')
+    this.initApiUrl()
   },
 
   onShow: function () {
@@ -15,6 +16,18 @@ App({
 
   onHide: function () {
     console.log('App Hide')
+  },
+
+  initApiUrl: function() {
+    const savedUrl = wx.getStorageSync('apiBaseUrl')
+    if (savedUrl) {
+      this.globalData.apiBaseUrl = savedUrl
+    }
+  },
+
+  setApiUrl: function(url) {
+    this.globalData.apiBaseUrl = url
+    wx.setStorageSync('apiBaseUrl', url)
   },
 
   request: function(options) {
@@ -29,7 +42,7 @@ App({
           'content-type': 'application/json',
           ...header
         },
-        timeout: 5000,
+        timeout: 10000,
         success: (res) => {
           if (res.data.code === 0) {
             resolve(res.data.data)

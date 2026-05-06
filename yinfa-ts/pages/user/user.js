@@ -10,15 +10,34 @@ Page({
   },
 
   loadUser: function () {
+    const openid = wx.getStorageSync('openid') || 'test_openid'
+    
     app.request({
-      url: '/users/test_openid',
+      url: '/users/' + openid,
       method: 'GET'
     }).then(res => {
       this.setData({
         userInfo: res
       })
     }).catch(err => {
-      console.error('加载用户信息失败:', err)
+      console.log('用户未注册，尝试注册...')
+      app.request({
+        url: '/users/login',
+        method: 'POST',
+        data: {
+          openid: openid,
+          nickname: '测试用户',
+          avatar_url: '',
+          phone: ''
+        }
+      }).then(res => {
+        this.setData({
+          userInfo: res
+        })
+        wx.setStorageSync('openid', openid)
+      }).catch(err => {
+        console.error('加载用户信息失败:', err)
+      })
     })
   },
 

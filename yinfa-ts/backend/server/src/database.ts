@@ -3,8 +3,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 let db: Database | null = null;
-// 数据库路径：指向项目根目录的 data 文件夹
-const dataDir = path.join(__dirname, '..', '..', '..', 'data');
+// 数据库路径：支持本地开发和Railway部署
+const isProduction = process.env.NODE_ENV === 'production';
+const dataDir = isProduction 
+  ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH || '/app', 'data')
+  : path.join(__dirname, '..', '..', '..', 'data');
 const dbPath = path.join(dataDir, 'shop.db');
 
 export async function initDatabase(): Promise<Database> {
@@ -12,10 +15,20 @@ export async function initDatabase(): Promise<Database> {
 
   const SQL = await initSqlJs();
 
+  // 确保数据目录存在
+  ensureDataDir();
+
   if (fs.existsSync(dbPath)) {
-    const buffer = fs.readFileSync(dbPath);
-    db = new SQL.Database(buffer);
-    console.log('Database loaded from file');
+    try {
+      const buffer = fs.readFileSync(dbPath);
+      db = new SQL.Database(buffer);
+      console.log('Database loaded from file:', dbPath);
+    } catch (e) {
+      console.log('Failed to load database file, creating new one');
+      db = new SQL.Database();
+      createTables(db);
+      insertSampleData(db);
+    }
   } else {
     db = new SQL.Database();
     createTables(db);
