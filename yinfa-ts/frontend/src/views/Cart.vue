@@ -40,8 +40,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const cartItems = ref([
-  { id: 1, name: '故宫门票', price: 60, image: new URL('../assets/image/1.jpg', import.meta.url).href, quantity: 2 },
-  { id: 2, name: '北京烤鸭', price: 198, image: new URL('../assets/image/72.png', import.meta.url).href, quantity: 1 }
+  { id: 1, name: '漓江景区门票', price: 80, image: new URL('../assets/image/1.jpg', import.meta.url).href, quantity: 2 },
+  { id: 7, name: '桂林米粉', price: 25, image: new URL('../assets/image/72.png', import.meta.url).href, quantity: 1 }
 ])
 
 const totalPrice = computed(() => {

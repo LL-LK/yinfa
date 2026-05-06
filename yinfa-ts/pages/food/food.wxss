@@ -1,0 +1,89 @@
+.food {
+  background-color: #F5F9F6;
+  padding-bottom: 40rpx;
+}
+
+.banner {
+  background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%);
+  padding: 40rpx 30rpx;
+}
+
+.banner-title {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.banner-desc {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.food-list {
+  padding: 20rpx 24rpx;
+}
+
+.food-item {
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  overflow: hidden;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(46,139,87,0.06);
+}
+
+.food-image {
+  width: 100%;
+  height: 300rpx;
+}
+
+.food-body {
+  padding: 24rpx 28rpx;
+}
+
+.food-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.food-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #2C3E2D;
+}
+
+.food-tag {
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 6rpx;
+}
+
+.food-desc {
+  font-size: 28rpx;
+  color: #5A7A5C;
+  line-height: 1.7;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.food-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #E8F5E9;
+}
+
+.food-price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF8C42;
+}
+
+.food-address {
+  font-size: 24rpx;
+  color: #5A7A5C;
+}

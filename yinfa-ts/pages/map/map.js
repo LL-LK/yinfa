@@ -1,39 +1,39 @@
 Page({
   data: {
-    latitude: 39.9042,
-    longitude: 116.4074,
+    latitude: 25.2736,
+    longitude: 110.2900,
     markers: [{
       id: 1,
-      latitude: 39.9042,
-      longitude: 116.4074,
+      latitude: 25.2797,
+      longitude: 110.2847,
       iconPath: '/src/assets/image/map-marker.png',
       width: 30,
       height: 30,
-      title: '北京故宫'
+      title: '漓江'
     }, {
       id: 2,
-      latitude: 39.9149,
-      longitude: 116.4038,
+      latitude: 24.7805,
+      longitude: 110.4863,
       iconPath: '/src/assets/image/map-marker.png',
       width: 30,
       height: 30,
-      title: '天安门广场'
+      title: '阳朔西街'
     }, {
       id: 3,
-      latitude: 39.9999,
-      longitude: 116.4753,
+      latitude: 25.7154,
+      longitude: 110.0289,
       iconPath: '/src/assets/image/map-marker.png',
       width: 30,
       height: 30,
-      title: '颐和园'
+      title: '龙脊梯田'
     }, {
       id: 4,
-      latitude: 39.9242,
-      longitude: 116.3975,
+      latitude: 25.2622,
+      longitude: 110.2954,
       iconPath: '/src/assets/image/map-marker.png',
       width: 30,
       height: 30,
-      title: '人民英雄纪念碑'
+      title: '象鼻山'
     }]
   },
 

@@ -1,0 +1,29 @@
+<view class="scenic">
+  <view class="banner">
+    <text class="banner-title">桂林山水甲天下</text>
+    <text class="banner-desc">精选漓江沿线最美景点</text>
+  </view>
+
+  <view class="scenic-list">
+    <view class="scenic-item" wx:for="{{scenics}}" wx:key="index">
+      <image src="{{item.image}}" class="scenic-image" mode="aspectFill" lazy-load />
+      <view class="scenic-body">
+        <view class="scenic-header">
+          <text class="scenic-name">{{item.name}}</text>
+          <view class="scenic-level tag-green">{{item.level}}</view>
+        </view>
+        <text class="scenic-intro">{{item.intro}}</text>
+        <view class="scenic-footer">
+          <view class="scenic-info">
+            <text class="scenic-price">¥{{item.price}}起</text>
+            <text class="scenic-time">游览约{{item.time}}</text>
+          </view>
+          <view class="scenic-weather" wx:if="{{item.slippery}}">
+            <text class="slippery-warn">⚠️ 注意路面湿滑</text>
+          </view>
+        </view>
+        <view class="scenic-btn btn-primary" bindtap="goDetails" data-id="{{item.id}}">查看详情</view>
+      </view>
+    </view>
+  </view>
+</view>

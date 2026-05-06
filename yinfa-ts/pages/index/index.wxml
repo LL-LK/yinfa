@@ -1,49 +1,71 @@
 <view class="home">
-  <swiper class="swiper" indicator-dots autoplay circular interval="3000">
+  <view class="header">
+    <view class="header-top">
+      <text class="header-title">桂林银发旅游</text>
+      <text class="header-sub">山水甲天下 · 安心游桂林</text>
+    </view>
+  </view>
+
+  <swiper class="swiper" indicator-dots autoplay circular interval="4000" indicator-color="#FFFFFF" indicator-active-color="#2E8B57">
     <swiper-item wx:for="{{imgUrls}}" wx:key="index">
       <image src="{{item}}" class="slide-image" mode="aspectFill" lazy-load />
+      <view class="swiper-tag" wx:if="{{index === 0}}">热门推荐</view>
     </swiper-item>
   </swiper>
 
-  <view class="search" bindtap="goSearch">
-    <view class="search-text">
-      <text class="search-icon">🔍</text>
-      <text>搜索商品、景点</text>
-    </view>
-  </view>
-
-  <view class="newest">
-    <view class="newest-title">
-      <text>功能模块</text>
-    </view>
-    <view class="newest-box">
-      <view class="newest-list" wx:for="{{modules}}" wx:key="index" bindtap="goPage" data-path="{{item.path}}">
-        <view class="icon-box">
-          <image src="{{item.icon}}" class="icon-image" mode="aspectFit" lazy-load />
+  <view class="function-section">
+    <view class="section-title">桂林旅游服务</view>
+    <view class="function-grid">
+      <view class="function-item" wx:for="{{modules}}" wx:key="index" bindtap="goPage" data-path="{{item.path}}">
+        <view class="function-icon-box">
+          <text class="function-emoji">{{item.emoji}}</text>
         </view>
-        <view class="newest-text">{{item.name}}</view>
+        <view class="function-name">{{item.name}}</view>
+        <view class="function-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
       </view>
     </view>
   </view>
 
-  <view class="products">
-    <view class="newest-title">
-      <text>热门商品</text>
+  <view class="weather-tip" wx:if="{{weatherTip}}">
+    <view class="weather-icon">{{weatherTip.icon}}</view>
+    <view class="weather-content">
+      <text class="weather-text">{{weatherTip.text}}</text>
+      <text class="weather-detail">{{weatherTip.detail}}</text>
     </view>
-    <view wx:if="{{loading}}" class="loading-container">
+  </view>
+
+  <view class="hot-section">
+    <view class="section-title">桂林热门推荐</view>
+    <view wx:if="{{loading}}" class="loading">
       <view class="loading-spinner"></view>
       <text class="loading-text">加载中...</text>
     </view>
-    <view wx:else class="products-box">
-      <view class="product-item" wx:for="{{products}}" wx:key="index" bindtap="goDetails" data-id="{{item.id}}">
-        <view class="product-image">
-          <image src="{{item.image}}" class="product-img" mode="aspectFill" lazy-load />
+    <view wx:else class="hot-list">
+      <view class="hot-item" wx:for="{{products}}" wx:key="index" bindtap="goDetails" data-id="{{item.id}}">
+        <view class="hot-image-box">
+          <image src="{{item.image}}" class="hot-image" mode="aspectFill" lazy-load />
+          <view class="hot-tag tag-green" wx:if="{{item.tag}}">{{item.tag}}</view>
         </view>
-        <view class="product-info">
-          <view class="product-name">{{item.name}}</view>
-          <view class="product-price">¥{{item.price}}</view>
+        <view class="hot-info">
+          <view class="hot-name">{{item.name}}</view>
+          <view class="hot-price">
+            <text class="hot-price-symbol">¥</text>
+            <text class="hot-price-num">{{item.price}}</text>
+            <text class="hot-price-unit">起</text>
+          </view>
         </view>
       </view>
+    </view>
+  </view>
+
+  <view class="safety-banner">
+    <view class="safety-banner-content" bindtap="goSafety">
+      <text class="safety-banner-icon">🛡️</text>
+      <view class="safety-banner-text">
+        <text class="safety-banner-title">出行安全提醒</text>
+        <text class="safety-banner-desc">查看今日防滑预警和实时路况</text>
+      </view>
+      <text class="safety-banner-arrow">></text>
     </view>
   </view>
 </view>

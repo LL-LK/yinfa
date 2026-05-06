@@ -106,20 +106,24 @@ function createTables(database: Database): void {
 }
 
 function insertSampleData(database: Database): void {
-  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('景点门票', 'tickets', 1)`);
+  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('漓江景点', 'scenic', 1)`);
   database.run(`INSERT INTO categories (name, slug, "order") VALUES ('酒店住宿', 'hotels', 2)`);
-  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('旅游团', 'tours', 3)`);
-  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('特色美食', 'food', 4)`);
-  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('纪念品', 'souvenirs', 5)`);
+  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('桂林美食', 'food', 3)`);
+  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('旅游线路', 'tours', 4)`);
+  database.run(`INSERT INTO categories (name, slug, "order") VALUES ('桂林特产', 'souvenirs', 5)`);
 
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '故宫门票', '北京故宫成人票', 60.00, 100, '/image/1.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '长城门票', '八达岭长城成人票', 45.00, 200, '/image/2.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '颐和园门票', '颐和园成人票', 30.00, 150, '/image/3.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '北京饭店', '五星级豪华酒店', 800.00, 20, '/image/4.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '王府井酒店', '四星级商务酒店', 450.00, 30, '/image/5.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '北京一日游', '经典线路包含午餐', 299.00, 50, '/image/6.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (4, '北京烤鸭', '全聚德招牌烤鸭', 198.00, 100, '/image/72.png', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (5, '故宫书签', '精美金属书签', 38.00, 500, '/image/82.png', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '漓江精华游船票', '乘船游览漓江精华段，欣赏黄布倒影、九马画山等经典景观，全程约4小时', 215.00, 200, '/image/b1.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '象鼻山公园门票', '桂林城徽象鼻山，山形酷似大象饮水，适合老年游客漫步游览，约2小时', 55.00, 300, '/image/b2.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '阳朔西街自由行', '中西文化交融的古街，石板路两侧店铺林立，可品尝地道桂林美食', 0.00, 999, '/image/b3.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '龙脊梯田观光', '壮观的梯田景观，建议青壮年游客前往，老年人请量力而行', 180.00, 150, '/image/1.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '两江四湖夜游船', '乘船夜游桂林市区水系，灯光璀璨，适合全家出行，约2.5小时', 220.00, 100, '/image/2.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '芦笛岩溶洞', '著名溶洞景观，钟乳石千姿百态，洞内恒温约20°C，雨天游览好去处', 90.00, 180, '/image/3.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '桂林漓江大瀑布酒店', '五星级景观酒店，毗邻两江四湖，提供老年人专属无障碍房间', 680.00, 50, '/image/4.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '阳朔悦榕庄', '高端度假酒店，环境清幽，适合静养休闲', 1200.00, 30, '/image/5.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '桂林米粉体验套餐', '正宗桂林米粉+锅烧+卤牛肉，配一碗大骨汤', 38.00, 500, '/image/72.png', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '啤酒鱼套餐', '阳朔名菜，漓江鲜鱼配啤酒烹制，鱼肉鲜嫩', 88.00, 100, '/image/11.png', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (4, '桂林阳朔三日游', '含漓江游船+阳朔西街+龙脊梯田，全程导游陪同，适合老年团', 799.00, 60, '/image/6.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (5, '桂林山水画扇', '手工绘制漓江风景折扇，精美雅致', 68.00, 500, '/image/82.png', 1)`);
 
   ensureDataDir();
   const data = database.export();

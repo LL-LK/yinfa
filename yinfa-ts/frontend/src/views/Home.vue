@@ -98,14 +98,14 @@ const modules = [
 ]
 
 const products = [
-  { id: 1, name: '故宫门票', price: 60, image: new URL('../assets/image/1.jpg', import.meta.url).href },
-  { id: 2, name: '长城门票', price: 45, image: new URL('../assets/image/2.jpg', import.meta.url).href },
-  { id: 3, name: '颐和园门票', price: 30, image: new URL('../assets/image/3.jpg', import.meta.url).href },
-  { id: 4, name: '北京饭店', price: 800, image: new URL('../assets/image/4.jpg', import.meta.url).href },
-  { id: 5, name: '王府井酒店', price: 450, image: new URL('../assets/image/5.jpg', import.meta.url).href },
-  { id: 6, name: '北京一日游', price: 299, image: new URL('../assets/image/6.jpg', import.meta.url).href },
-  { id: 7, name: '北京烤鸭', price: 198, image: new URL('../assets/image/72.png', import.meta.url).href },
-  { id: 8, name: '故宫书签', price: 38, image: new URL('../assets/image/82.png', import.meta.url).href }
+  { id: 1, name: '漓江景区门票', price: 80, image: new URL('../assets/image/1.jpg', import.meta.url).href },
+  { id: 2, name: '阳朔西街', price: 35, image: new URL('../assets/image/2.jpg', import.meta.url).href },
+  { id: 3, name: '龙脊梯田', price: 70, image: new URL('../assets/image/3.jpg', import.meta.url).href },
+  { id: 4, name: '桂林漓江大瀑布酒店', price: 600, image: new URL('../assets/image/4.jpg', import.meta.url).href },
+  { id: 5, name: '阳朔悦榕庄', price: 900, image: new URL('../assets/image/5.jpg', import.meta.url).href },
+  { id: 6, name: '桂林阳朔三日游', price: 599, image: new URL('../assets/image/6.jpg', import.meta.url).href },
+  { id: 7, name: '桂林米粉', price: 25, image: new URL('../assets/image/72.png', import.meta.url).href },
+  { id: 8, name: '桂林山水画扇', price: 68, image: new URL('../assets/image/82.png', import.meta.url).href }
 ]
 
 const goToSlide = (index: number) => {

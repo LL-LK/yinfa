@@ -1,0 +1,23 @@
+<view class="food">
+  <view class="banner">
+    <text class="banner-title">桂林美食</text>
+    <text class="banner-desc">舌尖上的桂林 · 地道风味</text>
+  </view>
+
+  <view class="food-list">
+    <view class="food-item" wx:for="{{foods}}" wx:key="index">
+      <image src="{{item.image}}" class="food-image" mode="aspectFill" lazy-load />
+      <view class="food-body">
+        <view class="food-header">
+          <text class="food-name">{{item.name}}</text>
+          <view class="food-tag tag-green">{{item.type}}</view>
+        </view>
+        <text class="food-desc">{{item.desc}}</text>
+        <view class="food-footer">
+          <text class="food-price">约 ¥{{item.price}}/人</text>
+          <text class="food-address">📍 {{item.address}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

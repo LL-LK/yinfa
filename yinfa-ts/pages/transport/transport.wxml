@@ -1,0 +1,29 @@
+<view class="transport">
+  <view class="banner">
+    <text class="banner-title">便捷出行</text>
+    <text class="banner-desc">桂林交通指南 · 安全出行</text>
+  </view>
+
+  <view class="transport-grid">
+    <view class="transport-card" wx:for="{{transports}}" wx:key="index">
+      <view class="transport-icon-box">
+        <text class="transport-emoji">{{item.emoji}}</text>
+      </view>
+      <text class="transport-name">{{item.name}}</text>
+      <text class="transport-desc">{{item.desc}}</text>
+      <view class="transport-actions">
+        <view class="transport-btn btn-outline" wx:if="{{item.route}}" bindtap="viewInfo" data-item="{{item}}">
+          {{item.btnText}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="tips-card">
+    <text class="tips-title">🚌 老年人出行提醒</text>
+    <text class="tips-item">· 桂林公交车对70岁以上老人免费，请携带身份证</text>
+    <text class="tips-item">· 漓江游船需提前一天预订，建议选择中午班次</text>
+    <text class="tips-item">· 阳朔方向公交在桂林汽车客运总站乘坐</text>
+    <text class="tips-item">· 桂林市区内共享单车/电动车需使用手机扫码</text>
+  </view>
+</view>

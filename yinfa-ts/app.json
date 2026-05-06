@@ -1,39 +1,44 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/scenic/scenic",
+    "pages/food/food",
+    "pages/transport/transport",
+    "pages/safety/safety",
+    "pages/traffic/traffic",
+    "pages/orders/orders",
+    "pages/user/user",
+    "pages/address/address",
+    "pages/map/map",
     "pages/category/category",
     "pages/list/list",
     "pages/details/details",
     "pages/search/search",
-    "pages/cart/cart",
-    "pages/orders/orders",
-    "pages/user/user",
-    "pages/address/address",
-    "pages/map/map"
+    "pages/cart/cart"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "银发旅游",
-    "navigationBarTextStyle": "black"
+    "navigationBarBackgroundColor": "#2E8B57",
+    "navigationBarTitleText": "桂林银发旅游",
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#ff6b00",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "selectedColor": "#2E8B57",
+    "borderStyle": "white",
+    "backgroundColor": "#FFFFFF",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "首页"
       },
       {
-        "pagePath": "pages/category/category",
-        "text": "分类"
+        "pagePath": "pages/scenic/scenic",
+        "text": "景点"
       },
       {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车"
+        "pagePath": "pages/safety/safety",
+        "text": "安全"
       },
       {
         "pagePath": "pages/user/user",
