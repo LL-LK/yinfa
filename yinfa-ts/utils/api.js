@@ -1,6 +1,3 @@
-const isProduction = false
-const RAILWAY_URL = ''
-
 const BASE_URL = 'https://web-production-58353.up.railway.app/api'
 
 let globalLoadingTimer = null
@@ -23,6 +20,7 @@ function request(options) {
       method: method,
       header: { 'content-type': 'application/json' },
       data: data,
+      timeout: 10000,
       success(res) {
         if (globalLoadingTimer) clearTimeout(globalLoadingTimer)
         if (showLoading) wx.hideLoading()
