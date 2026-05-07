@@ -2,8 +2,8 @@
   <view class="banner" bindtap="readWeather">
     <text class="banner-icon">{{weather.icon}}</text>
     <view class="banner-text">
-      <text class="banner-title">{{weather.condition}} {{weather.temp}}</text>
-      <text class="banner-desc">湿度{{weather.humidity}} · {{weather.wind}} · 点击播报天气</text>
+      <text class="banner-title">桂林 {{weather.condition}} {{weather.temp}}</text>
+      <text class="banner-desc">湿度{{weather.humidity}} · {{weather.wind}} · 点击播报</text>
     </view>
   </view>
 
@@ -12,6 +12,25 @@
       <text class="s-icon">⚠️</text>
       <text class="s-title">{{slippery.title}}</text>
       <text class="s-pic">{{slippery.desc}}</text>
+    </view>
+  </view>
+
+  <view class="advice-card" bindtap="readAdvice">
+    <view class="ac-header">
+      <text class="ac-icon">📝</text>
+      <text class="ac-title">今日出行建议</text>
+      <text class="ac-tip">点击听取语音</text>
+    </view>
+    <text class="ac-desc">{{travelAdvice.advice}}</text>
+    <view class="ac-tags" wx:if="{{travelAdvice.suitable && travelAdvice.suitable.length > 0}}">
+      <view class="ac-tag suitable" wx:for="{{travelAdvice.suitable}}" wx:key="index" bindtap="goRecommended" data-name="{{item}}">
+        ✅ {{item}}
+      </view>
+    </view>
+    <view class="ac-tags" wx:if="{{travelAdvice.avoid && travelAdvice.avoid.length > 0}}">
+      <view class="ac-tag avoid" wx:for="{{travelAdvice.avoid}}" wx:key="index">
+        ❌ {{item}}
+      </view>
     </view>
   </view>
 
@@ -34,7 +53,7 @@
   </view>
 
   <view class="warn-list">
-    <view class="wl-title">⚠️ 各景点路面提醒</view>
+    <view class="wl-title">⚠️ 桂林各景点路面提醒</view>
     <view class="wl-item level-{{item.level}}" wx:for="{{warnings}}" wx:key="index">
       <view class="wli-title">
         <text class="wli-dot level-{{item.level}}"></text>

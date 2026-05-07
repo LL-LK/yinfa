@@ -6,6 +6,7 @@ Page({
   data: {
     weather: weatherUtil.FALLBACK_WEATHER,
     slippery: { level: 1, title: '路面安全', desc: '' },
+    travelAdvice: {},
     warnings: [],
     loading: true
   },
@@ -21,9 +22,11 @@ Page({
   refreshAll: function () {
     return weatherUtil.getWeather('桂林').then(w => {
       const slip = weatherUtil.getSlipperyAdvice(w)
+      const advice = weatherUtil.getTravelAdvice(w)
       this.setData({
         weather: w,
         slippery: slip,
+        travelAdvice: advice,
         warnings: this._buildWarnings(w),
         loading: false
       })
@@ -48,12 +51,31 @@ Page({
     const w = this.data.weather
     const s = this.data.slippery
     const real = w.isReal ? '实时' : '参考'
-    voice.speak('今日' + real + '天气：' + w.condition + '，温度' + w.temp + '，湿度' + w.humidity + '，风力' + w.wind + '。' + s.desc)
+    const text = '今日桂林' + real + '天气：' + w.condition + '，温度' + w.temp + '，湿度' + w.humidity + '，风力' + w.wind + '。' + s.desc
+    voice.speak(text)
+  },
+
+  readAdvice: function () {
+    const advice = this.data.travelAdvice
+    let text = '今日出行建议：' + advice.advice
+    if (advice.suitable && advice.suitable.length > 0) {
+      text += '推荐景点：' + advice.suitable.join('、')
+    }
+    if (advice.avoid && advice.avoid.length > 0) {
+      text += '。建议避免：' + advice.avoid.join('、')
+    }
+    voice.speak(text)
   },
 
   goScenicTips: function () {
-    voice.speak('正在查看景点安全提示')
+    voice.speak('正在查看桂林景点安全提示')
     nav.go('/pages/scenic/scenic')
+  },
+
+  goRecommended: function (e) {
+    const name = e.currentTarget.dataset.name
+    voice.speak('正在查看' + name + '景点详情')
+    wx.showToast({ title: '正在打开' + name, icon: 'none' })
   },
 
   callEmergency: function () {

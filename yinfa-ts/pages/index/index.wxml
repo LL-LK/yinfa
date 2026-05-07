@@ -9,7 +9,7 @@
 
   <view class="weather-mini" bindtap="goSafety">
     <text class="w-icon">{{weather.icon}}</text>
-    <text class="w-text">{{weather.condition}} {{weather.temp}}</text>
+    <text class="w-text">桂林 {{weather.condition}} {{weather.temp}}</text>
     <text class="w-arrow">查看详情 ></text>
   </view>
 
@@ -23,7 +23,7 @@
   </view>
 
   <view class="hot-section">
-    <view class="hot-title">🔥 热门推荐</view>
+    <view class="hot-title">🔥 桂林热门推荐</view>
     <scroll-view scroll-x class="hot-scroll">
       <view class="hot-item" wx:for="{{hotProducts}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
         <image src="{{item.image}}" class="hot-img" mode="aspectFill" />
@@ -39,7 +39,7 @@
 
   <view class="tips">
     <text class="tips-icon">💡</text>
-    <text class="tips-text">小提示：桂林5月气候宜人，记得带外套和雨伞噢</text>
+    <text class="tips-text">桂林5月气候宜人，记得带外套和雨伞，漓江游船需提前预约</text>
   </view>
 
   <view class="quick-actions">

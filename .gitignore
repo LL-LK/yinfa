@@ -163,3 +163,7 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
+
+# Configuration files
+yinfa-ts/utils/config.js
+yinfa-ts/utils/secrets.js

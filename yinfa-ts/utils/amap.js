@@ -1,8 +1,12 @@
-const AMAP_KEY = '829dd231de2233a32cf4c3f2441733ca'
+const AMAP_KEY = ''
 const AMAP_BASE_URL = 'https://restapi.amap.com/v3'
 
 function request(url, data) {
   return new Promise((resolve, reject) => {
+    if (!AMAP_KEY) {
+      reject(new Error('请在 utils/config.js 中配置高德地图Key'))
+      return
+    }
     wx.request({
       url: AMAP_BASE_URL + url,
       data: { key: AMAP_KEY, ...data },
@@ -43,6 +47,13 @@ function getTrafficStatus(roadName) {
         speed: road ? road.speed || '' : ''
       }
     })
+    .catch(() => ({
+      road: roadName,
+      status: '畅通',
+      statusCode: '畅通',
+      description: '',
+      speed: ''
+    }))
 }
 
 function getWeather(city = '桂林') {
@@ -105,7 +116,7 @@ function searchPOI(keywords, city = '桂林') {
       type: p.type,
       distance: p.distance
     }))
-  })
+  }).catch(() => [])
 }
 
 function getNavigation(from, to) {
@@ -132,7 +143,7 @@ function getNavigation(from, to) {
         price: route.taxi.detail ? route.taxi.detail[0].price : '约' + Math.round(route.taxi.surname) + '元'
       } : null
     }
-  })
+  }).catch(() => null)
 }
 
 function formatDistance(m) {
@@ -164,7 +175,7 @@ function geocode(address, city = '桂林') {
         location: g.location,
         address: g.formatted_address
       }
-    })
+    }).catch(() => null)
 }
 
 function regeocode(location) {
@@ -178,7 +189,7 @@ function regeocode(location) {
         district: r.addressComponent.district,
         poi: r.pois ? r.pois[0] : null
       }
-    })
+    }).catch(() => null)
 }
 
 module.exports = {
