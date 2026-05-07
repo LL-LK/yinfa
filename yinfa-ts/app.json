@@ -22,6 +22,11 @@
     "navigationBarTitleText": "桂林银发旅游",
     "navigationBarTextStyle": "white"
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "获取位置信息用于地图显示和景点定位"
+    }
+  },
   "tabBar": {
     "color": "#999999",
     "selectedColor": "#2E8B57",

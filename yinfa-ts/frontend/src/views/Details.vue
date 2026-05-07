@@ -30,7 +30,7 @@ const product = ref({
   id: 1,
   name: '漓江景区门票',
   price: 80,
-  image: new URL('../assets/image/1.jpg', import.meta.url).href,
+  image: '/assets/image/1.jpg',
   description: '漓江是桂林山水的精华，被誉为"百里漓江、百里画廊"，是世界自然遗产地。'
 })
 

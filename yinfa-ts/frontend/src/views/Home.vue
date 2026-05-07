@@ -1,14 +1,11 @@
 <template>
   <div class="home">
-    <!-- 加载动画 -->
     <div v-if="loading" class="loading">
       <div class="loading-spinner"></div>
       <p>加载中...</p>
     </div>
 
-    <!-- 主内容 -->
     <div v-else class="content">
-      <!-- 轮播图区域 -->
       <div class="swiper">
         <div class="swiper-wrapper" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
           <div v-for="(img, index) in imgUrls" :key="index" class="swiper-slide">
@@ -23,7 +20,6 @@
         </div>
       </div>
 
-      <!-- 搜索框区域 -->
       <div class="search">
         <router-link to="/search" class="search-text">
           <span class="search-icon">🔍</span>
@@ -31,7 +27,6 @@
         </router-link>
       </div>
 
-      <!-- 功能模块区域 -->
       <div class="newest">
         <div class="newest-title">
           <span>功能模块</span>
@@ -48,7 +43,6 @@
         </div>
       </div>
 
-      <!-- 商品列表 -->
       <div class="products">
         <div class="newest-title">
           <span>热门商品</span>
@@ -79,33 +73,33 @@ const currentSlide = ref(0)
 let timer: number | null = null
 
 const imgUrls = [
-  new URL('../assets/image/1.jpg', import.meta.url).href,
-  new URL('../assets/image/2.jpg', import.meta.url).href,
-  new URL('../assets/image/3.jpg', import.meta.url).href,
-  new URL('../assets/image/4.jpg', import.meta.url).href,
-  new URL('../assets/image/5.jpg', import.meta.url).href
+  '/assets/image/1.jpg',
+  '/assets/image/2.jpg',
+  '/assets/image/3.jpg',
+  '/assets/image/4.jpg',
+  '/assets/image/5.jpg'
 ]
 
 const modules = [
-  { name: '商品分类', path: '/category', icon: new URL('../assets/image/c1.png', import.meta.url).href },
-  { name: '购物车', path: '/cart', icon: new URL('../assets/image/cart1.png', import.meta.url).href },
-  { name: '订单', path: '/orders', icon: new URL('../assets/image/s1.png', import.meta.url).href },
-  { name: '个人中心', path: '/user', icon: new URL('../assets/image/s2.png', import.meta.url).href },
-  { name: '地图', path: '/map', icon: new URL('../assets/image/s3.png', import.meta.url).href },
-  { name: '地址管理', path: '/address', icon: new URL('../assets/image/s4.png', import.meta.url).href },
-  { name: '搜索', path: '/search', icon: new URL('../assets/image/s5.png', import.meta.url).href },
-  { name: '列表', path: '/list', icon: new URL('../assets/image/s6.png', import.meta.url).href }
+  { name: '商品分类', path: '/category', icon: '/assets/image/c1.png' },
+  { name: '购物车', path: '/cart', icon: '/assets/image/cart1.png' },
+  { name: '订单', path: '/orders', icon: '/assets/image/s1.png' },
+  { name: '个人中心', path: '/user', icon: '/assets/image/s2.png' },
+  { name: '地图', path: '/map', icon: '/assets/image/s3.png' },
+  { name: '地址管理', path: '/address', icon: '/assets/image/s4.png' },
+  { name: '搜索', path: '/search', icon: '/assets/image/s5.png' },
+  { name: '列表', path: '/list', icon: '/assets/image/s6.png' }
 ]
 
 const products = [
-  { id: 1, name: '漓江景区门票', price: 80, image: new URL('../assets/image/1.jpg', import.meta.url).href },
-  { id: 2, name: '阳朔西街', price: 35, image: new URL('../assets/image/2.jpg', import.meta.url).href },
-  { id: 3, name: '龙脊梯田', price: 70, image: new URL('../assets/image/3.jpg', import.meta.url).href },
-  { id: 4, name: '桂林漓江大瀑布酒店', price: 600, image: new URL('../assets/image/4.jpg', import.meta.url).href },
-  { id: 5, name: '阳朔悦榕庄', price: 900, image: new URL('../assets/image/5.jpg', import.meta.url).href },
-  { id: 6, name: '桂林阳朔三日游', price: 599, image: new URL('../assets/image/6.jpg', import.meta.url).href },
-  { id: 7, name: '桂林米粉', price: 25, image: new URL('../assets/image/72.png', import.meta.url).href },
-  { id: 8, name: '桂林山水画扇', price: 68, image: new URL('../assets/image/82.png', import.meta.url).href }
+  { id: 1, name: '漓江景区门票', price: 80, image: '/assets/image/1.jpg' },
+  { id: 2, name: '阳朔西街', price: 35, image: '/assets/image/2.jpg' },
+  { id: 3, name: '龙脊梯田', price: 70, image: '/assets/image/3.jpg' },
+  { id: 4, name: '桂林漓江大瀑布酒店', price: 600, image: '/assets/image/4.jpg' },
+  { id: 5, name: '阳朔悦榕庄', price: 900, image: '/assets/image/5.jpg' },
+  { id: 6, name: '桂林阳朔三日游', price: 599, image: '/assets/image/6.jpg' },
+  { id: 7, name: '桂林米粉', price: 25, image: '/assets/image/72.png' },
+  { id: 8, name: '桂林山水画扇', price: 68, image: '/assets/image/82.png' }
 ]
 
 const goToSlide = (index: number) => {

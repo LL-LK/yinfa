@@ -6,7 +6,7 @@ Page({
       id: 1,
       latitude: 25.2797,
       longitude: 110.2847,
-      iconPath: '/src/assets/image/map-marker.png',
+      iconPath: '/image/map-marker.png',
       width: 30,
       height: 30,
       title: '漓江'
@@ -14,7 +14,7 @@ Page({
       id: 2,
       latitude: 24.7805,
       longitude: 110.4863,
-      iconPath: '/src/assets/image/map-marker.png',
+      iconPath: '/image/map-marker.png',
       width: 30,
       height: 30,
       title: '阳朔西街'
@@ -22,7 +22,7 @@ Page({
       id: 3,
       latitude: 25.7154,
       longitude: 110.0289,
-      iconPath: '/src/assets/image/map-marker.png',
+      iconPath: '/image/map-marker.png',
       width: 30,
       height: 30,
       title: '龙脊梯田'
@@ -30,7 +30,7 @@ Page({
       id: 4,
       latitude: 25.2622,
       longitude: 110.2954,
-      iconPath: '/src/assets/image/map-marker.png',
+      iconPath: '/image/map-marker.png',
       width: 30,
       height: 30,
       title: '象鼻山'

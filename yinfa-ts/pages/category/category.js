@@ -19,6 +19,11 @@ Page({
       })
     }).catch(err => {
       console.error('加载分类失败:', err)
+      wx.showToast({
+        title: '加载失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
     })
   },
 

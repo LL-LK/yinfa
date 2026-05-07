@@ -45,6 +45,11 @@ Page({
       
       this.setData({ products: guilinProducts, loading: false })
     }).catch(() => {
+      wx.showToast({
+        title: '网络异常，使用本地数据',
+        icon: 'none',
+        duration: 2000
+      })
       this.setData({
         products: [
           { id: 1, name: '漓江精华游船票', price: 215, image: '/image/b1.jpg', tag: '热门' },

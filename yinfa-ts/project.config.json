@@ -1,7 +1,56 @@
 {
   "description": "银发旅游小程序",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "src"
+      },
+      {
+        "type": "folder",
+        "value": "frontend"
+      },
+      {
+        "type": "folder",
+        "value": "frontend/dist"
+      },
+      {
+        "type": "folder",
+        "value": "frontend/node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/@vue"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/@vitejs"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/estree-walker"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/magic-string"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/rollup"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/vite"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/vue"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules/vue-router"
+      }
+    ],
     "include": []
   },
   "setting": {
@@ -48,7 +97,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
-  "appid": "wx6e8240779209c963",
+  "appid": "wxYOUR_APPID_HERE",
   "projectname": "yinfa",
   "isGameTourist": false,
   "condition": {
