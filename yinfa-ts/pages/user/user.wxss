@@ -112,3 +112,90 @@
   font-size: 32rpx;
   color: #CCC;
 }
+
+.menu-badge {
+  background-color: #FF4757;
+  color: #FFFFFF;
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 16rpx;
+}
+
+.sos-section {
+  background: linear-gradient(135deg, #FF4757 0%, #FF6B6B 100%);
+  margin: 20rpx 24rpx;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(255,71,87,0.3);
+}
+
+.sos-section:active {
+  opacity: 0.9;
+}
+
+.sos-icon {
+  font-size: 56rpx;
+  margin-right: 20rpx;
+}
+
+.sos-text {
+  flex: 1;
+}
+
+.sos-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.sos-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.8);
+  margin-top: 4rpx;
+}
+
+.settings-section {
+  background-color: #FFFFFF;
+  margin: 20rpx 24rpx;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 16rpx rgba(46,139,87,0.06);
+}
+
+.settings-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2C3E2D;
+  margin-bottom: 24rpx;
+}
+
+.font-size-options {
+  display: flex;
+  justify-content: space-around;
+}
+
+.font-option {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background-color: #F5F9F6;
+  margin: 0 8rpx;
+  border: 2rpx solid transparent;
+}
+
+.font-option.active {
+  background-color: #E8F5EC;
+  border-color: #2E8B57;
+}
+
+.font-option text {
+  font-size: 28rpx;
+  color: #2C3E2D;
+  font-weight: 500;
+}

@@ -47,8 +47,11 @@
           <text class="extra-text">{{item.hours}}</text>
         </view>
         <view class="scenic-actions">
-          <view class="scenic-action-btn btn-primary">立即预订</view>
-          <view class="scenic-action-btn btn-outline">加入收藏</view>
+          <view class="scenic-action-btn btn-primary" bindtap="book" data-idx="{{index}}">立即预订</view>
+          <view class="scenic-action-btn btn-outline" bindtap="toggleFavorite" data-idx="{{index}}">
+            <text>{{isFavorite(item.id) ? '❤️' : '🤍'}}</text>
+            <text>{{isFavorite(item.id) ? '已收藏' : '加入收藏'}}</text>
+          </view>
         </view>
       </view>
     </view>

@@ -1,7 +1,10 @@
+const app = getApp()
+
 Page({
   data: {
     scenics: [
       {
+        id: 1,
         name: '漓江精华段',
         level: '5A景区',
         image: '/image/b1.jpg',
@@ -16,6 +19,7 @@ Page({
         hours: '8:00 - 17:30（建议上午9:00前往，避开中午日晒）'
       },
       {
+        id: 2,
         name: '象鼻山公园',
         level: '5A景区',
         image: '/image/b2.jpg',
@@ -30,6 +34,7 @@ Page({
         hours: '6:30 - 18:00'
       },
       {
+        id: 3,
         name: '阳朔西街',
         level: '4A景区',
         image: '/image/b3.jpg',
@@ -44,6 +49,7 @@ Page({
         hours: '全天开放'
       },
       {
+        id: 4,
         name: '龙脊梯田',
         level: '4A景区',
         image: '/image/1.jpg',
@@ -58,6 +64,7 @@ Page({
         hours: '7:00 - 18:00'
       },
       {
+        id: 5,
         name: '两江四湖',
         level: '5A景区',
         image: '/image/2.jpg',
@@ -72,6 +79,7 @@ Page({
         hours: '夜游19:30 - 21:30；日游9:00 - 17:00'
       },
       {
+        id: 6,
         name: '芦笛岩',
         level: '4A景区',
         image: '/image/3.jpg',
@@ -88,10 +96,64 @@ Page({
     ]
   },
 
+  onLoad: function (options) {
+    if (options && options.mode === 'favorite') {
+      this.loadFavorites()
+    }
+  },
+
+  loadFavorites: function () {
+    const favorites = app.globalData.favorites
+    if (favorites.length === 0) {
+      wx.showToast({ title: '暂无收藏', icon: 'none' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1500)
+    } else {
+      const ids = favorites.map(f => f.id)
+      this.setData({
+        scenics: this.data.scenics.filter(s => ids.includes(s.id))
+      })
+    }
+  },
+
   toggleExpand: function (e) {
     const idx = e.currentTarget.dataset.idx
     const key = 'scenics[' + idx + '].expanded'
     const current = this.data.scenics[idx].expanded
     this.setData({ [key]: !current })
+  },
+
+  toggleFavorite: function (e) {
+    const idx = e.currentTarget.dataset.idx
+    const scenic = this.data.scenics[idx]
+    
+    if (app.isFavorite(scenic.id)) {
+      app.removeFavorite(scenic.id)
+      wx.showToast({ title: '已取消收藏', icon: 'none' })
+    } else {
+      app.addFavorite(scenic)
+      wx.showToast({ title: '收藏成功', icon: 'success' })
+    }
+  },
+
+  isFavorite: function (id) {
+    return app.isFavorite(id)
+  },
+
+  book: function (e) {
+    const idx = e.currentTarget.dataset.idx
+    const scenic = this.data.scenics[idx]
+    wx.showModal({
+      title: '预订确认',
+      content: `确认预订「${scenic.name}」？\n价格：¥${scenic.price}起`,
+      confirmText: '确认预订',
+      cancelText: '稍后再说',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showToast({ title: '预订成功', icon: 'success' })
+        }
+      }
+    })
   }
 })
