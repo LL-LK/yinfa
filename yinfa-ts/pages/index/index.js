@@ -49,8 +49,8 @@ Page({
           { id: 2, name: '象鼻山公园门票', price: 55, image: '/image/b2.jpg', tag: '必去' },
           { id: 3, name: '桂林米粉套餐', price: 38, image: '/image/72.png', tag: '推荐' },
           { id: 4, name: '阳朔西街一日游', price: 168, image: '/image/b3.jpg', tag: '特惠' },
-          { id: 5, name: '龙脊梯田观光', price: 180, image: '/image/1.jpg', tag: '新品' },
-          { id: 6, name: '两江四湖夜游', price: 220, image: '/image/2.jpg', tag: '经典' }
+          { id: 5, name: '龙脊梯田观光', price: 180, image: '/image/b1.jpg', tag: '新品' },
+          { id: 6, name: '两江四湖夜游', price: 220, image: '/image/b2.jpg', tag: '经典' }
         ]
       })
     })

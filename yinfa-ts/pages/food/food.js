@@ -49,7 +49,7 @@ function buildFoods() {
     {
       name: '啤酒鱼',
       type: '招牌',
-      image: '/image/1.jpg',
+      image: '/image/b1.jpg',
       desc: '阳朔名菜，用漓江鲜鱼加啤酒烹制，鱼肉鲜嫩，汤汁浓郁，不辣适合老人。',
       price: 68,
       score: '4.7',
@@ -59,7 +59,7 @@ function buildFoods() {
     {
       name: '桂林油茶',
       type: '传统',
-      image: '/image/2.jpg',
+      image: '/image/b2.jpg',
       desc: '瑶族传统饮品，用茶叶、姜、蒜等擂制而成，暖胃驱寒，配上炒米脆果别具风味。',
       price: 8,
       score: '4.5',
@@ -69,7 +69,7 @@ function buildFoods() {
     {
       name: '马蹄糕',
       type: '甜品',
-      image: '/image/3.jpg',
+      image: '/image/b3.jpg',
       desc: '用桂林特产马蹄制成，晶莹剔透，清甜爽口，软糯不粘牙，适合老人食用。',
       price: 5,
       score: '4.6',
@@ -79,7 +79,7 @@ function buildFoods() {
     {
       name: '荔浦芋扣肉',
       type: '名菜',
-      image: '/image/4.jpg',
+      image: '/image/b1.jpg',
       desc: '荔浦芋头软糯香甜，搭配五花肉肥而不腻，是桂林宴席上的传统名菜。',
       price: 48,
       score: '4.6',
@@ -89,7 +89,7 @@ function buildFoods() {
     {
       name: '阳朔田螺酿',
       type: '特色',
-      image: '/image/5.jpg',
+      image: '/image/b2.jpg',
       desc: '田螺中填入肉馅，鲜香可口，是阳朔独有的特色小吃，别有风味。',
       price: 35,
       score: '4.4',
