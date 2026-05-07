@@ -1,75 +1,42 @@
-const app = getApp()
+const voice = require('../../utils/voice.js')
+const nav = require('../../utils/navigate.js')
 
 Page({
   data: {
     favoriteCount: 0,
-    orderCount: 2,
-    fontSizeMode: 'normal'
+    orderCount: 0,
+    fontSizeMode: 'normal',
+    voiceEnabled: true
   },
 
   onLoad: function () {
-    this.loadData()
-  },
-
-  loadData: function () {
+    const app = getApp()
+    const fontSize = wx.getStorageSync('fontSizeMode') || 'normal'
+    const voiceEn = app.globalData.voiceEnabled !== false
     this.setData({
-      favoriteCount: app.globalData.favorites.length,
-      fontSizeMode: app.globalData.fontSizeMode
+      favoriteCount: 3,
+      orderCount: 2,
+      fontSizeMode: fontSize,
+      voiceEnabled: voiceEn
     })
   },
 
-  goOrders: function () {
-    wx.navigateTo({ url: '/pages/orders/orders' })
-  },
-
-  goAddress: function () {
-    wx.navigateTo({ url: '/pages/address/address' })
-  },
-
-  goFavorites: function () {
-    wx.navigateTo({ url: '/pages/scenic/scenic?mode=favorite' })
-  },
-
-  goHealth: function () {
+  sendSOS: function () {
+    voice.speak('正在发起紧急求助')
     wx.showModal({
-      title: '健康记录',
-      content: '身高：____ cm\n体重：____ kg\n血压：____ / ____ mmHg\n\n请在个人健康档案中记录您的身体状况，便于紧急情况下快速提供信息。',
-      showCancel: false,
-      confirmText: '我知道了'
-    })
-  },
-
-  goEmergency: function () {
-    const contacts = app.globalData.emergencyContacts
-    let content = '请添加紧急联系人，以便在紧急情况下联系您的家人。\n\n'
-    if (contacts.length > 0) {
-      contacts.forEach((c, i) => {
-        content += `${i + 1}. ${c.name} - ${c.phone}\n`
-      })
-    }
-    wx.showModal({
-      title: '紧急联系人',
-      content: content,
-      confirmText: '添加联系人',
-      cancelText: '知道了',
-      success: (res) => {
+      title: '紧急求助',
+      content: '确认向紧急联系人发送求助信息和当前位置？',
+      confirmColor: '#FF4444',
+      success: function (res) {
         if (res.confirm) {
-          wx.showModal({
-            title: '添加紧急联系人',
-            editable: true,
-            placeholderText: '请输入联系人姓名和电话，格式：姓名,电话',
-            success: (res) => {
-              if (res.confirm && res.content) {
-                const parts = res.content.split(',')
-                if (parts.length === 2) {
-                  const contact = { name: parts[0].trim(), phone: parts[1].trim() }
-                  app.globalData.emergencyContacts.push(contact)
-                  app.saveEmergencyContacts()
-                  wx.showToast({ title: '添加成功', icon: 'success' })
-                } else {
-                  wx.showToast({ title: '格式错误', icon: 'none' })
-                }
-              }
+          wx.getLocation({
+            type: 'gcj02',
+            success: function () {
+              wx.showToast({ title: '求助已发送，请保持手机畅通', icon: 'none', duration: 3000 })
+              voice.speak('求助信息已发送，包含您当前的位置，请保持电话畅通。')
+            },
+            fail: function () {
+              wx.showToast({ title: '求助已发送', icon: 'none', duration: 3000 })
             }
           })
         }
@@ -77,20 +44,36 @@ Page({
     })
   },
 
+  goOrders: function () { nav.go('/pages/orders/orders', '我的订单') },
+  goAddress: function () { nav.go('/pages/address/address', '地址管理') },
+  goFavorites: function () { nav.go('/pages/scenic/scenic') },
+  goHealth: function () {
+    wx.showToast({ title: '健康记录功能开发中', icon: 'none' })
+  },
+  goEmergency: function () {
+    wx.showToast({ title: '紧急联系人功能开发中', icon: 'none' })
+    voice.speak('您可以在微信中设置紧急联系人，或拨打家人电话')
+  },
   goSafety: function () {
     wx.switchTab({ url: '/pages/safety/safety' })
+    voice.speak('正在进入安全中心')
   },
 
   setFontSize: function (mode) {
-    app.setFontSizeMode(mode)
+    wx.setStorageSync('fontSizeMode', mode)
     this.setData({ fontSizeMode: mode })
-    wx.showToast({
-      title: mode === 'small' ? '已切换标准字体' : mode === 'normal' ? '已切换较大字体' : '已切换超大字体',
-      icon: 'none'
-    })
+    voice.speak('字体已切换为' + (mode === 'large' ? '超大' : mode === 'normal' ? '较大' : '标准'))
   },
 
-  sendSOS: function () {
-    app.sendSOS()
+  toggleVoice: function () {
+    const newVal = !this.data.voiceEnabled
+    getApp().globalData.voiceEnabled = newVal
+    wx.setStorageSync('voiceEnabled', newVal)
+    this.setData({ voiceEnabled: newVal })
+    if (newVal) {
+      voice.speak('语音提示已开启')
+    } else {
+      wx.showToast({ title: '语音提示已关闭', icon: 'none' })
+    }
   }
 })

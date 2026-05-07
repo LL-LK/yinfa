@@ -1,54 +1,82 @@
+const voice = require('../../utils/voice.js')
+const weatherUtil = require('../../utils/weather.js')
+const nav = require('../../utils/navigate.js')
+
 Page({
   data: {
-    weather: {
-      icon: '⛅',
-      temp: '18°C ~ 26°C',
-      condition: '多云转晴',
-      humidity: '65%',
-      wind: '微风2级',
-      slippery: '注意'
-    },
-    slipperyLevel: 1,
-    slipperyText: {
-      title: '路面安全',
-      desc: '今日天气晴好，路面干燥，湿度适中，适合外出游览。建议穿防滑运动鞋，携带拐杖更安心。'
-    },
-    warnings: [
-      { name: '漓江步道', desc: '江边石阶有青苔，请小心行走', level: 'medium' },
-      { name: '象鼻山台阶', desc: '部分台阶较陡，雨后更需注意', level: 'medium' },
-      { name: '西街石板路', desc: '石板凹凸，雨天注意积水', level: 'low' },
-      { name: '龙脊梯田路', desc: '雨后极度湿滑，老人不建议', level: 'high' },
-      { name: '芦笛岩洞口', desc: '水汽重，地面常年湿润', level: 'medium' },
-      { name: '四湖码头', desc: '上下船区域湿滑', level: 'medium' }
-    ],
-    tips: [
-      { icon: '👟', title: '穿防滑鞋', desc: '请穿防滑合脚运动鞋，避免拖鞋或硬底鞋' },
-      { icon: '🦯', title: '使用拐杖', desc: '建议携带拐杖或登山杖增加行走稳定性' },
-      { icon: '🐢', title: '慢行不急', desc: '放慢脚步游览，给自己充足的游玩时间' },
-      { icon: '👥', title: '结伴出行', desc: '与家人朋友同行，相互照应更安全' },
-      { icon: '📱', title: '保持通讯', desc: '手机充满电，保存景区紧急联系电话' },
-      { icon: '☔', title: '雨不出行', desc: '遇大雨或暴雨，暂停户外游览活动' }
-    ],
-    accidents: [
-      { scene: '景区湿滑台阶', risk: '高', prevent: '使用扶手，一步一阶，不要在台阶上停留拍照' },
-      { scene: '雨后石板路', risk: '高', prevent: '绕行或等地面干燥后再走，穿防滑鞋底加深摩擦' },
-      { scene: '上下旅游巴士', risk: '中', prevent: '抓牢车门扶手，等车停稳后再上下，不要着急' },
-      { scene: '漓江游船甲板', risk: '中', prevent: '甲板湿滑时不要走到边缘，穿平底鞋上下船' },
-      { scene: '购物街区地砖', risk: '低', prevent: '注意地面积水或油渍，走路时不要看手机' },
-      { scene: '酒店卫生间', risk: '中', prevent: '使用防滑拖鞋，地面积水及时擦干，可铺防滑垫' }
-    ]
+    weather: weatherUtil.FALLBACK_WEATHER,
+    slippery: { level: 1, title: '路面安全', desc: '' },
+    warnings: [],
+    loading: true
   },
 
   onLoad: function () {
-    const hour = new Date().getHours()
-    if (hour < 8) {
+    this.refreshAll()
+  },
+
+  onPullDownRefresh: function () {
+    this.refreshAll().then(() => wx.stopPullDownRefresh())
+  },
+
+  refreshAll: function () {
+    return weatherUtil.getWeather('桂林').then(w => {
+      const slip = weatherUtil.getSlipperyAdvice(w)
       this.setData({
-        slipperyLevel: 2,
-        slipperyText: {
-          title: '路面注意',
-          desc: '清晨路面可能有露水，部分景区步道湿滑。请小心慢行，避开积水区域。'
-        }
+        weather: w,
+        slippery: slip,
+        warnings: this._buildWarnings(w),
+        loading: false
       })
-    }
+    })
+  },
+
+  _buildWarnings: function (weather) {
+    const cond = (weather.condition || '').toLowerCase()
+    const isWet = cond.includes('雨') || cond.includes('雪')
+    const isHumid = weather.humidity !== '--' && parseFloat(weather.humidity) > 70
+
+    return [
+      { name: '漓江步道', desc: isWet ? '严重湿滑，请勿在江边行走' : isHumid ? '江边石阶可能潮湿，请小心行走' : '江边石阶有青苔，请小心行走', level: isWet ? 'high' : 'medium' },
+      { name: '象鼻山台阶', desc: isWet ? '台阶极度湿滑，不建议攀爬' : '部分台阶较陡，请使用扶手', level: isWet ? 'high' : 'medium' },
+      { name: '西街石板路', desc: isWet ? '石板路积水湿滑，请穿防滑鞋' : '石板凹凸，注意脚下', level: isWet ? 'medium' : 'low' },
+      { name: '龙脊梯田路', desc: isWet ? '极度危险！下雨天强烈建议不要前往' : '雨后湿滑，老人不建议游览梯田深处', level: isWet ? 'high' : 'high' },
+      { name: '芦笛岩入口', desc: isWet ? '洞口地面湿滑，入洞请慢行' : '洞口有缓坡，注意慢行', level: isWet ? 'medium' : 'low' }
+    ]
+  },
+
+  readWeather: function () {
+    const w = this.data.weather
+    const s = this.data.slippery
+    const real = w.isReal ? '实时' : '参考'
+    voice.speak('今日' + real + '天气：' + w.condition + '，温度' + w.temp + '，湿度' + w.humidity + '，风力' + w.wind + '。' + s.desc)
+  },
+
+  goScenicTips: function () {
+    voice.speak('正在查看景点安全提示')
+    nav.go('/pages/scenic/scenic')
+  },
+
+  callEmergency: function () {
+    voice.speak('正在拨打急救电话')
+    wx.showModal({
+      title: '拨打急救电话',
+      content: '确认拨打 120 急救电话？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.makePhoneCall({ phoneNumber: '120' })
+        }
+      }
+    })
+  },
+
+  shareLocation: function () {
+    voice.speak('正在分享当前位置给家人')
+    wx.getLocation({
+      type: 'gcj02',
+      success: function (loc) {
+        wx.showToast({ title: '位置信息已复制，可发送给家人', icon: 'none', duration: 2500 })
+        voice.speak('您当前的位置信息已准备好，请在聊天中发送给家人。')
+      }
+    })
   }
 })

@@ -1,23 +1,12 @@
 <view class="user">
   <view class="user-header">
-    <view class="avatar-box">
-      <text class="avatar-emoji">👴</text>
-    </view>
+    <view class="avatar-box"><text class="avatar-emoji">👴</text></view>
     <text class="user-name">桂林游客</text>
     <text class="user-id">尊贵的银发旅行者</text>
     <view class="user-stats">
-      <view class="stat">
-        <text class="stat-num">{{favoriteCount}}</text>
-        <text class="stat-label">收藏景点</text>
-      </view>
-      <view class="stat">
-        <text class="stat-num">{{orderCount}}</text>
-        <text class="stat-label">我的订单</text>
-      </view>
-      <view class="stat">
-        <text class="stat-num">86</text>
-        <text class="stat-label">安全分</text>
-      </view>
+      <view class="stat"><text class="stat-num">{{favoriteCount}}</text><text class="stat-label">收藏景点</text></view>
+      <view class="stat"><text class="stat-num">{{orderCount}}</text><text class="stat-label">我的订单</text></view>
+      <view class="stat"><text class="stat-num">{{voiceEnabled ? '开' : '关'}}</text><text class="stat-label">语音提示</text></view>
     </view>
   </view>
 
@@ -25,64 +14,51 @@
     <view class="sos-icon">🆘</view>
     <view class="sos-text">
       <text class="sos-title">紧急求助</text>
-      <text class="sos-desc">遇到危险时点击</text>
+      <text class="sos-desc">遇到危险，一键求助家人和救援</text>
     </view>
   </view>
 
   <view class="menu-section">
     <view class="menu-item" bindtap="goOrders">
-      <text class="menu-icon">📋</text>
-      <text class="menu-name">我的订单</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">📋</text><text class="menu-name">我的订单</text><text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goAddress">
-      <text class="menu-icon">📍</text>
-      <text class="menu-name">地址管理</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">📍</text><text class="menu-name">地址管理</text><text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goFavorites">
-      <text class="menu-icon">❤️</text>
-      <text class="menu-name">我的收藏</text>
-      <text class="menu-badge" wx:if="{{favoriteCount > 0}}">{{favoriteCount}}</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">❤️</text><text class="menu-name">我的收藏</text><text class="menu-badge" wx:if="{{favoriteCount > 0}}">{{favoriteCount}}</text><text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goHealth">
-      <text class="menu-icon">🏥</text>
-      <text class="menu-name">健康记录</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">🏥</text><text class="menu-name">健康记录</text><text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goEmergency">
-      <text class="menu-icon">👨‍👩‍👧</text>
-      <text class="menu-name">紧急联系人</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">👨‍👩‍👧</text><text class="menu-name">紧急联系人</text><text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="goSafety">
-      <text class="menu-icon">🛡️</text>
-      <text class="menu-name">安全设置</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">🛡️</text><text class="menu-name">安全设置</text><text class="menu-arrow">></text>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <view class="settings-title">语音提示</view>
+    <view class="voice-switch" bindtap="toggleVoice">
+      <text>{{voiceEnabled ? '✅ 已开启（点击关闭）' : '❌ 已关闭（点击开启）'}}</text>
+      <text class="voice-hint">开启后每次点击按钮都会语音播报，方便老人使用</text>
     </view>
   </view>
 
   <view class="settings-section">
     <view class="settings-title">字体大小</view>
     <view class="font-size-options">
-      <view class="font-option {{fontSizeMode === 'small' ? 'active' : ''}}" bindtap="setFontSize('small')">
-        <text>标准</text>
-      </view>
-      <view class="font-option {{fontSizeMode === 'normal' ? 'active' : ''}}" bindtap="setFontSize('normal')">
-        <text>较大</text>
-      </view>
-      <view class="font-option {{fontSizeMode === 'large' ? 'active' : ''}}" bindtap="setFontSize('large')">
-        <text>超大</text>
-      </view>
+      <view class="font-option {{fontSizeMode === 'small' ? 'active' : ''}}" bindtap="setFontSize" data-mode="small"><text>标准</text></view>
+      <view class="font-option {{fontSizeMode === 'normal' ? 'active' : ''}}" bindtap="setFontSize" data-mode="normal"><text>较大</text></view>
+      <view class="font-option {{fontSizeMode === 'large' ? 'active' : ''}}" bindtap="setFontSize" data-mode="large"><text>超大</text></view>
     </view>
   </view>
 
   <view class="menu-section">
     <view class="menu-item">
-      <text class="menu-icon">ℹ️</text>
-      <text class="menu-name">关于桂林银发旅游</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-icon">ℹ️</text><text class="menu-name">关于桂林银发旅游</text><text class="menu-arrow">></text>
     </view>
   </view>
 </view>

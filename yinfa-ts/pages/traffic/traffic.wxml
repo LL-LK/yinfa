@@ -1,33 +1,44 @@
 <view class="traffic">
-  <view class="banner">
+  <view class="banner" bindtap="readSummary">
     <text class="banner-icon">🚦</text>
     <view class="banner-text">
       <text class="banner-title">实时路况</text>
-      <text class="banner-desc">桂林道路通行 · 助您畅通出行</text>
+      <text class="banner-desc">点击播报路况概况</text>
+    </view>
+  </view>
+
+  <view class="disclaimer">
+    <text>ℹ️ 路况数据来源：高德地图 | 天气来源：和风天气</text>
+  </view>
+
+  <view class="weather-bar" wx:if="{{weather}}">
+    <view class="wb-item">
+      <text class="wb-icon">🌤️</text>
+      <text class="wb-text">{{weather.weather}}</text>
+    </view>
+    <view class="wb-item">
+      <text class="wb-icon">🌡️</text>
+      <text class="wb-text">{{weather.temperature}}</text>
+    </view>
+    <view class="wb-item">
+      <text class="wb-icon">💨</text>
+      <text class="wb-text">{{weather.wind}}</text>
+    </view>
+    <view class="wb-item slippery-{{weather.slippery}}">
+      <text class="wb-icon">🛡️</text>
+      <text class="wb-text">{{weather.slippery}}</text>
     </view>
   </view>
 
   <view class="t-status-bar">
     <view class="ts-card">
-      <view class="ts-status">
-        <text class="ts-dot green"></text>
-        <text class="ts-num">{{summary.green}}</text>
-        <text class="ts-label">畅通</text>
-      </view>
+      <view class="ts-status"><text class="ts-dot green"></text><text class="ts-num">{{summary.green}}</text><text class="ts-label">畅通</text></view>
     </view>
     <view class="ts-card">
-      <view class="ts-status">
-        <text class="ts-dot orange"></text>
-        <text class="ts-num">{{summary.orange}}</text>
-        <text class="ts-label">缓行</text>
-      </view>
+      <view class="ts-status"><text class="ts-dot orange"></text><text class="ts-num">{{summary.orange}}</text><text class="ts-label">缓行</text></view>
     </view>
     <view class="ts-card">
-      <view class="ts-status">
-        <text class="ts-dot red"></text>
-        <text class="ts-num">{{summary.red}}</text>
-        <text class="ts-label">拥堵</text>
-      </view>
+      <view class="ts-status"><text class="ts-dot red"></text><text class="ts-num">{{summary.red}}</text><text class="ts-label">拥堵</text></view>
     </view>
     <view class="ts-card overall">
       <text class="ts-overall-label">整体</text>
@@ -38,27 +49,10 @@
 
   <view class="road-list">
     <view class="rl-title">🗺️ 主要道路</view>
-    <view class="road-item {{item.status === '畅通' ? 'road-green' : item.status === '缓行' ? 'road-orange' : 'road-red'}}" wx:for="{{roads}}" wx:key="index">
-      <view class="road-dot {{item.status === '畅通' ? 'dot-green' : item.status === '缓行' ? 'dot-orange' : 'dot-red'}}"></view>
-      <view class="road-mid">
-        <text class="road-name">{{item.name}}</text>
-        <text class="road-desc">{{item.desc}}</text>
-      </view>
-      <text class="road-speed {{item.status === '畅通' ? 'text-green' : item.status === '缓行' ? 'text-orange' : 'text-red'}}">{{item.speed}}</text>
-    </view>
-  </view>
-
-  <view class="scenic-parking">
-    <view class="sp-title">🅿️ 景区停车</view>
-    <view class="sp-grid">
-      <view class="sp-item" wx:for="{{scenicTraffic}}" wx:key="index">
-        <text class="sp-name">{{item.name}}</text>
-        <view class="sp-status {{item.parking === '充足' ? 'sp-full' : item.parking === '紧张' ? 'sp-tight' : 'sp-none'}}">{{item.parking}}</view>
-      </view>
-    </view>
-    <view wx:if="{{scenicSuggest}}" class="sp-suggest">
-      <text class="sp-suggest-icon">💡</text>
-      <text class="sp-suggest-text">{{scenicSuggest}}</text>
+    <view class="road-item road-{{item.status}}" wx:for="{{roads}}" wx:key="index">
+      <view class="road-dot dot-{{item.status}}"></view>
+      <view class="road-mid"><text class="road-name">{{item.name}}</text><text class="road-desc">{{item.desc}}</text></view>
+      <text class="road-speed text-{{item.status}}">{{item.status}}</text>
     </view>
   </view>
 

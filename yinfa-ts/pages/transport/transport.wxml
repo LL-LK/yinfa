@@ -1,44 +1,41 @@
 <view class="transport">
   <view class="banner">
-    <text class="banner-icon-deco">🚌</text>
+    <text class="banner-icon">🚌</text>
     <view class="banner-text">
-      <text class="banner-title">便捷出行</text>
-      <text class="banner-desc">桂林交通指南 · 安全出行</text>
+      <text class="banner-title">交通出行</text>
+      <text class="banner-desc">出行无忧·老人友好指南</text>
     </view>
   </view>
 
-  <view class="transport-grid">
-    <view class="transport-card" wx:for="{{transports}}" wx:key="index">
-      <view class="tc-icon-box" style="background: {{item.bg}};">
-        <text class="tc-emoji">{{item.emoji}}</text>
-      </view>
-      <text class="tc-name">{{item.name}}</text>
-      <text class="tc-desc">{{item.desc}}</text>
-      <view class="tc-footer">
-        <text class="tc-price">{{item.price}}</text>
-        <text class="tc-extra">{{item.extra}}</text>
-      </view>
-      <view class="tc-btn btn-primary" bindtap="viewInfo" data-item="{{item}}">
-        {{item.btnText}}
-      </view>
+  <view class="quick-btns">
+    <view class="qb-btn" bindtap="callTaxi">
+      <text class="qb-icon">🚕</text>
+      <text class="qb-label">呼叫出租车</text>
+    </view>
+    <view class="qb-btn" bindtap="goTraffic">
+      <text class="qb-icon">🚦</text>
+      <text class="qb-label">查看路况</text>
     </view>
   </view>
 
-  <view class="tips-section">
-    <view class="tips-header">
-      <text class="tips-title">🚌 老年人出行贴士</text>
-    </view>
-    <view class="tips-grid-sm">
-      <view class="tip-chip" wx:for="{{quickTips}}" wx:key="index">
-        <text class="tip-chip-icon">{{item.icon}}</text>
-        <text class="tip-chip-text">{{item.text}}</text>
+  <view class="mode-list">
+    <view class="mode-item" wx:for="{{modes}}" wx:key="index">
+      <view class="mi-header">
+        <text class="mi-icon">{{item.icon}}</text>
+        <view class="mi-title-row">
+          <text class="mi-name">{{item.name}}</text>
+          <text class="mi-badge">{{item.suitable}}</text>
+        </view>
       </view>
+      <text class="mi-desc">{{item.desc}}</text>
+      <text class="mi-tips">💡 {{item.tips}}</text>
     </view>
-    <view class="tips-detail">
-      <text class="tips-detail-item">· 70岁以上老人公交车免费，请携带身份证</text>
-      <text class="tips-detail-item">· 漓江游船需提前一天预订</text>
-      <text class="tips-detail-item">· 阳朔方向在汽车客运总站乘车</text>
-      <text class="tips-detail-item">· 桂林旅游热线：0773-XXXXXXX</text>
+  </view>
+
+  <view class="tips-list">
+    <view class="tl-item" wx:for="{{tips}}" wx:key="index">
+      <text class="tl-icon">{{item.icon}}</text>
+      <text class="tl-text">{{item.text}}</text>
     </view>
   </view>
 </view>

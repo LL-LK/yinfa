@@ -1,9 +1,13 @@
 const app = getApp()
+const api = require('../../utils/api.js')
+const voice = require('../../utils/voice.js')
+const nav = require('../../utils/navigate.js')
 
 Page({
   data: {
     product: null,
-    quantity: 1
+    quantity: 1,
+    loading: true
   },
 
   onLoad: function (options) {
@@ -12,67 +16,49 @@ Page({
   },
 
   loadProduct: function (id) {
-    app.request({
-      url: `/products/${id}`,
-      method: 'GET'
-    }).then(res => {
-      this.setData({
-        product: res
-      })
+    api.getProductById(id).then(res => {
+      this.setData({ product: res, loading: false })
     }).catch(err => {
       console.error('加载商品详情失败:', err)
-      wx.showToast({
-        title: '加载失败，请重试',
-        icon: 'none',
-        duration: 2000
-      })
+      wx.showToast({ title: '加载失败，请重试', icon: 'none', duration: 2000 })
+      this.setData({ loading: false })
     })
   },
 
   decrease: function () {
     if (this.data.quantity > 1) {
-      this.setData({
-        quantity: this.data.quantity - 1
-      })
+      this.setData({ quantity: this.data.quantity - 1 })
     }
   },
 
   increase: function () {
-    this.setData({
-      quantity: this.data.quantity + 1
-    })
+    this.setData({ quantity: this.data.quantity + 1 })
   },
 
   addToCart: function () {
-    if (!this.data.product) return
-    
+    const p = this.data.product
+    if (!p) return
+
     const cartItems = app.globalData.cartItems || []
-    const existingItem = cartItems.find(item => item.id === this.data.product.id)
-    
-    if (existingItem) {
-      existingItem.quantity += this.data.quantity
+    const exist = cartItems.find(item => item.id === p.id)
+
+    if (exist) {
+      exist.quantity += this.data.quantity
     } else {
       cartItems.push({
-        id: this.data.product.id,
-        name: this.data.product.name,
-        price: this.data.product.price,
-        image: this.data.product.image_url,
+        id: p.id, name: p.name, price: p.price,
+        image: p.image_url || '/image/default.jpg',
         quantity: this.data.quantity
       })
     }
-    
+
     app.globalData.cartItems = cartItems
-    
-    wx.showToast({
-      title: '已添加到购物车',
-      icon: 'success'
-    })
+    voice.speak(p.name + '已添加到购物车，当前数量' + this.data.quantity + '件')
+    wx.showToast({ title: '已添加到购物车', icon: 'success' })
   },
 
   buyNow: function () {
     this.addToCart()
-    wx.navigateTo({
-      url: '/pages/cart/cart'
-    })
+    nav.go('/pages/cart/cart')
   }
 })

@@ -1,59 +1,51 @@
 <view class="scenic">
   <view class="banner">
-    <text class="banner-icon-deco">🏞️</text>
+    <text class="banner-icon">🏔️</text>
     <view class="banner-text">
-      <text class="banner-title">桂林山水甲天下</text>
-      <text class="banner-desc">精选漓江沿线最美景点</text>
+      <text class="banner-title">景点攻略</text>
+      <text class="banner-desc">桂林必游景点·老人友好推荐</text>
     </view>
   </view>
 
+  <view class="tips-bar">
+    <text class="tips-icon">{{tips.icon}}</text>
+    <text class="tips-text">{{tips.text}}</text>
+  </view>
+
   <view class="scenic-list">
-    <view class="scenic-item {{item.expanded ? 'expanded' : ''}}" wx:for="{{scenics}}" wx:for-item="item" wx:key="index">
-      <view class="scenic-main" bindtap="toggleExpand" data-idx="{{index}}">
-        <image src="{{item.image}}" class="scenic-image" mode="aspectFill" lazy-load />
-        <view class="scenic-body">
-          <view class="scenic-row1">
-            <text class="scenic-name">{{item.name}}</text>
-            <view class="scenic-level tag-green">{{item.level}}</view>
-          </view>
-          <view class="scenic-row2">
-            <text class="scenic-intro">{{item.intro}}</text>
-          </view>
-          <view class="scenic-row3">
-            <text class="scenic-price">¥{{item.price}}起</text>
-            <text class="scenic-time">游览约{{item.time}}</text>
-            <text wx:if="{{item.slippery}}" class="slippery-warn">⚠️湿滑</text>
-          </view>
-          <view class="scenic-toggle">
-            <text>{{item.expanded ? '收起 ▲' : '展开更多 ▼'}}</text>
-          </view>
-        </view>
+    <view class="scenic-item" wx:for="{{scenics}}" wx:key="id">
+      <image src="{{item.image}}" class="si-img" mode="aspectFill" bindtap="expandInfo" data-index="{{index}}" />
+      <view class="si-tags">
+        <text class="si-level">{{item.level}}</text>
+        <text class="si-time">⏱{{item.time}}</text>
+        <text class="si-price">{{item.price > 0 ? '¥' + item.price : '免费'}}</text>
       </view>
-      <view class="scenic-extra" wx:if="{{item.expanded}}">
-        <view class="extra-card">
-          <text class="extra-label">⭐ 推荐理由</text>
-          <text class="extra-text">{{item.highlight}}</text>
+      <view class="si-info" bindtap="expandInfo" data-index="{{index}}">
+        <text class="si-name">{{item.name}}</text>
+        <text class="si-intro">{{item.intro}}</text>
+      </view>
+
+      <view class="si-expand" wx:if="{{item.expanded}}">
+        <view class="si-section">
+          <text class="si-label">✨ 精彩看点</text>
+          <text class="si-val">{{item.highlight}}</text>
         </view>
-        <view class="extra-card" wx:if="{{item.slippery}}">
-          <text class="extra-label label-warn">⚠️ 安全提示</text>
-          <text class="extra-text">{{item.safetyTips}}</text>
+        <view class="si-section">
+          <text class="si-label">⚠️ 老人出游提示</text>
+          <text class="si-val warn">{{item.safetyTips}}</text>
         </view>
-        <view class="extra-card">
-          <text class="extra-label">🚌 交通方式</text>
-          <text class="extra-text">{{item.transport}}</text>
+        <view class="si-section">
+          <text class="si-label">🚌 交通指南</text>
+          <text class="si-val">{{item.transport}}</text>
         </view>
-        <view class="extra-card">
-          <text class="extra-label">🕐 开放时间</text>
-          <text class="extra-text">{{item.hours}}</text>
+        <view class="si-section">
+          <text class="si-label">🕐 开放时间</text>
+          <text class="si-val">{{item.hours}}</text>
         </view>
-        <view class="scenic-actions">
-          <view class="scenic-action-btn btn-primary" bindtap="book" data-idx="{{index}}">立即预订</view>
-          <view class="scenic-action-btn btn-outline" bindtap="toggleFavorite" data-idx="{{index}}">
-            <text>{{isFavorite(item.id) ? '❤️' : '🤍'}}</text>
-            <text>{{isFavorite(item.id) ? '已收藏' : '加入收藏'}}</text>
-          </view>
-        </view>
+        <view class="si-buy-btn" bindtap="goDetails" data-id="{{item.id}}">🎫 购买门票</view>
       </view>
     </view>
   </view>
+
+  <view class="bottom-space"></view>
 </view>

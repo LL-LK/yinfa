@@ -32,6 +32,50 @@
   margin-top: 4rpx;
 }
 
+.weather-bar {
+  display: flex;
+  justify-content: space-around;
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  margin: 0 20rpx 16rpx;
+  border-radius: 12rpx;
+  padding: 16rpx 12rpx;
+}
+
+.wb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.wb-icon {
+  font-size: 32rpx;
+}
+
+.wb-text {
+  font-size: 24rpx;
+  color: #2C3E2D;
+  font-weight: 600;
+}
+
+.wb-item.slippery-注意 { background: #FFF3E0; border-radius: 8rpx; padding: 4rpx 12rpx; }
+.wb-item.slippery-危险 { background: #FFEBEE; border-radius: 8rpx; padding: 4rpx 12rpx; }
+.wb-item.slippery-注意 .wb-text { color: #FF9800; }
+.wb-item.slippery-危险 .wb-text { color: #D32F2F; }
+
+.disclaimer {
+  background: #FFF9E6;
+  margin: 0 20rpx 12rpx;
+  border-radius: 8rpx;
+  padding: 12rpx 16rpx;
+  text-align: center;
+}
+
+.disclaimer text {
+  font-size: 22rpx;
+  color: #8B6914;
+}
+
 .t-status-bar {
   display: flex;
   margin: 16rpx 20rpx;
@@ -124,9 +168,9 @@
   margin-bottom: 6rpx;
 }
 
-.road-green { background: #F5FAF6; }
-.road-orange { background: #FFFBF5; }
-.road-red { background: #FFF8F8; }
+.road-畅通 { background: #F5FAF6; }
+.road-缓行 { background: #FFFBF5; }
+.road-拥堵 { background: #FFF8F8; }
 
 .road-dot {
   width: 18rpx;
@@ -136,9 +180,9 @@
   flex-shrink: 0;
 }
 
-.dot-green { background: #2E8B57; }
-.dot-orange { background: #FF8C42; }
-.dot-red { background: #D32F2F; }
+.dot-畅通 { background: #2E8B57; }
+.dot-缓行 { background: #FF8C42; }
+.dot-拥堵 { background: #D32F2F; }
 
 .road-mid {
   flex: 1;
@@ -163,9 +207,9 @@
   font-weight: 700;
 }
 
-.text-green { color: #2E8B57; }
-.text-orange { color: #FF8C42; }
-.text-red { color: #D32F2F; }
+.text-畅通 { color: #2E8B57; }
+.text-缓行 { color: #FF8C42; }
+.text-拥堵 { color: #D32F2F; }
 
 .scenic-parking {
   background: #FFFFFF;

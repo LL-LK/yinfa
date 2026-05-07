@@ -1,4 +1,6 @@
-const app = getApp()
+const api = require('../../utils/api.js')
+const voice = require('../../utils/voice.js')
+const nav = require('../../utils/navigate.js')
 
 Page({
   data: {
@@ -8,43 +10,30 @@ Page({
   },
 
   onLoad: function (options) {
-    this.setData({
-      category: options.category || '',
-      name: options.name || '全部商品'
-    })
+    const cat = options.category || ''
+    const catName = options.name || '全部商品'
+    this.setData({ category: cat, name: catName })
     this.loadProducts()
   },
 
   loadProducts: function () {
     const params = this.data.category ? { category: this.data.category } : {}
-    app.request({
-      url: '/products',
-      method: 'GET',
-      data: params
-    }).then(res => {
-      this.setData({
-        products: res.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          image: item.image_url,
-          description: item.description
-        }))
-      })
+    api.getProducts(params).then(products => {
+      const list = (products || []).map(p => ({
+        id: p.id, name: p.name || '未知', price: p.price || 0,
+        image: p.image_url || '/image/default.jpg',
+        description: p.description || ''
+      }))
+      this.setData({ products: list })
     }).catch(err => {
       console.error('加载商品失败:', err)
-      wx.showToast({
-        title: '加载失败，请重试',
-        icon: 'none',
-        duration: 2000
-      })
+      wx.showToast({ title: '加载失败，请重试', icon: 'none' })
     })
   },
 
   goDetails: function (e) {
     const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: `/pages/details/details?id=${id}`
-    })
+    voice.speak('正在查看商品详情')
+    nav.go('/pages/details/details?id=' + id)
   }
 })
