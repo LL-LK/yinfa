@@ -115,15 +115,15 @@ function insertSampleData(database: Database): void {
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '漓江精华游船票', '乘船游览漓江精华段，欣赏黄布倒影、九马画山等经典景观，全程约4小时', 215.00, 200, '/image/b1.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '象鼻山公园门票', '桂林城徽象鼻山，山形酷似大象饮水，适合老年游客漫步游览，约2小时', 55.00, 300, '/image/b2.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '阳朔西街自由行', '中西文化交融的古街，石板路两侧店铺林立，可品尝地道桂林美食', 0.00, 999, '/image/b3.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '龙脊梯田观光', '壮观的梯田景观，建议青壮年游客前往，老年人请量力而行', 180.00, 150, '/image/1.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '两江四湖夜游船', '乘船夜游桂林市区水系，灯光璀璨，适合全家出行，约2.5小时', 220.00, 100, '/image/2.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '芦笛岩溶洞', '著名溶洞景观，钟乳石千姿百态，洞内恒温约20°C，雨天游览好去处', 90.00, 180, '/image/3.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '杨堤码头竹筏漂流', '漓江精华段起点，乘竹筏漂流至九马画山，欣赏两岸如画美景，约2小时', 160.00, 120, '/image/9.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '桂林漓江大瀑布酒店', '五星级景观酒店，毗邻两江四湖，提供老年人专属无障碍房间', 680.00, 50, '/image/4.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '阳朔悦榕庄', '高端度假酒店，环境清幽，适合静养休闲', 1200.00, 30, '/image/5.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '龙脊梯田观光', '壮观的梯田景观，建议青壮年游客前往，老年人请量力而行', 180.00, 150, '/image/b1.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '两江四湖夜游船', '乘船夜游桂林市区水系，灯光璀璨，适合全家出行，约2.5小时', 220.00, 100, '/image/b2.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '芦笛岩溶洞', '著名溶洞景观，钟乳石千姿百态，洞内恒温约20°C，雨天游览好去处', 90.00, 180, '/image/b3.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '杨堤码头竹筏漂流', '漓江精华段起点，乘竹筏漂流至九马画山，欣赏两岸如画美景，约2小时', 160.00, 120, '/image/b1.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '桂林漓江大瀑布酒店', '五星级景观酒店，毗邻两江四湖，提供老年人专属无障碍房间', 680.00, 50, '/image/b2.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '阳朔悦榕庄', '高端度假酒店，环境清幽，适合静养休闲', 1200.00, 30, '/image/b3.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '桂林米粉体验套餐', '正宗桂林米粉+锅烧+卤牛肉，配一碗大骨汤', 38.00, 500, '/image/72.png', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '啤酒鱼套餐', '阳朔名菜，漓江鲜鱼配啤酒烹制，鱼肉鲜嫩', 88.00, 100, '/image/11.png', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (4, '桂林阳朔三日游', '含漓江游船+阳朔西街+龙脊梯田，全程导游陪同，适合老年团', 799.00, 60, '/image/6.jpg', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (4, '桂林阳朔三日游', '含漓江游船+阳朔西街+龙脊梯田，全程导游陪同，适合老年团', 799.00, 60, '/image/b1.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (5, '桂林山水画扇', '手工绘制漓江风景折扇，精美雅致', 68.00, 500, '/image/82.png', 1)`);
 
   ensureDataDir();

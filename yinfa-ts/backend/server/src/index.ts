@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
+import path from 'path';
 import routes from './routes';
 import { initDatabase } from './database';
 
@@ -20,6 +21,11 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// 静态文件服务
+const imageDir = path.join(__dirname, '../../../../yinfa-ts/image');
+app.use('/image', express.static(imageDir));
+console.log(`Serving static images from: ${imageDir}`);
 
 // 健康检查端点
 app.get('/health', (req, res) => {

@@ -1,7 +1,7 @@
 const isProduction = false
 const RAILWAY_URL = ''
 
-const BASE_URL = 'http://localhost:8000/api'
+const BASE_URL = 'https://web-production-58353.up.railway.app/api'
 
 let globalLoadingTimer = null
 
