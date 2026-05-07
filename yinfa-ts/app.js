@@ -10,7 +10,15 @@ App({
   },
 
   onLaunch: function () {
-    voice.speak('欢迎使用桂林银发旅游，祝您旅途愉快')
+    setTimeout(() => {
+      if (this.globalData.voiceEnabled) {
+        voice.speak('欢迎使用桂林银发旅游，祝您旅途愉快')
+      }
+    }, 1000)
+  },
+
+  onShow: function () {
+    voice.init()
   },
 
   request: api.request,

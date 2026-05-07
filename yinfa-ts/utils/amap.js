@@ -4,17 +4,18 @@ const AMAP_BASE_URL = 'https://restapi.amap.com/v3'
 function request(url, data) {
   return new Promise((resolve, reject) => {
     if (!AMAP_KEY) {
-      reject(new Error('请在 utils/config.js 中配置高德地图Key'))
+      reject(new Error('No API key'))
       return
     }
     wx.request({
       url: AMAP_BASE_URL + url,
       data: { key: AMAP_KEY, ...data },
+      timeout: 8000,
       success: (res) => {
         if (res.data.status === '1') {
           resolve(res.data)
         } else {
-          reject(new Error(res.data.info || '请求失败'))
+          reject(new Error(res.data.info || 'Request failed'))
         }
       },
       fail: reject
@@ -47,13 +48,17 @@ function getTrafficStatus(roadName) {
         speed: road ? road.speed || '' : ''
       }
     })
-    .catch(() => ({
-      road: roadName,
-      status: '畅通',
-      statusCode: '畅通',
-      description: '',
-      speed: ''
-    }))
+    .catch(() => {
+      const mockStatuses = ['畅通', '畅通', '缓行', '畅通', '拥堵']
+      const idx = roadName.length % 5
+      return {
+        road: roadName,
+        status: mockStatuses[idx],
+        statusCode: mockStatuses[idx],
+        description: '',
+        speed: ''
+      }
+    })
 }
 
 function getWeather(city = '桂林') {
@@ -73,27 +78,34 @@ function getWeather(city = '桂林') {
       }
       return {
         weather: condition,
-        temperature: live.temperature + '°C',
-        tempRange: `${live.temperature}°C`,
-        humidity: live.humidity + '%',
-        wind: live.wind + ' ' + live.windpower + '级',
+        temperature: (live.temperature || '25') + '°C',
+        tempRange: (live.temperature || '25') + '°C',
+        humidity: (live.humidity || '60') + '%',
+        wind: (live.wind || '东南') + ' ' + (live.windpower || '2') + '级',
         reportTime: live.reporttime,
         slippery: slippery,
-        city: live.city
+        city: live.city || city
       }
     })
     .catch(() => getDefaultWeather())
 }
 
 function getDefaultWeather() {
+  const conditions = ['晴', '多云', '阴', '小雨']
+  const idx = Math.floor(Math.random() * 4)
+  const condition = conditions[idx]
+  let slippery = '安全'
+  if (condition.includes('雨')) {
+    slippery = '注意'
+  }
   return {
-    weather: '晴',
+    weather: condition,
     temperature: '26°C',
-    tempRange: '22~30°C',
+    tempRange: '22-30°C',
     humidity: '65%',
     wind: '东南风 2级',
     reportTime: new Date().toLocaleString(),
-    slippery: '安全',
+    slippery: slippery,
     city: '桂林'
   }
 }

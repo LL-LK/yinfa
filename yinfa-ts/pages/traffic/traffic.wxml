@@ -24,7 +24,7 @@
       <text class="wb-icon">💨</text>
       <text class="wb-text">{{weather.wind}}</text>
     </view>
-    <view class="wb-item slippery-{{weather.slippery}}">
+    <view class="wb-item {{weather.slippery === '危险' ? 'slippery-danger' : weather.slippery === '注意' ? 'slippery-warning' : ''}}">
       <text class="wb-icon">🛡️</text>
       <text class="wb-text">{{weather.slippery}}</text>
     </view>
@@ -49,10 +49,10 @@
 
   <view class="road-list">
     <view class="rl-title">🗺️ 主要道路</view>
-    <view class="road-item road-{{item.status}}" wx:for="{{roads}}" wx:key="index">
-      <view class="road-dot dot-{{item.status}}"></view>
+    <view class="road-item road-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}" wx:for="{{roads}}" wx:key="index">
+      <view class="road-dot dot-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}"></view>
       <view class="road-mid"><text class="road-name">{{item.name}}</text><text class="road-desc">{{item.desc}}</text></view>
-      <text class="road-speed text-{{item.status}}">{{item.status}}</text>
+      <text class="road-speed text-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}">{{item.status}}</text>
     </view>
   </view>
 

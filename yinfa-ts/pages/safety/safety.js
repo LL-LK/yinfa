@@ -43,7 +43,8 @@ Page({
       { name: '象鼻山台阶', desc: isWet ? '台阶极度湿滑，不建议攀爬' : '部分台阶较陡，请使用扶手', level: isWet ? 'high' : 'medium' },
       { name: '西街石板路', desc: isWet ? '石板路积水湿滑，请穿防滑鞋' : '石板凹凸，注意脚下', level: isWet ? 'medium' : 'low' },
       { name: '龙脊梯田路', desc: isWet ? '极度危险！下雨天强烈建议不要前往' : '雨后湿滑，老人不建议游览梯田深处', level: isWet ? 'high' : 'high' },
-      { name: '芦笛岩入口', desc: isWet ? '洞口地面湿滑，入洞请慢行' : '洞口有缓坡，注意慢行', level: isWet ? 'medium' : 'low' }
+      { name: '芦笛岩入口', desc: isWet ? '洞口地面湿滑，入洞请慢行' : '洞口有缓坡，注意慢行', level: isWet ? 'medium' : 'low' },
+      { name: '杨堤码头', desc: isWet ? '江面风浪较大，竹筏漂流可能取消，请提前致电确认' : '码头台阶湿滑，上下船请小心', level: isWet ? 'high' : 'medium' }
     ]
   },
 

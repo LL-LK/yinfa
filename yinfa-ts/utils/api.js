@@ -1,4 +1,11 @@
-const BASE_URL = 'http://localhost:8000/api'
+const isProduction = process.env.NODE_ENV === 'production'
+const RAILWAY_URL = process.env.RAILWAY_URL || process.env.RENDER_EXTERNAL_URL || ''
+
+const BASE_URL = RAILWAY_URL 
+  ? RAILWAY_URL.replace(/\/$/, '') + '/api' 
+  : isProduction 
+    ? 'https://your-railway-domain.up.railway.app/api' 
+    : 'http://localhost:8000/api'
 
 let globalLoadingTimer = null
 
@@ -55,5 +62,6 @@ module.exports = {
   request,
   getCategories,
   getProducts,
-  getProductById
+  getProductById,
+  BASE_URL
 }
