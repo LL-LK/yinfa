@@ -1,4 +1,17 @@
 <view class="address">
+  <view wx:if="{{notLoggedIn}}" class="empty-state">
+    <text class="empty-icon">🔐</text>
+    <text class="empty-title">请先登录</text>
+    <text class="empty-desc">登录后才能查看和管理地址</text>
+    <text class="btn-primary" bindtap="goLogin" style="min-height:80rpx;line-height:80rpx;padding:0 64rpx;font-size:32rpx;">去登录</text>
+  </view>
+
+  <view wx:elif="{{loading}}" class="loading-state">
+    <text class="loading-icon">⏳</text>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:else>
   <view class="address-list" wx:if="{{addresses.length > 0}}">
     <view class="address-item" wx:for="{{addresses}}" wx:key="id">
       <view class="address-header">
@@ -10,7 +23,24 @@
         <text>{{item.city}} {{item.address_line}}</text>
       </view>
       <view class="address-postal" wx:if="{{item.postal_code}}">邮编: {{item.postal_code}}</view>
+      <view class="address-actions">
+        <view class="action-btn edit-btn" bindtap="editAddress" data-id="{{item.id}}">
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete-btn" bindtap="deleteAddress" data-id="{{item.id}}">
+          <text>删除</text>
+        </view>
+        <view class="action-btn default-btn" bindtap="setDefaultAddress" data-id="{{item.id}}" wx:if="{{!item.is_default}}">
+          <text>设为默认</text>
+        </view>
+      </view>
     </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{addresses.length === 0}}">
+    <text class="empty-icon">📍</text>
+    <text class="empty-title">还没有地址</text>
+    <text class="empty-desc">添加收货地址，方便下单后快速填写</text>
   </view>
 
   <view class="address-form">
@@ -43,4 +73,5 @@
     </view>
     <view class="submit-btn" bindtap="submitAddress">保存地址</view>
   </view>
+  </block>
 </view>

@@ -1,14 +1,44 @@
-<view class="map">
-  <map 
+<view class="map-page">
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <view class="loading-ring"></view>
+    <text class="loading-text">加载地图中...</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state" style="position:absolute;top:30%;left:0;right:0;z-index:10;">
+    <text class="error-icon">😵</text>
+    <text class="error-title">地图加载失败</text>
+    <text class="btn-primary" bindtap="loadScenicMarkers" style="margin-top:16rpx;padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  </view>
+
+  <map
+    id="myMap"
     class="map-view"
-    latitude="{{latitude}}"
-    longitude="{{longitude}}"
+    longitude="{{centerLng}}"
+    latitude="{{centerLat}}"
     markers="{{markers}}"
     bindmarkertap="onMarkerTap"
-    scale="13"
-    show-location
+    bindcallouttap="onCalloutTap"
+    bindregionchange="onRegionChange"
+    scale="{{mapScale}}"
+    show-location="{{hasLocation}}"
+    show-scale
+    enable-zoom
+    enable-scroll
   />
-  <view class="map-tips">
-    <text>点击标记查看景点信息</text>
+
+  <view class="map-controls" wx:if="{{!loading && !error}}">
+    <view class="map-ctrl-btn" bindtap="moveToLocation">
+      <text class="ctrl-icon">📍</text>
+    </view>
+    <view class="map-ctrl-btn" bindtap="zoomIn">
+      <text class="ctrl-icon">➕</text>
+    </view>
+    <view class="map-ctrl-btn" bindtap="zoomOut">
+      <text class="ctrl-icon">➖</text>
+    </view>
+  </view>
+
+  <view class="map-tips" wx:if="{{!loading && !error}}">
+    <text>📍 点击标记查看景点详情，双击缩放地图</text>
   </view>
 </view>

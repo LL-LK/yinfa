@@ -1,15 +1,82 @@
 const voice = require('../../utils/voice.js')
 const nav = require('../../utils/navigate.js')
+const api = require('../../utils/api.js')
 
 Page({
   data: {
     scenics: [],
-    tips: {}
+    tips: {},
+    loading: true,
+    error: false,
+    _loaded: false
   },
 
   onLoad: function () {
+    if (!this.data._loaded) {
+      this.loadScenicSpots()
+    }
+  },
+
+  onShow: function () {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ current: 1 });
+    }
+    if (!this.data._loaded) {
+      this.loadScenicSpots()
+    }
+  },
+
+  onTabItemTap: function () {
+    this.loadScenicSpots()
+  },
+
+  loadScenicSpots: function () {
+    this.setData({ loading: true, error: false })
+
+    api.request({
+      url: '/products?category=scenic',
+      method: 'GET'
+    }).then((products) => {
+      if (products && products.length > 0) {
+        const scenics = products.map(p => ({
+          id: p.id,
+          name: p.name,
+          level: p.tag_name || '景区',
+          image: p.image_url || '/image/b1.jpg',
+          intro: p.description || '桂林著名景点，风景如画',
+          price: p.price || 0,
+          time: p.duration || '2小时',
+          expanded: false,
+          highlight: p.highlight || '桂林山水甲天下',
+          safetyTips: p.safety_tips || '出行请注意安全，建议穿防滑鞋',
+          transport: p.transport || '市内公交可达',
+          hours: p.opening_hours || '8:00-18:00',
+          elderScore: p.elder_score || '4.0',
+          walkDistance: p.walk_distance || '约500m',
+          stairsCount: p.stairs_count || '少量台阶',
+          restArea: p.rest_area || '有休息区'
+        }))
+        this.setData({
+          scenics,
+          loading: false,
+          error: false,
+          _loaded: true,
+          tips: { icon: '💡', text: '每个景点下方有详细的老人友好提示，出门前记得查看哦' }
+        })
+      } else {
+        this.useScenicFallback()
+      }
+    }).catch(() => {
+      this.useScenicFallback()
+    })
+  },
+
+  useScenicFallback: function () {
     this.setData({
       scenics: buildScenics(),
+      loading: false,
+      error: false,
+      _loaded: true,
       tips: { icon: '💡', text: '每个景点下方有详细的老人友好提示，出门前记得查看哦' }
     })
   },
@@ -53,7 +120,11 @@ function buildScenics() {
       highlight: '乘船游览漓江，两岸青山相对出，碧水蓝天相映成趣。',
       safetyTips: '漓江沿岸步道青苔较多，上下船时请慢行注意脚下，雨天甲板湿滑请不要奔跑。建议穿防滑鞋，携带手杖。',
       transport: '桂林市区乘5路、16路公交至漓江码头；也可乘出租车约15元。',
-      hours: '8:00-17:30（建议上午9:00前往）'
+      hours: '8:00-17:30（建议上午9:00前往）',
+      elderScore: '4.2',
+      walkDistance: '约500m',
+      stairsCount: '0级台阶',
+      restArea: '码头有休息亭'
     },
     {
       id: 2,
@@ -67,7 +138,11 @@ function buildScenics() {
       highlight: '象鼻山脚下可乘竹筏游览，近距离感受桂林山水的魅力。',
       safetyTips: '台阶较多且部分较陡，请使用扶手慢行。山脚江边有青苔，注意防滑。景区设有无障碍通道。',
       transport: '乘2路、16路公交至象山公园站，步行2分钟即达。',
-      hours: '8:00-18:00'
+      hours: '8:00-18:00',
+      elderScore: '3.8',
+      walkDistance: '约800m',
+      stairsCount: '约80级台阶',
+      restArea: '山顶有休息平台'
     },
     {
       id: 3,
@@ -81,7 +156,11 @@ function buildScenics() {
       highlight: '免费开放的古老街区，夜晚灯火辉煌，热闹非凡。',
       safetyTips: '石板路面凹凸不平，雨天注意积水和湿滑。人多时注意保管随身物品。建议白天游览，光线好更安全。',
       transport: '桂林汽车站乘大巴至阳朔（约1小时），下车步行10分钟。',
-      hours: '全天开放'
+      hours: '全天开放',
+      elderScore: '4.5',
+      walkDistance: '约600m',
+      stairsCount: '0级台阶',
+      restArea: '沿街有长椅'
     },
     {
       id: 4,
@@ -95,7 +174,11 @@ function buildScenics() {
       highlight: '梯田在日出时分金光闪烁，美不胜收。',
       safetyTips: '雨天极度湿滑，强烈不建议老人前往梯田深处。建议在观景台游览即可，不要深入田间小路。携带拐杖，最好有人陪同。',
       transport: '桂林汽车站乘班车至龙胜（约2.5小时），建议包车前往更舒适。',
-      hours: '7:00-18:00'
+      hours: '7:00-18:00',
+      elderScore: '2.5',
+      walkDistance: '约300m',
+      stairsCount: '约200级台阶',
+      restArea: '观景台有休息区'
     },
     {
       id: 5,
@@ -109,7 +192,11 @@ function buildScenics() {
       highlight: '洞内岩石千奇百怪，在灯光的照射下如梦如幻。',
       safetyTips: '洞口地面湿滑，入洞请慢行。洞内外温差大（约10度），建议带薄外套。洞内有灯光，但有台阶需注意。',
       transport: '乘3路、14路至芦笛岩站，步行5分钟。',
-      hours: '8:00-17:00'
+      hours: '8:00-17:00',
+      elderScore: '3.5',
+      walkDistance: '约400m',
+      stairsCount: '约60级台阶',
+      restArea: '洞口有休息区'
     },
     {
       id: 6,
@@ -123,7 +210,11 @@ function buildScenics() {
       highlight: '夜游时两岸灯火通明，日月双塔熠熠生辉，是桂林最美的夜景。',
       safetyTips: '夜游船只安全性高，上下船有工作人员扶助。湖边步道平坦，适合散步。夜间注意保暖。',
       transport: '市中心步行可达，多个码头可供选择，最近的在杉湖知音台。',
-      hours: '日游8:30-17:00，夜游19:00-21:30'
+      hours: '日游8:30-17:00，夜游19:00-21:30',
+      elderScore: '4.3',
+      walkDistance: '约1km',
+      stairsCount: '0级台阶',
+      restArea: '沿湖有多个休息亭'
     },
     {
       id: 7,
@@ -137,7 +228,11 @@ function buildScenics() {
       highlight: '乘坐竹筏漂流漓江，感受清风拂面，两岸青山如画。',
       safetyTips: '上下竹筏请听从船夫指引，穿好救生衣。竹筏行驶中请坐稳扶好，不要站立。建议上午前往，避开午后风浪。',
       transport: '桂林汽车站乘阳朔班车，在杨堤路口下车，转乘景区电瓶车至码头。',
-      hours: '7:30-17:30（竹筏每小时一班）'
+      hours: '7:30-17:30（竹筏每小时一班）',
+      elderScore: '3.9',
+      walkDistance: '约200m',
+      stairsCount: '0级台阶',
+      restArea: '码头有等候区'
     }
   ]
 }

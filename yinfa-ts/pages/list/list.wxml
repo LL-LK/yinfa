@@ -1,17 +1,50 @@
 <view class="list">
-  <view class="list-header">
-    <text>{{name}}</text>
+  <view class="banner">
+    <text class="banner-icon">🏷️</text>
+    <text class="banner-title">{{categoryName || '商品列表'}}</text>
+    <text class="banner-desc">发现更多桂林旅行服务</text>
   </view>
-  <view class="products-box">
+
+  <scroll-view class="filter-bar" scroll-x>
+    <view class="filter-item {{activeFilter === -1 ? 'active' : ''}}" bindtap="switchFilter" data-idx="-1">全部</view>
+    <view class="filter-item {{activeFilter === index ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="id"
+          bindtap="switchFilter"
+          data-idx="{{index}}">
+      {{item.name}}
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{loading}}" class="loading-spinner">
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-icon">😵</text>
+    <text class="error-text">加载失败</text>
+    <text class="btn-primary" bindtap="loadProducts" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  </view>
+
+  <view wx:else class="product-grid">
     <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
       <view class="product-image">
-        <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+        <image src="{{item.image}}" class="product-img" mode="aspectFill" lazy-load />
       </view>
       <view class="product-info">
-        <view class="product-name">{{item.name}}</view>
-        <view class="product-desc">{{item.description}}</view>
-        <view class="product-price">¥{{item.price}}</view>
+        <text class="product-name text-ellipsis-2">{{item.name}}</text>
+        <view class="product-bottom">
+          <text class="product-price">¥{{item.price}}</text>
+          <text class="product-tag" wx:if="{{item.tag}}">{{item.tag}}</text>
+        </view>
       </view>
     </view>
+  </view>
+
+  <view wx:if="{{!loading && !error && products.length === 0 && loaded}}" class="empty-state">
+    <text class="empty-icon">📦</text>
+    <text class="empty-title">暂无商品</text>
   </view>
 </view>

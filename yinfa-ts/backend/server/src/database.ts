@@ -1,14 +1,18 @@
 import initSqlJs, { Database } from 'sql.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import logger from './logger';
 
 let db: Database | null = null;
-// 数据库路径：支持本地开发和Railway部署
 const isProduction = process.env.NODE_ENV === 'production';
 const dataDir = isProduction 
   ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH || '/app', 'data')
   : path.join(__dirname, '..', '..', '..', 'data');
 const dbPath = path.join(dataDir, 'shop.db');
+const backupDir = path.join(dataDir, 'backups');
+const MAX_BACKUPS = 24;
+const BACKUP_INTERVAL_MS = 60 * 60 * 1000;
+let backupTimer: ReturnType<typeof setInterval> | null = null;
 
 export async function initDatabase(): Promise<Database> {
   if (db) return db;
@@ -22,20 +26,30 @@ export async function initDatabase(): Promise<Database> {
     try {
       const buffer = fs.readFileSync(dbPath);
       db = new SQL.Database(buffer);
-      console.log('Database loaded from file:', dbPath);
+      logger.info('Database loaded from file: ' + dbPath);
     } catch (e) {
-      console.log('Failed to load database file, creating new one');
+      logger.warn({ err: e }, 'Failed to load database file, trying backup');
+      db = tryLoadFromBackup(SQL);
+      if (!db) {
+        logger.warn('No backup available, creating new database');
+        db = new SQL.Database();
+        createTables(db);
+        insertSampleData(db);
+      }
+    }
+  } else {
+    logger.info('No database file found, trying backup');
+    db = tryLoadFromBackup(SQL);
+    if (!db) {
       db = new SQL.Database();
       createTables(db);
       insertSampleData(db);
+      logger.info('Database created with sample data');
     }
-  } else {
-    db = new SQL.Database();
-    createTables(db);
-    insertSampleData(db);
-    console.log('Database created with sample data');
   }
 
+  saveDatabase();
+  startBackupTimer();
   return db;
 }
 
@@ -102,6 +116,38 @@ function createTables(database: Database): void {
       FOREIGN KEY (order_id) REFERENCES orders(id),
       FOREIGN KEY (product_id) REFERENCES products(id)
     );
+
+    CREATE TABLE IF NOT EXISTS emergency_contacts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      name TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      relationship TEXT DEFAULT '',
+      is_primary INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES user_profiles(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS health_records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      blood_pressure TEXT DEFAULT '',
+      heart_rate TEXT DEFAULT '',
+      notes TEXT DEFAULT '',
+      record_date TEXT DEFAULT (date('now')),
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES user_profiles(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS cart_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      product_id INTEGER,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES user_profiles(id),
+      FOREIGN KEY (product_id) REFERENCES products(id)
+    );
   `);
 }
 
@@ -151,5 +197,91 @@ export function saveDatabase(): void {
     const data = db.export();
     const buffer = Buffer.from(data);
     fs.writeFileSync(dbPath, buffer);
+  }
+}
+
+function tryLoadFromBackup(SQL: any): Database | null {
+  if (!fs.existsSync(backupDir)) return null;
+
+  try {
+    const files = fs.readdirSync(backupDir)
+      .filter(f => f.startsWith('shop_backup_') && f.endsWith('.db'))
+      .sort()
+      .reverse();
+
+    for (const file of files) {
+      try {
+        const backupPath = path.join(backupDir, file);
+        const buffer = fs.readFileSync(backupPath);
+        const backupDb = new SQL.Database(buffer);
+        logger.info('Database restored from backup: ' + file);
+        return backupDb;
+      } catch {
+        continue;
+      }
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function createBackup(): void {
+  if (!db) return;
+
+  try {
+    ensureDataDir();
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupFile = path.join(backupDir, `shop_backup_${timestamp}.db`);
+    const data = db.export();
+    const buffer = Buffer.from(data);
+    fs.writeFileSync(backupFile, buffer);
+    logger.info('Database backup created: ' + path.basename(backupFile));
+
+    cleanupOldBackups();
+  } catch (e) {
+    logger.error({ err: e }, 'Database backup failed');
+  }
+}
+
+function cleanupOldBackups(): void {
+  try {
+    if (!fs.existsSync(backupDir)) return;
+
+    const files = fs.readdirSync(backupDir)
+      .filter(f => f.startsWith('shop_backup_') && f.endsWith('.db'))
+      .sort();
+
+    while (files.length > MAX_BACKUPS) {
+      const oldFile = files.shift()!;
+      fs.unlinkSync(path.join(backupDir, oldFile));
+      logger.info('Old backup removed: ' + oldFile);
+    }
+  } catch (e) {
+    logger.error({ err: e }, 'Backup cleanup failed');
+  }
+}
+
+function startBackupTimer(): void {
+  if (backupTimer) return;
+
+  createBackup();
+
+  backupTimer = setInterval(() => {
+    createBackup();
+  }, BACKUP_INTERVAL_MS);
+
+  logger.info('Database auto-backup scheduled every ' + (BACKUP_INTERVAL_MS / 3600000) + ' hour(s)');
+}
+
+export function stopBackupTimer(): void {
+  if (backupTimer) {
+    clearInterval(backupTimer);
+    backupTimer = null;
   }
 }

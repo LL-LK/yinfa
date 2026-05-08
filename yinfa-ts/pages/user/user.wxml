@@ -1,8 +1,10 @@
 <view class="user">
-  <view class="user-header">
-    <view class="avatar-box"><text class="avatar-emoji">👴</text></view>
-    <text class="user-name">桂林游客</text>
-    <text class="user-id">尊贵的银发旅行者</text>
+  <view class="user-header" bindtap="{{isLoggedIn ? '' : 'doLogin'}}">
+    <view class="avatar-box"><text class="avatar-emoji">{{isLoggedIn ? '👴' : '🔐'}}</text></view>
+    <text class="user-name">{{nickname}}</text>
+    <text class="user-id" wx:if="{{isLoggedIn}}">尊贵的银发旅行者</text>
+    <text class="user-subtitle" wx:if="{{!isLoggedIn}}">点击登录，享受更多服务</text>
+    <text class="btn-primary" wx:if="{{!isLoggedIn}}" catchtap="doLogin" style="margin-top:20rpx;min-height:72rpx;line-height:72rpx;font-size:30rpx;padding:0 56rpx;">微信一键登录</text>
     <view class="user-stats">
       <view class="stat"><text class="stat-num">{{favoriteCount}}</text><text class="stat-label">收藏景点</text></view>
       <view class="stat"><text class="stat-num">{{orderCount}}</text><text class="stat-label">我的订单</text></view>

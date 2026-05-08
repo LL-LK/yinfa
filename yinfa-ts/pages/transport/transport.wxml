@@ -1,4 +1,15 @@
 <view class="transport">
+  <view wx:if="{{loading}}" class="loading-spinner">
+    <view class="loading-ring"></view>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-icon">😵</text>
+    <text class="error-title">加载失败</text>
+    <text class="btn-primary" bindtap="loadTransportModes" style="margin-top:20rpx;padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  </view>
+
+  <block wx:else>
   <view class="banner">
     <text class="banner-icon">🚌</text>
     <view class="banner-text">
@@ -19,7 +30,7 @@
   </view>
 
   <view class="mode-list">
-    <view class="mode-item" wx:for="{{modes}}" wx:key="index">
+    <view class="mode-item" wx:for="{{modes}}" wx:key="id">
       <view class="mi-header">
         <text class="mi-icon">{{item.icon}}</text>
         <view class="mi-title-row">
@@ -38,4 +49,5 @@
       <text class="tl-text">{{item.text}}</text>
     </view>
   </view>
+  </block>
 </view>

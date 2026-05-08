@@ -1,57 +1,125 @@
 .search-page {
-  padding: 15px;
+  background: var(--bg);
+  min-height: 100vh;
 }
 
 .search-bar {
   display: flex;
-  margin-bottom: 15px;
+  align-items: center;
+  gap: 20rpx;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.search-input-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  padding: 14rpx 20rpx;
+  border: 2rpx solid var(--border);
+  transition: all var(--transition-fast);
+}
+
+.search-input-box.focus {
+  border-color: var(--primary);
+}
+
+.search-icon {
+  font-size: var(--font-lg);
+  margin-right: 12rpx;
 }
 
 .search-input {
   flex: 1;
-  height: 40px;
-  border: 1px solid #ddd;
-  border-radius: 20px 0 0 20px;
-  padding: 0 15px;
-  font-size: 14px;
+  font-size: var(--font-lg);
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.search-clear {
+  padding: 6rpx 14rpx;
+  font-size: var(--font-md);
+  color: var(--text-hint);
 }
 
 .search-btn {
-  width: 80px;
-  height: 40px;
-  background-color: #ff6b00;
-  color: white;
-  border-radius: 0 20px 20px 0;
+  padding: 18rpx 32rpx;
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-md);
+  font-weight: 700;
+}
+
+.hot-search {
+  padding: 24rpx var(--space-lg);
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.hot-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+}
+
+.hot-tags {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.hot-tag {
+  padding: 14rpx 24rpx;
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  border: 1rpx solid var(--border);
+  transition: all var(--transition-fast);
+}
+
+.hot-tag:active {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .result-count {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 15px;
+  padding: 20rpx var(--space-lg);
+  font-size: var(--font-sm);
+  color: var(--text-hint);
+  background: var(--bg);
 }
 
-.products-box {
-  display: flex;
-  flex-direction: column;
+.product-list {
+  padding: 20rpx;
 }
 
 .product-item {
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 15px;
   display: flex;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.product-item:active {
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
 .product-image {
-  width: 120px;
-  height: 100px;
+  width: 220rpx;
+  height: 180rpx;
   flex-shrink: 0;
+  background: var(--border-light);
 }
 
 .product-img {
@@ -61,35 +129,57 @@
 
 .product-info {
   flex: 1;
-  padding: 10px;
+  padding: 20rpx 24rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .product-name {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
 }
 
 .product-desc {
-  font-size: 12px;
-  color: #999;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .product-price {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff6b00;
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--accent);
 }
 
-.empty {
-  text-align: center;
-  padding: 50px 0;
-  color: #999;
+.product-tag {
+  padding: 6rpx 16rpx;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-xs);
+  font-weight: 600;
+}
+
+.search-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.search-hint text {
+  color: var(--text-hint);
 }

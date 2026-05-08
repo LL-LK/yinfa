@@ -1,59 +1,71 @@
 <view class="index">
-  <view class="banner">
-    <text class="banner-icon">🏞️</text>
-    <view class="banner-text">
-      <text class="banner-title">桂林银发旅游</text>
-      <text class="banner-desc" bindtap="readAloud">舒适慢行 · 安心享受（点击听取导航提示）</text>
+  <!-- 顶部天气和安全快报区域 -->
+  <view bindtap="goSafety" class="safety-bar">
+    <text wx:if="{{weather.condition}}" class="safety-emoji">{{weather.condition === '晴' ? '☀️' : weather.condition === '多云' ? '⛅' : weather.condition === '阴' ? '☁️' : weather.condition.indexOf('雨') >= 0 ? '🌧️' : '🌤️'}}</text>
+    <text class="safety-text">{{weather.condition || '多云'}} {{weather.temp || '22°C'}}</text>
+    <text class="safety-text2">桂林·银发宜居</text>
+  </view>
+
+  <!-- 轮播图 (首屏关键图片不使用懒加载) -->
+  <view class="swiper-box">
+    <swiper class="swiper" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" autoplay circular interval="4000">
+      <swiper-item>
+        <image src="/image/IMG_0329.webp" class="slide-image" mode="aspectFill" />
+        <text class="swiper-label">桂林山水甲天下</text>
+      </swiper-item>
+      <swiper-item>
+        <image src="/image/b2.jpg" class="slide-image" mode="aspectFill" />
+        <text class="swiper-label">象鼻山</text>
+      </swiper-item>
+      <swiper-item>
+        <image src="/image/b3.jpg" class="slide-image" mode="aspectFill" />
+        <text class="swiper-label">阳朔西街</text>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 功能模块 -->
+  <view class="module-grid">
+    <view class="function-item" wx:for="{{modules}}" wx:key="name" bindtap="goModule" data-url="{{item.url}}" data-name="{{item.name}}" data-voice="{{item.voice}}">
+      <text class="function-icon">{{item.icon}}</text>
+      <text class="function-name">{{item.name}}</text>
     </view>
   </view>
 
-  <view class="weather-mini" bindtap="goSafety">
-    <text class="w-icon">{{weather.icon}}</text>
-    <text class="w-text">桂林 {{weather.condition}} {{weather.temp}}</text>
-    <text class="w-arrow">查看详情 ></text>
-  </view>
-
-  <view class="modules">
-    <view class="module-item" wx:for="{{modules}}" wx:key="index"
-      bindtap="goModule"
-      data-url="{{item.url}}" data-name="{{item.name}}" data-voice="{{item.voice}}">
-      <text class="mo-icon">{{item.icon}}</text>
-      <text class="mo-name">{{item.name}}</text>
-    </view>
-  </view>
-
+  <!-- 热门推荐 - 骨架屏 -->
   <view class="hot-section">
-    <view class="hot-title">🔥 桂林热门推荐</view>
-    <scroll-view scroll-x class="hot-scroll">
+    <view class="section-header">
+      <text class="section-title">🔥 热门推荐</text>
+      <text class="section-more" bindtap="goMoreHot">更多 ></text>
+    </view>
+
+    <view wx:if="{{loadingHot}}" class="hot-grid">
+      <view class="skeleton-card" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" style="border-radius:16rpx; overflow:hidden;"></view>
+    </view>
+
+    <view wx:elif="{{hotError}}" class="error-state">
+      <text class="error-icon">😵</text>
+      <text class="error-text">加载失败</text>
+      <text class="btn-primary" bindtap="loadHotProducts" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+    </view>
+
+    <view wx:elif="{{hotProducts.length === 0}}" class="empty-state">
+      <text class="empty-icon">📦</text>
+      <text class="empty-title">暂无推荐</text>
+    </view>
+
+    <view wx:else class="hot-grid">
       <view class="hot-item" wx:for="{{hotProducts}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
-        <image src="{{item.image}}" class="hot-img" mode="aspectFill" />
-        <text class="hot-tag" wx:if="{{item.tag}}">{{item.tag}}</text>
-        <view class="hot-info">
-          <text class="hot-name">{{item.name}}</text>
-          <text class="hot-price" wx:if="{{item.price}}">¥{{item.price}}</text>
-          <text class="hot-price free" wx:else>免费</text>
+        <view class="hot-image-box">
+          <image src="{{item.image}}" class="hot-image" mode="aspectFill" lazy-load />
+          <text class="hot-tag" style="background: {{item.tagColor}};">{{item.tag}}</text>
+        </view>
+        <text class="hot-name">{{item.name}}</text>
+        <view class="hot-bottom">
+          <text class="hot-price">¥{{item.price}}</text>
+          <text class="hot-sold">起</text>
         </view>
       </view>
-    </scroll-view>
-  </view>
-
-  <view class="tips">
-    <text class="tips-icon">💡</text>
-    <text class="tips-text">桂林5月气候宜人，记得带外套和雨伞，漓江游船需提前预约</text>
-  </view>
-
-  <view class="quick-actions">
-    <view class="qa-btn emergency" bindtap="sendSOS">
-      <text class="qa-icon">🆘</text>
-      <text class="qa-label">一键呼救</text>
-    </view>
-    <view class="qa-btn" bindtap="goTraffic">
-      <text class="qa-icon">🚦</text>
-      <text class="qa-label">实时路况</text>
-    </view>
-    <view class="qa-btn" bindtap="goOrders">
-      <text class="qa-icon">📋</text>
-      <text class="qa-label">我的订单</text>
     </view>
   </view>
 </view>

@@ -11,12 +11,14 @@ const router = createRouter({
     {
       path: '/address',
       name: 'Address',
-      component: () => import('../views/Address.vue')
+      component: () => import('../views/Address.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/cart',
       name: 'Cart',
-      component: () => import('../views/Cart.vue')
+      component: () => import('../views/Cart.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/category',
@@ -36,7 +38,8 @@ const router = createRouter({
     {
       path: '/orders',
       name: 'Orders',
-      component: () => import('../views/Orders.vue')
+      component: () => import('../views/Orders.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/search',
@@ -54,6 +57,17 @@ const router = createRouter({
       component: () => import('../views/Map.vue')
     }
   ]
+})
+
+router.beforeEach((to, _from, next) => {
+  if (to.meta.requiresAuth) {
+    const openid = localStorage.getItem('openid')
+    if (!openid) {
+      next({ path: '/user', query: { redirect: to.fullPath } })
+      return
+    }
+  }
+  next()
 })
 
 export default router

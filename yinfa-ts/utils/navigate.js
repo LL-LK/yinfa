@@ -1,10 +1,17 @@
 const voice = require('./voice.js')
 
+let pendingTimer = null
+
 function go(url, label) {
+  clearPending()
   if (label) {
     voice.speak('正在进入' + label)
-    setTimeout(() => {
-      wx.navigateTo({ url: url })
+    pendingTimer = setTimeout(() => {
+      pendingTimer = null
+      wx.navigateTo({
+        url: url,
+        fail: () => {}
+      })
     }, 600)
   } else {
     wx.navigateTo({ url: url })
@@ -12,10 +19,15 @@ function go(url, label) {
 }
 
 function switchTab(url, label) {
+  clearPending()
   if (label) {
     voice.speak('正在切换到' + label)
-    setTimeout(() => {
-      wx.switchTab({ url: url })
+    pendingTimer = setTimeout(() => {
+      pendingTimer = null
+      wx.switchTab({
+        url: url,
+        fail: () => {}
+      })
     }, 600)
   } else {
     wx.switchTab({ url: url })
@@ -23,14 +35,23 @@ function switchTab(url, label) {
 }
 
 function goBack(label) {
+  clearPending()
   if (label) {
     voice.speak('正在返回' + label)
   }
   wx.navigateBack()
 }
 
+function clearPending() {
+  if (pendingTimer) {
+    clearTimeout(pendingTimer)
+    pendingTimer = null
+  }
+}
+
 module.exports = {
   go,
   switchTab,
-  goBack
+  goBack,
+  clearPending
 }

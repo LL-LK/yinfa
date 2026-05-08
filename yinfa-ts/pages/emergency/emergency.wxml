@@ -1,0 +1,86 @@
+<view class="emergency">
+  <view class="header">
+    <view class="header-icon">👨‍👩‍👧</view>
+    <text class="header-title">紧急联系人</text>
+    <text class="header-desc">最多添加3位紧急联系人，遇到危险可一键求助</text>
+  </view>
+
+  <view class="contact-list" wx:if="{{!loading && contacts.length > 0}}">
+    <view class="contact-card" wx:for="{{contacts}}" wx:key="id">
+      <view class="contact-info">
+        <view class="contact-header">
+          <text class="contact-name">{{item.name}}</text>
+          <text class="primary-badge" wx:if="{{item.is_primary}}">主联系人</text>
+        </view>
+        <text class="contact-phone">{{item.phone}}</text>
+        <text class="contact-relation" wx:if="{{item.relationship}}">{{item.relationship}}</text>
+      </view>
+      <view class="contact-actions">
+        <view class="action-btn call-btn" bindtap="makeCall" data-phone="{{item.phone}}">
+          <text class="action-icon">📞</text>
+          <text>拨打</text>
+        </view>
+        <view class="action-btn location-btn" bindtap="sendLocation" data-name="{{item.name}}">
+          <text class="action-icon">📍</text>
+          <text>发位置</text>
+        </view>
+      </view>
+      <view class="contact-footer">
+        <view class="footer-btn" bindtap="setPrimary" data-id="{{item.id}}" wx:if="{{!item.is_primary}}">
+          <text>设为主联系人</text>
+        </view>
+        <view class="footer-btn danger" bindtap="deleteContact" data-id="{{item.id}}" data-name="{{item.name}}">
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && contacts.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">还没有添加紧急联系人</text>
+    <text class="empty-hint">添加家人或朋友的电话，遇到紧急情况可一键求助</text>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="add-section">
+    <view class="add-btn" bindtap="showAddForm" wx:if="{{!showForm && contacts.length < 3}}">
+      <text class="add-icon">＋</text>
+      <text>添加紧急联系人</text>
+    </view>
+
+    <view class="form-section" wx:if="{{showForm}}">
+      <view class="form-title">添加紧急联系人</view>
+
+      <view class="form-group">
+        <text class="form-label">姓名</text>
+        <input class="form-input" placeholder="请输入姓名" value="{{formData.name}}" bindinput="onNameInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">手机号</text>
+        <input class="form-input" type="number" maxlength="11" placeholder="请输入手机号" value="{{formData.phone}}" bindinput="onPhoneInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">关系</text>
+        <input class="form-input" placeholder="如：儿子、女儿、老伴" value="{{formData.relationship}}" bindinput="onRelationInput" />
+      </view>
+
+      <view class="form-group row">
+        <text class="form-label">设为主要联系人</text>
+        <switch checked="{{formData.is_primary}}" bindchange="togglePrimary" color="#2E8B57" />
+      </view>
+
+      <view class="form-actions">
+        <view class="form-btn cancel-btn" bindtap="hideForm">取消</view>
+        <view class="form-btn submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitContact">
+          {{submitting ? '添加中...' : '确认添加'}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

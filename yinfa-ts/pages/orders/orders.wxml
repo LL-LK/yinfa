@@ -1,29 +1,70 @@
 <view class="orders">
   <view class="banner">
+    <text class="banner-icon">📋</text>
     <text class="banner-title">我的订单</text>
     <text class="banner-desc">桂林之旅·轻松管理</text>
   </view>
 
-  <view wx:if="{{orders.length > 0}}" class="order-list">
-    <view class="order-item" wx:for="{{orders}}" wx:key="index" bindtap="readOrder" data-index="{{index}}">
-      <view class="order-header">
-        <text class="order-no">订单号: {{item.orderNo}}</text>
-        <view class="order-status tag-green">{{item.statusText}}</view>
+  <view wx:if="{{loading}}" class="loading-spinner">
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-icon">😵</text>
+    <text class="error-text">{{errorMsg || '加载失败'}}</text>
+    <text class="btn-primary" bindtap="loadOrders" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  </view>
+
+  <view wx:elif="{{orders.length > 0}}">
+    <view class="tab-bar">
+      <view class="tab-item {{selectedTab === 'all' ? 'active' : ''}}" bindtap="onTabChange" data-tab="all">
+        <text>全部</text>
+        <view class="tab-badge" wx:if="{{selectedTab === 'all'}}"></view>
       </view>
-      <view class="order-title">{{item.title}}</view>
-      <view class="order-footer">
-        <view class="order-row">
-          <text class="order-date">📅 {{item.date}}</text>
-          <text class="order-people">👥 {{item.people}}人</text>
+      <view class="tab-item {{selectedTab === 'pending' ? 'active' : ''}}" bindtap="onTabChange" data-tab="pending">
+        <text>待支付</text>
+      </view>
+      <view class="tab-item {{selectedTab === 'paid' ? 'active' : ''}}" bindtap="onTabChange" data-tab="paid">
+        <text>已支付</text>
+      </view>
+      <view class="tab-item {{selectedTab === 'completed' ? 'active' : ''}}" bindtap="onTabChange" data-tab="completed">
+        <text>已完成</text>
+      </view>
+      <view class="tab-item {{selectedTab === 'cancelled' ? 'active' : ''}}" bindtap="onTabChange" data-tab="cancelled">
+        <text>已取消</text>
+      </view>
+    </view>
+
+    <view class="order-list">
+      <view class="order-item" wx:for="{{filteredOrders}}" wx:key="id" bindtap="onOrderTap" data-id="{{item.id}}">
+        <view class="order-header">
+          <text class="order-no">订单号: {{item.orderNo}}</text>
+          <view class="order-status tag-{{item.statusText === '已完成' ? 'success' : item.statusText === '待支付' ? 'warning' : item.statusText === '已取消' ? 'danger' : 'primary'}}">{{item.statusText}}</view>
         </view>
-        <text class="order-price">¥{{item.price}}</text>
+        <view class="order-title text-ellipsis-2">{{item.title}}</view>
+        <view class="order-footer">
+          <view class="order-row">
+            <text class="order-date">📅 {{item.date}}</text>
+          </view>
+          <view style="display:flex;align-items:center;gap:16rpx;">
+            <text class="btn-primary" wx:if="{{item.payBtnVisible}}" catchtap="onOrderTap" data-id="{{item.id}}" style="min-height:56rpx;line-height:56rpx;font-size:26rpx;padding:0 32rpx;">去支付</text>
+            <text class="order-price">¥{{item.price}}</text>
+          </view>
+        </view>
       </view>
+    </view>
+
+    <view class="empty-tab" wx:if="{{filteredOrders.length === 0}}">
+      <text class="empty-tab-icon">📭</text>
+      <text class="empty-tab-text">当前分类没有订单</text>
     </view>
   </view>
 
-  <view wx:else class="empty">
+  <view wx:else class="empty-state">
     <text class="empty-icon">📋</text>
-    <text class="empty-text">暂无订单</text>
-    <text class="empty-sub">快去探索桂林美景吧</text>
+    <text class="empty-title">您还没有订单</text>
+    <text class="empty-desc">快去选购门票吧</text>
   </view>
 </view>

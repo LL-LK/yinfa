@@ -1,0 +1,107 @@
+<view class="health">
+  <view class="header">
+    <view class="header-icon">🏥</view>
+    <text class="header-title">健康记录</text>
+    <text class="header-desc">记录血压、心率，关注身体健康</text>
+  </view>
+
+  <view class="chart-section" wx:if="{{chartData.bpLabels.length > 0}}">
+    <view class="chart-title">📊 血压趋势</view>
+    <view class="chart-wrapper">
+      <view class="chart-bar-group" wx:for="{{chartData.bpLabels}}" wx:key="*this" wx:for-index="idx">
+        <view class="chart-date">{{item}}</view>
+        <view class="bar-box">
+          <view class="bar systolic" style="height: {{chartData.bpSystolic[idx] / 200 * 200}}rpx;">{{chartData.bpSystolic[idx]}}</view>
+          <view class="bar diastolic" style="height: {{chartData.bpDiastolic[idx] / 200 * 200}}rpx;">{{chartData.bpDiastolic[idx]}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="chart-legend">
+      <view class="legend-item"><view class="legend-color systolic"></view><text>收缩压</text></view>
+      <view class="legend-item"><view class="legend-color diastolic"></view><text>舒张压</text></view>
+    </view>
+  </view>
+
+  <view class="chart-section" wx:if="{{chartData.hrLabels.length > 0}}">
+    <view class="chart-title">💓 心率趋势</view>
+    <view class="chart-wrapper">
+      <view class="chart-bar-group" wx:for="{{chartData.hrLabels}}" wx:key="*this" wx:for-index="idx">
+        <view class="chart-date">{{item}}</view>
+        <view class="bar-box">
+          <view class="bar heart-rate" style="height: {{chartData.hrValues[idx] / 120 * 200}}rpx;">{{chartData.hrValues[idx]}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="record-list" wx:if="{{!loading && records.length > 0}}">
+    <view class="list-title">📝 历史记录</view>
+    <view class="record-card" wx:for="{{records}}" wx:key="id">
+      <view class="record-date">{{item.record_date}}</view>
+      <view class="record-values">
+        <view class="record-item" wx:if="{{item.blood_pressure}}">
+          <text class="record-label">血压</text>
+          <text class="record-value bp-{{getBpLevel(item.blood_pressure)}}">{{item.blood_pressure}}</text>
+          <text class="record-tag {{getBpLevel(item.blood_pressure)}}">{{getBpLevelText(item.blood_pressure)}}</text>
+        </view>
+        <view class="record-item" wx:if="{{item.heart_rate}}">
+          <text class="record-label">心率</text>
+          <text class="record-value">{{item.heart_rate}} 次/分</text>
+        </view>
+      </view>
+      <view class="record-notes" wx:if="{{item.notes}}">
+        <text>📝 {{item.notes}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && records.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">还没有健康记录</text>
+    <text class="empty-hint">开始记录您的血压和心率，关注身体健康</text>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="add-section">
+    <view class="add-btn" bindtap="showAddForm" wx:if="{{!showForm}}">
+      <text class="add-icon">＋</text>
+      <text>记录健康数据</text>
+    </view>
+
+    <view class="form-section" wx:if="{{showForm}}">
+      <view class="form-title">记录健康数据</view>
+
+      <view class="form-group">
+        <text class="form-label">血压 (收缩压/舒张压)</text>
+        <input class="form-input" placeholder="例如: 120/80" value="{{formData.blood_pressure}}" bindinput="onBpInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">心率 (次/分)</text>
+        <input class="form-input" type="number" placeholder="例如: 72" value="{{formData.heart_rate}}" bindinput="onHrInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <input class="form-input" placeholder="服药情况、身体感受等" value="{{formData.notes}}" bindinput="onNotesInput" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">记录日期</text>
+        <picker mode="date" value="{{formData.record_date}}" bindchange="onDateChange">
+          <view class="form-input picker">{{formData.record_date || '选择日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-actions">
+        <view class="form-btn cancel-btn" bindtap="hideForm">取消</view>
+        <view class="form-btn submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitRecord">
+          {{submitting ? '保存中...' : '确认保存'}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

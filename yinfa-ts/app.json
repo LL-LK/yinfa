@@ -14,7 +14,9 @@
     "pages/list/list",
     "pages/details/details",
     "pages/search/search",
-    "pages/cart/cart"
+    "pages/cart/cart",
+    "pages/emergency/emergency",
+    "pages/health/health"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,7 +30,7 @@
     }
   },
   "tabBar": {
-    "color": "#999999",
+    "color": "#7A9A7E",
     "selectedColor": "#2E8B57",
     "borderStyle": "white",
     "backgroundColor": "#FFFFFF",

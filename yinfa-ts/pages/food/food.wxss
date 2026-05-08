@@ -1,52 +1,30 @@
 .food {
-  background-color: #F5F9F6;
+  background: var(--bg);
+  min-height: 100vh;
   padding-bottom: 40rpx;
 }
 
 .banner {
-  background: linear-gradient(135deg, #FF8C42 0%, #FF9800 50%, #E65100 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   padding: 36rpx 30rpx;
   display: flex;
   align-items: center;
-  position: relative;
-  overflow: hidden;
 }
-
-.banner-decor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.decor-circle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-}
-
-.c1 { width: 160rpx; height: 160rpx; bottom: -40rpx; right: -20rpx; }
-.c2 { width: 100rpx; height: 100rpx; top: -10rpx; left: -10rpx; }
 
 .banner-icon {
   font-size: 52rpx;
   margin-right: 20rpx;
-  position: relative;
-  z-index: 1;
 }
 
 .banner-text {
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 1;
 }
 
 .banner-title {
   font-size: 40rpx;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--text-inverse);
 }
 
 .banner-desc {
@@ -55,152 +33,145 @@
   margin-top: 4rpx;
 }
 
-.food-featured {
+.featured {
   display: flex;
   margin: 16rpx 20rpx;
-  gap: 10rpx;
+  gap: 12rpx;
 }
 
-.featured-card {
+.ft-item {
   flex: 1;
-  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-  border-radius: 14rpx;
-  padding: 16rpx 10rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 20rpx 12rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: var(--shadow-sm);
   position: relative;
-  border: 1rpx solid #FFE0B2;
 }
 
-.fc-badge {
+.ft-badge {
   position: absolute;
-  top: 4rpx;
-  right: 6rpx;
-  font-size: 16rpx;
-  background: #FF8C42;
-  color: #FFF;
-  padding: 2rpx 8rpx;
-  border-radius: 6rpx;
+  top: 6rpx;
+  right: 8rpx;
+  font-size: 18rpx;
+  background: var(--accent);
+  color: var(--text-inverse);
+  padding: 2rpx 10rpx;
+  border-radius: var(--radius-pill);
   font-weight: 700;
 }
 
-.fc-name {
-  font-size: 24rpx;
+.ft-name {
+  font-size: var(--font-md);
   font-weight: 700;
-  color: #2C3E2D;
+  color: var(--text-primary);
 }
 
-.fc-sub {
+.ft-sub {
   font-size: 20rpx;
-  color: #5A7A5C;
+  color: var(--text-secondary);
   margin-top: 4rpx;
 }
 
-.food-section {
+.food-list {
   padding: 0 20rpx;
 }
 
-.food-section-title {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #2C3E2D;
-  margin-bottom: 14rpx;
-  padding-left: 8rpx;
-  border-left: 6rpx solid #FF8C42;
-}
-
-.food-grid {
+.food-item {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.food-card {
-  width: 48%;
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
   overflow: hidden;
   margin-bottom: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
-.food-card-img-wrapper {
-  position: relative;
-  width: 100%;
-  height: 180rpx;
-  overflow: hidden;
+.food-item.selected {
+  box-shadow: var(--shadow-md);
 }
 
-.food-card-img {
-  width: 100%;
-  height: 100%;
+.fi-img {
+  width: 200rpx;
+  height: 160rpx;
+  flex-shrink: 0;
+  background: var(--border-light);
 }
 
-.food-card-badge {
-  position: absolute;
-  top: 8rpx;
-  left: 8rpx;
-  padding: 2rpx 12rpx;
-  border-radius: 4rpx;
-  font-size: 20rpx;
-}
-
-.food-card-body {
-  padding: 14rpx;
-}
-
-.food-card-row1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6rpx;
-}
-
-.food-card-name {
-  font-size: 26rpx;
-  font-weight: 700;
-  color: #2C3E2D;
-}
-
-.food-card-score {
-  font-size: 20rpx;
-  color: #FF9800;
-}
-
-.food-card-desc {
-  font-size: 22rpx;
-  color: #5A7A5C;
-  line-height: 1.5;
-  display: block;
-  margin-bottom: 10rpx;
-}
-
-.food-card-bottom {
+.fi-info {
+  flex: 1;
+  padding: 20rpx 24rpx;
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
-}
-
-.food-card-meta {
-  display: flex;
   justify-content: space-between;
+  min-width: 0;
 }
 
-.food-card-price {
-  font-size: 26rpx;
+.fi-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.fi-name {
+  font-size: var(--font-lg);
   font-weight: 700;
-  color: #FF8C42;
+  color: var(--text-primary);
 }
 
-.food-card-addr {
-  font-size: 20rpx;
-  color: #999;
+.fi-badge {
+  font-size: var(--font-xs);
+  padding: 4rpx 14rpx;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
 }
 
-.food-card-action {
-  font-size: 24rpx;
-  padding: 10rpx 0;
-  border-radius: 24rpx;
-  text-align: center;
+.fi-price {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.fi-score {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.fi-expand {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  background: var(--bg);
+  border-top: 1rpx solid var(--border-light);
+  animation: fadeIn var(--transition-normal);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fi-desc {
+  display: block;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 12rpx;
+}
+
+.fi-addr {
+  display: block;
+  font-size: var(--font-sm);
+  color: var(--text-hint);
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 200rpx 0;
 }

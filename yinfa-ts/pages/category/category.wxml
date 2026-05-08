@@ -1,8 +1,54 @@
 <view class="category">
-  <view class="category-list">
-    <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="goList" data-slug="{{item.slug}}" data-name="{{item.name}}">
-      <view class="category-icon">📦</view>
-      <view class="category-name">{{item.name}}</view>
+  <view class="banner">
+    <text class="banner-icon">🏷️</text>
+    <text class="banner-title">商品分类</text>
+    <text class="banner-desc">选择您需要的旅行服务</text>
+  </view>
+
+  <view class="category-body">
+    <scroll-view wx:if="{{categories.length > 0}}" class="sidebar" scroll-y>
+      <view class="sidebar-item {{index === activeCategory ? 'active' : ''}}"
+            wx:for="{{categories}}"
+            wx:key="id"
+            bindtap="switchCategory"
+            data-index="{{index}}">
+        <text>{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{loadingCategories}}" class="sidebar" style="padding:40rpx 0;">
+      <view class="skeleton-text" wx:for="{{[1,2,3,4,5]}}" wx:key="*this" style="width:80%; margin:20rpx auto 20rpx 20rpx;"></view>
     </view>
+
+    <scroll-view class="product-content" scroll-y>
+      <view wx:if="{{loadingProducts}}" class="product-grid">
+        <view wx:for="{{[1,2,3,4]}}" wx:key="*this" style="padding:12rpx;">
+          <view class="skeleton-image" style="height:220rpx;"></view>
+          <view class="skeleton-text" style="margin-top:12rpx;"></view>
+          <view class="skeleton-text-short"></view>
+        </view>
+      </view>
+
+      <view wx:elif="{{productError}}" class="error-state">
+        <text class="error-icon">😵</text>
+        <text class="error-text">加载失败</text>
+        <text class="btn-primary" bindtap="loadProducts" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+      </view>
+
+      <view wx:elif="{{products.length === 0}}" class="empty-state">
+        <text class="empty-icon">📦</text>
+        <text class="empty-title">该分类暂无商品</text>
+      </view>
+
+      <view wx:else class="product-grid">
+        <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
+          <view class="product-image">
+            <image src="{{item.image || '/image/icon3.webp'}}" class="product-img" mode="aspectFill" lazy-load />
+          </view>
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </scroll-view>
   </view>
 </view>

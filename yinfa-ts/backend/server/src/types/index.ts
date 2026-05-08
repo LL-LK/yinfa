@@ -42,7 +42,7 @@ export interface Order {
   user?: number;
   order_no: string;
   total_price: number;
-  status: 'pending' | 'paid' | 'shipped' | 'completed' | 'cancelled';
+  status: OrderStatus;
   created_at?: string;
   updated_at?: string;
   items?: OrderItem[];
@@ -55,6 +55,36 @@ export interface OrderItem {
   quantity: number;
   unit_price: number;
   subtotal?: number;
+}
+
+export interface CartItem {
+  id?: number;
+  user_id?: number;
+  product_id: number;
+  quantity: number;
+  created_at?: string;
+}
+
+export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'completed' | 'cancelled';
+
+export interface EmergencyContact {
+  id?: number;
+  user_id?: number;
+  name: string;
+  phone: string;
+  relationship: string;
+  is_primary: boolean;
+  created_at?: string;
+}
+
+export interface HealthRecord {
+  id?: number;
+  user_id?: number;
+  blood_pressure: string;
+  heart_rate: string;
+  notes: string;
+  record_date: string;
+  created_at?: string;
 }
 
 export interface ApiResponse<T = any> {

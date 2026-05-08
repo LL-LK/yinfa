@@ -1,5 +1,5 @@
 <view class="scenic">
-  <view class="banner">
+  <view class="banner banner-sunrise">
     <text class="banner-icon">🏔️</text>
     <view class="banner-text">
       <text class="banner-title">景点攻略</text>
@@ -12,13 +12,41 @@
     <text class="tips-text">{{tips.text}}</text>
   </view>
 
-  <view class="scenic-list">
+  <view wx:if="{{loading}}" class="scenic-list">
+    <view class="scenic-item" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+      <view class="skeleton" style="width:100%; height:300rpx; border-radius:16rpx 16rpx 0 0;"></view>
+      <view style="padding:20rpx 24rpx;">
+        <view class="skeleton skeleton-text-short" style="height:36rpx;"></view>
+        <view class="skeleton skeleton-text-long" style="height:28rpx;"></view>
+        <view class="skeleton skeleton-text" style="height:28rpx;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-icon">😵</text>
+    <text class="error-title">加载失败</text>
+    <text class="btn-primary" bindtap="loadScenicSpots" style="margin-top:20rpx;">重新加载</text>
+  </view>
+
+  <view wx:elif="{{scenics.length === 0}}" class="empty-state">
+    <text class="empty-icon">🏔️</text>
+    <text class="empty-title">暂无景点信息</text>
+  </view>
+
+  <view wx:else class="scenic-list">
     <view class="scenic-item" wx:for="{{scenics}}" wx:key="id">
-      <image src="{{item.image}}" class="si-img" mode="aspectFill" bindtap="expandInfo" data-index="{{index}}" />
+      <image src="{{item.image}}" class="si-img" mode="aspectFill" lazy-load bindtap="expandInfo" data-index="{{index}}" />
       <view class="si-tags">
         <text class="si-level">{{item.level}}</text>
         <text class="si-time">⏱{{item.time}}</text>
         <text class="si-price">{{item.price > 0 ? '¥' + item.price : '免费'}}</text>
+      </view>
+      <view class="si-elder-info">
+        <text class="elder-tag">{{item.elderScore}}分</text>
+        <text class="elder-tag">{{item.walkDistance}}</text>
+        <text class="elder-tag">{{item.stairsCount}}</text>
+        <text class="elder-tag">{{item.restArea}}</text>
       </view>
       <view class="si-info" bindtap="expandInfo" data-index="{{index}}">
         <text class="si-name">{{item.name}}</text>

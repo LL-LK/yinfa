@@ -1,65 +1,44 @@
 <view class="traffic">
-  <view class="banner" bindtap="readSummary">
+  <view class="banner">
     <text class="banner-icon">🚦</text>
-    <view class="banner-text">
-      <text class="banner-title">实时路况</text>
-      <text class="banner-desc">点击播报路况概况</text>
+    <text class="banner-title">实时路况</text>
+    <text class="banner-desc">桂林市区交通快报</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-spinner">
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+    <view class="loading-dot"></view>
+  </view>
+
+  <view wx:elif="{{error}}" class="error-state">
+    <text class="error-icon">😵</text>
+    <text class="error-text">路况加载失败</text>
+    <text class="btn-primary" bindtap="loadTraffic" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  </view>
+
+  <view wx:else>
+    <view class="road-list">
+      <view class="road-item road-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}"
+            wx:for="{{roads}}" wx:key="name">
+        <text class="road-icon">{{item.status === '畅通' ? '🟢' : item.status === '缓行' ? '🟡' : '🔴'}}</text>
+        <view class="road-info">
+          <text class="road-name">{{item.name}}</text>
+          <text class="road-detail">{{item.detail}}</text>
+        </view>
+        <text class="road-status">{{item.status}}</text>
+      </view>
+    </view>
+
+    <view class="tips-list">
+      <view class="tl-item" wx:for="{{tips}}" wx:key="index">
+        <text class="tl-icon">{{item.icon}}</text>
+        <text class="tl-text">{{item.text}}</text>
+      </view>
     </view>
   </view>
 
-  <view class="disclaimer">
-    <text>ℹ️ 路况数据来源：高德地图 | 天气来源：和风天气</text>
-  </view>
-
-  <view class="weather-bar" wx:if="{{weather}}">
-    <view class="wb-item">
-      <text class="wb-icon">🌤️</text>
-      <text class="wb-text">{{weather.weather}}</text>
-    </view>
-    <view class="wb-item">
-      <text class="wb-icon">🌡️</text>
-      <text class="wb-text">{{weather.temperature}}</text>
-    </view>
-    <view class="wb-item">
-      <text class="wb-icon">💨</text>
-      <text class="wb-text">{{weather.wind}}</text>
-    </view>
-    <view class="wb-item {{weather.slippery === '危险' ? 'slippery-danger' : weather.slippery === '注意' ? 'slippery-warning' : ''}}">
-      <text class="wb-icon">🛡️</text>
-      <text class="wb-text">{{weather.slippery}}</text>
-    </view>
-  </view>
-
-  <view class="t-status-bar">
-    <view class="ts-card">
-      <view class="ts-status"><text class="ts-dot green"></text><text class="ts-num">{{summary.green}}</text><text class="ts-label">畅通</text></view>
-    </view>
-    <view class="ts-card">
-      <view class="ts-status"><text class="ts-dot orange"></text><text class="ts-num">{{summary.orange}}</text><text class="ts-label">缓行</text></view>
-    </view>
-    <view class="ts-card">
-      <view class="ts-status"><text class="ts-dot red"></text><text class="ts-num">{{summary.red}}</text><text class="ts-label">拥堵</text></view>
-    </view>
-    <view class="ts-card overall">
-      <text class="ts-overall-label">整体</text>
-      <text class="ts-overall-val">{{summary.status}}</text>
-      <text class="ts-overall-time">{{summary.time}}</text>
-    </view>
-  </view>
-
-  <view class="road-list">
-    <view class="rl-title">🗺️ 主要道路</view>
-    <view class="road-item road-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}" wx:for="{{roads}}" wx:key="index">
-      <view class="road-dot dot-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}"></view>
-      <view class="road-mid"><text class="road-name">{{item.name}}</text><text class="road-desc">{{item.desc}}</text></view>
-      <text class="road-speed text-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}">{{item.status}}</text>
-    </view>
-  </view>
-
-  <view class="t-tips">
-    <view class="t-tips-row" wx:for="{{tips}}" wx:key="index">
-      <text class="t-tips-icon">{{item.icon}}</text>
-      <text class="t-tips-text">{{item.text}}</text>
-    </view>
+  <view class="back-btn" bindtap="goBack">
+    <text>← 返回交通出行</text>
   </view>
 </view>

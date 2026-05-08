@@ -1,26 +1,65 @@
-<view class="search-page">
+<view class="search search-page">
   <view class="search-bar">
-    <input class="search-input" placeholder="请输入搜索关键词" value="{{keyword}}" bindinput="inputChange" confirm-type="search" bindconfirm="search" />
-    <view class="search-btn" bindtap="search">搜索</view>
+    <view class="search-input-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input"
+             value="{{keyword}}"
+             placeholder="搜索景点、美食、服务..."
+             bindinput="onInput"
+             bindconfirm="doSearch"
+             confirm-type="search"
+             focus="{{autoFocus}}" />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">✕</text>
+    </view>
+    <text class="search-btn" bindtap="doSearch">搜索</text>
   </view>
 
-  <view class="search-result" wx:if="{{products.length > 0}}">
-    <view class="result-count">找到{{products.length}}个结果</view>
-    <view class="products-box">
+  <view wx:if="{{!searched && hotSearches.length > 0}}" class="hot-search">
+    <text class="hot-title">🔥 热门搜索</text>
+    <view class="hot-tags">
+      <text class="hot-tag" wx:for="{{hotSearches}}" wx:key="index" bindtap="tapHotSearch" data-keyword="{{item}}">{{item}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{searched}}">
+    <view wx:if="{{loading}}" class="loading-spinner">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+
+    <view wx:elif="{{searchError}}" class="error-state">
+      <text class="error-icon">😵</text>
+      <text class="error-text">搜索失败</text>
+      <view class="btn-primary" bindtap="doSearch" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新搜索</view>
+    </view>
+
+    <view wx:elif="{{products.length === 0}}" class="empty-state">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-title">未找到相关商品</text>
+      <text class="empty-desc">试试其他关键词吧</text>
+    </view>
+
+    <view wx:else class="product-list" style="padding:0 20rpx;">
+      <view><text class="result-count">共找到 {{products.length}} 个结果</text></view>
       <view class="product-item" wx:for="{{products}}" wx:key="id" bindtap="goDetails" data-id="{{item.id}}">
         <view class="product-image">
-          <image src="{{item.image}}" class="product-img" mode="aspectFill" />
+          <image src="{{item.image}}" class="product-img" mode="aspectFill" lazy-load />
         </view>
         <view class="product-info">
-          <view class="product-name">{{item.name}}</view>
-          <view class="product-desc">{{item.description}}</view>
-          <view class="product-price">¥{{item.price}}</view>
+          <text class="product-name text-ellipsis-2">{{item.name}}</text>
+          <text class="product-desc text-ellipsis-2" wx:if="{{item.description}}">{{item.description}}</text>
+          <view class="product-bottom">
+            <text class="product-price">¥{{item.price}}</text>
+            <text class="product-tag" wx:if="{{item.tag}}">{{item.tag}}</text>
+          </view>
         </view>
       </view>
     </view>
   </view>
 
-  <view class="empty" wx:else>
-    <text>暂无搜索结果</text>
+  <view wx:if="{{!searched}}" class="search-hint">
+    <text class="hint-icon">🔍</text>
+    <text class="hint-text">搜索您感兴趣的旅行服务</text>
   </view>
 </view>

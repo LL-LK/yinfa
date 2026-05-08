@@ -1,8 +1,8 @@
 <view class="cart">
   <view class="cart-list" wx:if="{{cartItems.length > 0}}">
-    <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
+    <view class="cart-item {{isLargeFont ? 'large-font' : ''}}" wx:for="{{cartItems}}" wx:key="id">
       <view class="cart-image">
-        <image src="{{item.image}}" class="cart-img" mode="aspectFill" />
+        <image src="{{item.image}}" class="cart-img" mode="aspectFill" lazy-load />
       </view>
       <view class="cart-info">
         <view class="cart-name">{{item.name}}</view>
@@ -21,7 +21,10 @@
     <text>购物车为空</text>
   </view>
 
-  <view class="bottom-bar" wx:if="{{cartItems.length > 0}}">
+  <view class="bottom-bar {{isLargeFont ? 'large-font' : ''}}" wx:if="{{cartItems.length > 0}}">
+    <view class="font-toggle" bindtap="toggleFontSize">
+      <text class="font-toggle-text">大字</text>
+    </view>
     <view class="total-info">
       <text class="total-label">合计:</text>
       <text class="total-price">¥{{totalPrice}}</text>
