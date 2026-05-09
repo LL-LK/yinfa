@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "景点地图"
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view"
+  },
+  "navigationBarTitleText": "地图导览"
 }

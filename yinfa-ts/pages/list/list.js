@@ -14,10 +14,12 @@ Page({
     priceFilter: 'all',
     page: 1,
     pageSize: 10,
+    fontSizeMode: 'normal',
     hasMore: false
   },
 
   onLoad: function (options) {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     if (options.category) {
       this.setData({ selectedCategory: options.category })
     }

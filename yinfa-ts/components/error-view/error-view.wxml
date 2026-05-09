@@ -1,0 +1,6 @@
+<view class="error-state">
+  <text class="error-icon">😵</text>
+  <text class="error-title">{{title}}</text>
+  <text class="error-desc" wx:if="{{desc}}">{{desc}}</text>
+  <view class="btn-primary" bindtap="onRetry" wx:if="{{retry}}">重新加载</view>
+</view>

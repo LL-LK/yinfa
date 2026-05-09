@@ -13,10 +13,12 @@ Page({
       relationship: '',
       is_primary: false
     },
-    submitting: false
+    submitting: false,
+    fontSizeMode: 'normal'
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     this.loadContacts()
   },
 

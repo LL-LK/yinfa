@@ -1,29 +1,57 @@
-<view class="details" wx:if="{{product}}">
-  <view class="product-image">
-    <image src="{{product.image_url}}" class="detail-img" mode="widthFix" lazy-load />
-  </view>
-  
-  <view class="product-info">
-    <view class="product-name">{{product.name}}</view>
-    <view class="product-price">¥{{product.price}}</view>
-    <view class="product-desc">{{product.description}}</view>
-    <view class="product-stock">库存: {{product.stock}}件</view>
-    <view class="detail-accessibility" wx:if="{{product.wheelchairAccess || product.restArea}}"><view class="detail-accessibility__title">♿ 老人出行信息</view><view class="acc-grid"><view class="acc-item" wx:if="{{product.wheelchairAccess !== undefined}}"><text class="acc-icon">♿</text><text>轮椅通道：{{product.wheelchairAccess ? '有' : '无'}}</text></view><view class="acc-item" wx:if="{{product.restArea}}"><text class="acc-icon">🪑</text><text>休息设施：{{product.restArea === '充足' ? '充足' : '一般'}}</text></view><view class="acc-item" wx:if="{{product.suggestedDuration}}"><text class="acc-icon">⏱</text><text>建议游览：{{product.suggestedDuration}}</text></view><view class="acc-item" wx:if="{{product.stairsCount !== undefined}}"><text class="acc-icon">🚶</text><text>台阶数：{{product.stairsCount === 0 ? '无台阶' : product.stairsCount + '级台阶'}}</text></view></view></view>
+<view class="details font-mode-{{fontSizeMode}}">
+  <view wx:if="{{loading}}" class="detail-loading">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
   </view>
 
-  <view class="detail-voice" bindtap="playVoiceIntro"><text class="detail-voice__icon">🔊</text><text class="detail-voice__text">点击听景点介绍</text></view>
+  <view wx:elif="{{loadError}}" class="detail-error">
+    <text class="error-icon">😞</text>
+    <text class="error-msg">加载失败</text>
+    <text class="error-hint">请检查网络后重试</text>
+    <view class="error-retry-btn" bindtap="retryLoad">重新加载</view>
+  </view>
 
-  <view class="quantity-section">
-    <text class="quantity-label">数量:</text>
-    <view class="quantity-control">
-      <view class="quantity-btn" bindtap="decrease">-</view>
-      <text class="quantity-value">{{quantity}}</text>
-      <view class="quantity-btn" bindtap="increase">+</view>
+  <block wx:elif="{{product}}">
+    <view class="product-image">
+      <image src="{{product.image_url}}" class="detail-img" mode="widthFix" lazy-load binderror="onImgError" />
     </view>
-  </view>
 
-  <view class="bottom-bar">
-    <view class="bottom-btn cart-btn" bindtap="addToCart">加入购物车</view>
-    <view class="bottom-btn buy-btn" bindtap="buyNow">立即购买</view>
-  </view>
+    <view class="product-info">
+      <view class="product-name">{{product.name}}</view>
+      <view class="product-price">{{product.price > 0 ? '¥' + product.price : '免费'}}</view>
+      <view class="product-desc">{{product.description}}</view>
+      <view class="product-stock">库存: {{product.stock}}件</view>
+    </view>
+
+    <view class="detail-accessibility" wx:if="{{product.wheelchairAccess !== undefined || product.restArea}}">
+      <view class="detail-accessibility__title">♿ 老人出行信息</view>
+      <view class="acc-grid">
+        <view class="acc-item" wx:if="{{product.wheelchairAccess !== undefined}}"><text class="acc-icon">♿</text><text>轮椅通道：{{product.wheelchairAccess ? '有' : '无'}}</text></view>
+        <view class="acc-item" wx:if="{{product.restArea}}"><text class="acc-icon">🪑</text><text>休息设施：{{product.restArea === '充足' ? '充足' : '一般'}}</text></view>
+        <view class="acc-item" wx:if="{{product.suggestedDuration}}"><text class="acc-icon">⏱</text><text>建议游览：{{product.suggestedDuration}}</text></view>
+        <view class="acc-item" wx:if="{{product.stairsCount !== undefined}}"><text class="acc-icon">🚶</text><text>台阶数：{{product.stairsCount === 0 ? '无台阶' : product.stairsCount + '级台阶'}}</text></view>
+      </view>
+    </view>
+
+    <view class="detail-voice" bindtap="playVoiceIntro"><text class="detail-voice__icon">🔊</text><text class="detail-voice__text">点击听景点介绍</text></view>
+
+    <view class="detail-favorite" bindtap="toggleFavorite">
+      <text class="fav-icon">{{isFavorited ? '❤️' : '🤍'}}</text>
+      <text class="fav-text">{{isFavorited ? '已收藏' : '收藏景点'}}</text>
+    </view>
+
+    <view class="quantity-section">
+      <text class="quantity-label">数量:</text>
+      <view class="quantity-control">
+        <view class="quantity-btn" bindtap="decrease">-</view>
+        <text class="quantity-value">{{quantity}}</text>
+        <view class="quantity-btn" bindtap="increase">+</view>
+      </view>
+    </view>
+
+    <view class="bottom-bar">
+      <view class="bottom-btn cart-btn" bindtap="addToCart">加入购物车</view>
+      <view class="bottom-btn buy-btn" bindtap="buyNow">立即购买</view>
+    </view>
+  </block>
 </view>

@@ -1,28 +1,10 @@
-<view class="food">
-  <view wx:if="{{loading}}" class="loading-spinner">
-    <view class="loading-ring"></view>
-  </view>
-
-  <view wx:elif="{{error}}" class="error-state">
-    <text class="error-icon">😵</text>
-    <text class="error-title">加载失败</text>
-    <text class="btn-primary" bindtap="loadFoods" style="margin-top:20rpx;padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
-  </view>
-
-  <view wx:elif="{{empty}}" class="empty-state">
-    <text class="empty-icon">🍜</text>
-    <text class="empty-title">暂无美食推荐</text>
-    <text class="empty-desc">美食数据正在更新中，请稍后再来</text>
-  </view>
+<view class="food font-mode-{{fontSizeMode}}">
+  <loading-view wx:if="{{loading}}" />
+  <error-view wx:elif="{{error}}" bind:retry="loadFoods" />
+  <empty-view wx:elif="{{empty}}" icon="🍜" title="暂无美食推荐" desc="美食数据正在更新中，请稍后再来" />
 
   <block wx:else>
-  <view class="banner">
-    <text class="banner-icon">🍜</text>
-    <view class="banner-text">
-      <text class="banner-title">桂林美食</text>
-      <text class="banner-desc">地道风味·老人友好推荐</text>
-    </view>
-  </view>
+  <banner-view icon="🍜" title="桂林美食" desc="地道风味·老人友好推荐" />
 
   <view class="featured">
     <view class="ft-item" wx:for="{{featured}}" wx:key="index">
@@ -43,7 +25,6 @@
         <text class="fi-price">¥{{item.price}}起</text>
         <text class="fi-score">⭐{{item.score}}</text>
       </view>
-
       <view class="fi-expand" wx:if="{{item.expanded}}">
         <text class="fi-desc">{{item.desc}}</text>
         <text class="fi-addr">📍 {{item.address}}</text>

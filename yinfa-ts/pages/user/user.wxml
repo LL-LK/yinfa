@@ -1,14 +1,35 @@
-<view class="user">
-  <view class="user-header" bindtap="{{isLoggedIn ? '' : 'doLogin'}}">
-    <view class="avatar-box"><text class="avatar-emoji">{{isLoggedIn ? '👴' : '🔐'}}</text></view>
+<view class="user font-mode-{{fontSizeMode}}">
+  <view class="user-header">
+    <view class="avatar-box">
+      <image wx:if="{{avatarUrl}}" src="{{avatarUrl}}" class="avatar-img" mode="aspectFill" />
+      <text wx:else class="avatar-emoji">{{isLoggedIn ? '👴' : '🔐'}}</text>
+    </view>
+
     <text class="user-name">{{nickname}}</text>
-    <text class="user-id" wx:if="{{isLoggedIn}}">尊贵的银发旅行者</text>
-    <text class="user-subtitle" wx:if="{{!isLoggedIn}}">点击登录，享受更多服务</text>
-    <text class="btn-primary" wx:if="{{!isLoggedIn}}" catchtap="doLogin" style="margin-top:20rpx;min-height:72rpx;line-height:72rpx;font-size:30rpx;padding:0 56rpx;">微信一键登录</text>
+
+    <block wx:if="{{isLoggedIn}}">
+      <text class="user-id">{{phone ? '已绑定手机' : '桂林银发旅行者'}}</text>
+      <view class="btn-logout" bindtap="doLogout">退出登录</view>
+    </block>
+
+    <block wx:else>
+      <text class="user-subtitle">点击登录，享受更多服务</text>
+      <view class="btn-login" bindtap="doLogin">微信一键登录</view>
+    </block>
+
     <view class="user-stats">
-      <view class="stat"><text class="stat-num">{{favoriteCount}}</text><text class="stat-label">收藏景点</text></view>
-      <view class="stat"><text class="stat-num">{{orderCount}}</text><text class="stat-label">我的订单</text></view>
-      <view class="stat"><text class="stat-num">{{voiceEnabled ? '开' : '关'}}</text><text class="stat-label">语音提示</text></view>
+      <view class="stat" bindtap="tapMenu" data-id="favorites">
+        <text class="stat-num">{{favoriteCount}}</text>
+        <text class="stat-label">收藏景点</text>
+      </view>
+      <view class="stat" bindtap="tapMenu" data-id="orders">
+        <text class="stat-num">{{orderCount}}</text>
+        <text class="stat-label">我的订单</text>
+      </view>
+      <view class="stat" bindtap="toggleVoice">
+        <text class="stat-num">{{voiceEnabled ? '开' : '关'}}</text>
+        <text class="stat-label">语音提示</text>
+      </view>
     </view>
   </view>
 
@@ -21,23 +42,11 @@
   </view>
 
   <view class="menu-section">
-    <view class="menu-item" bindtap="goOrders">
-      <text class="menu-icon">📋</text><text class="menu-name">我的订单</text><text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goAddress">
-      <text class="menu-icon">📍</text><text class="menu-name">地址管理</text><text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goFavorites">
-      <text class="menu-icon">❤️</text><text class="menu-name">我的收藏</text><text class="menu-badge" wx:if="{{favoriteCount > 0}}">{{favoriteCount}}</text><text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goHealth">
-      <text class="menu-icon">🏥</text><text class="menu-name">健康记录</text><text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goEmergency">
-      <text class="menu-icon">👨‍👩‍👧</text><text class="menu-name">紧急联系人</text><text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goSafety">
-      <text class="menu-icon">🛡️</text><text class="menu-name">安全设置</text><text class="menu-arrow">></text>
+    <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" bindtap="tapMenu" data-id="{{item.id}}">
+      <text class="menu-icon">{{item.icon}}</text>
+      <text class="menu-name">{{item.name}}</text>
+      <text class="menu-badge" wx:if="{{item.badge && favoriteCount > 0}}">{{favoriteCount}}</text>
+      <text class="menu-arrow">›</text>
     </view>
   </view>
 
@@ -50,17 +59,44 @@
   </view>
 
   <view class="settings-section">
+    <view class="settings-title">语言辅助</view>
+    <view class="lang-assist-switch" bindtap="toggleLangAssist">
+      <switch checked="{{langAssistEnabled}}" color="#2E8B57" />
+      <view class="lang-assist-content">
+        <text class="lang-assist-title">{{langAssistEnabled ? '✅ 已开启' : '❌ 已关闭'}}</text>
+        <text class="lang-assist-hint">开启后提供多语言翻译和语音朗读辅助功能</text>
+      </view>
+    </view>
+    <view wx:if="{{langAssistEnabled}}" class="lang-options">
+      <view class="lang-option {{langClassZh}}" bindtap="setLangAssist" data-lang="zh">
+        <text class="lang-name">中文</text>
+      </view>
+      <view class="lang-option {{langClassEn}}" bindtap="setLangAssist" data-lang="en">
+        <text class="lang-name">English</text>
+      </view>
+      <view class="lang-option {{langClassJa}}" bindtap="setLangAssist" data-lang="ja">
+        <text class="lang-name">日本語</text>
+      </view>
+      <view class="lang-option {{langClassKo}}" bindtap="setLangAssist" data-lang="ko">
+        <text class="lang-name">한국어</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-section">
     <view class="settings-title">字体大小</view>
     <view class="font-size-options">
-      <view class="font-option {{fontSizeMode === 'small' ? 'active' : ''}}" bindtap="setFontSize" data-mode="small"><text>标准</text></view>
-      <view class="font-option {{fontSizeMode === 'normal' ? 'active' : ''}}" bindtap="setFontSize" data-mode="normal"><text>较大</text></view>
-      <view class="font-option {{fontSizeMode === 'large' ? 'active' : ''}}" bindtap="setFontSize" data-mode="large"><text>超大</text></view>
+      <view class="font-option {{fontSizeMode === 'small' ? 'active' : ''}}" bindtap="setFontSize" data-mode="small">标准</view>
+      <view class="font-option {{fontSizeMode === 'normal' ? 'active' : ''}}" bindtap="setFontSize" data-mode="normal">较大</view>
+      <view class="font-option {{fontSizeMode === 'large' ? 'active' : ''}}" bindtap="setFontSize" data-mode="large">超大</view>
     </view>
   </view>
 
   <view class="menu-section">
-    <view class="menu-item">
-      <text class="menu-icon">ℹ️</text><text class="menu-name">关于桂林银发旅游</text><text class="menu-arrow">></text>
+    <view class="menu-item" bindtap="goAbout">
+      <text class="menu-icon">ℹ️</text>
+      <text class="menu-name">关于桂林银发旅游</text>
+      <text class="menu-arrow">›</text>
     </view>
   </view>
 </view>

@@ -24,10 +24,11 @@ Page({
     totalPrice: 0,
     loading: true,
     cartItemIds: {},
-    isLargeFont: false
+    fontSizeMode: 'normal'
   },
 
   onShow: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ current: 3 });
     }
@@ -138,12 +139,6 @@ Page({
         }
       }
     })
-  },
-
-  toggleFontSize: function () {
-    const isLarge = !this.data.isLargeFont
-    this.setData({ isLargeFont: isLarge })
-    voice.speak(isLarge ? '已切换到大字模式' : '已切换到正常模式')
   },
 
   checkout: function () {

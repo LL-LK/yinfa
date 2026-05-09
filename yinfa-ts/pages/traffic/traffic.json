@@ -1,4 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view"
+  },
   "navigationBarTitleText": "实时路况"
 }

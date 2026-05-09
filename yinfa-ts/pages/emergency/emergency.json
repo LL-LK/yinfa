@@ -1,4 +1,7 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "紧急联系人"
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view"
+  },
+  "navigationBarTitleText": "紧急求助"
 }

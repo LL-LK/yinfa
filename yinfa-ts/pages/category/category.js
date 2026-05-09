@@ -10,10 +10,12 @@ Page({
     activeCategory: 0,
     loadingCategories: true,
     loadingProducts: true,
-    productError: false
+    productError: false,
+    fontSizeMode: 'normal'
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     this.loadCategories()
   },
 

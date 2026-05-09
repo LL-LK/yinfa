@@ -1,4 +1,4 @@
-<view class="health">
+<view class="health font-mode-{{fontSizeMode}}">
   <view class="header">
     <view class="header-icon">🏥</view>
     <text class="header-title">健康记录</text>

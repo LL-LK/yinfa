@@ -1,0 +1,7 @@
+<view class="banner {{theme}}">
+  <text class="banner-icon">{{icon}}</text>
+  <view class="banner-text">
+    <text class="banner-title">{{title}}</text>
+    <text class="banner-desc" wx:if="{{desc}}">{{desc}}</text>
+  </view>
+</view>

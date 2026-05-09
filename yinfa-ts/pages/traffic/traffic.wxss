@@ -12,18 +12,18 @@
 }
 
 .banner-icon {
-  font-size: 52rpx;
+  font-size: var(--font-xxl);
   margin-right: 20rpx;
 }
 
 .banner-title {
-  font-size: 40rpx;
+  font-size: var(--font-xl);
   font-weight: 700;
   color: var(--text-inverse);
 }
 
 .banner-desc {
-  font-size: 24rpx;
+  font-size: var(--font-xs);
   color: rgba(255,255,255,0.8);
   margin-top: 4rpx;
 }

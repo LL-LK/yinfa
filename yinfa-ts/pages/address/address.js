@@ -18,10 +18,12 @@ Page({
       is_default: false
     },
     loading: true,
-    notLoggedIn: false
+    notLoggedIn: false,
+    fontSizeMode: 'normal'
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     this.loadAddresses()
   },
 

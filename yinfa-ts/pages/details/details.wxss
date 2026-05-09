@@ -4,6 +4,74 @@
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
+.detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 24rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: var(--font-md);
+  color: var(--text-hint);
+}
+
+.detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16rpx;
+  padding: 40rpx;
+}
+
+.error-icon {
+  font-size: 80rpx;
+}
+
+.error-msg {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.error-hint {
+  font-size: var(--font-sm);
+  color: var(--text-hint);
+}
+
+.error-retry-btn {
+  margin-top: 20rpx;
+  padding: 20rpx 60rpx;
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.error-retry-btn:active {
+  transform: scale(0.95);
+  opacity: 0.85;
+}
+
 .product-image {
   width: 100%;
   background: var(--border-light);
@@ -29,7 +97,7 @@
 }
 
 .product-price {
-  font-size: 52rpx;
+  font-size: var(--font-xxl);
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 20rpx;
@@ -85,7 +153,7 @@
 }
 
 .acc-icon {
-  font-size: 36rpx;
+  font-size: var(--font-lg);
 }
 
 .detail-voice {
@@ -105,13 +173,38 @@
 }
 
 .detail-voice__icon {
-  font-size: 48rpx;
+  font-size: var(--font-xl);
 }
 
 .detail-voice__text {
   font-size: var(--font-lg);
   font-weight: 600;
   color: var(--primary);
+}
+
+.detail-favorite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 28rpx;
+  margin: 0 var(--space-md) var(--space-md);
+  gap: 16rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.detail-favorite:active {
+  background: var(--bg-hover);
+  transform: scale(0.97);
+}
+
+.fav-icon { font-size: var(--font-xl); }
+
+.fav-text {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .quantity-section {
@@ -145,7 +238,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40rpx;
+  font-size: var(--font-xl);
   color: var(--text-primary);
   background: var(--bg);
   transition: all var(--transition-fast);

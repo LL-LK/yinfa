@@ -17,10 +17,12 @@ Page({
     loadingMore: false,
     searchHistory: [],
     hotTags: ['漓江', '阳朔', '米粉', '龙脊梯田', '西街', '象鼻山', '两江四湖', '芦笛岩'],
-    showHistoryClear: false
+    showHistoryClear: false,
+    fontSizeMode: 'normal'
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     this.loadSearchHistory()
   },
 

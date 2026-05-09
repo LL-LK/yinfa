@@ -1,3 +1,9 @@
 {
+  "usingComponents": {
+    "banner-view": "/components/banner-view/banner-view",
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view",
+    "empty-view": "/components/empty-view/empty-view"
+  },
   "navigationBarTitleText": "桂林银发旅游"
 }

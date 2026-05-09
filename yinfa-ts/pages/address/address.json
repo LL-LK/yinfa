@@ -1,3 +1,8 @@
 {
-  "navigationBarTitleText": "地址管理"
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view",
+    "empty-view": "/components/empty-view/empty-view"
+  },
+  "navigationBarTitleText": "收货地址"
 }

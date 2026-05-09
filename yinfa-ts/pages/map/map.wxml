@@ -1,15 +1,4 @@
-<view class="map-page">
-  <view wx:if="{{loading}}" class="loading-overlay">
-    <view class="loading-ring"></view>
-    <text class="loading-text">加载地图中...</text>
-  </view>
-
-  <view wx:elif="{{error}}" class="error-state" style="position:absolute;top:30%;left:0;right:0;z-index:10;">
-    <text class="error-icon">😵</text>
-    <text class="error-title">地图加载失败</text>
-    <text class="btn-primary" bindtap="loadScenicMarkers" style="margin-top:16rpx;padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
-  </view>
-
+<view class="map-page font-mode-{{fontSizeMode}}">
   <map
     id="myMap"
     class="map-view"
@@ -21,12 +10,12 @@
     bindregionchange="onRegionChange"
     scale="{{mapScale}}"
     show-location="{{hasLocation}}"
-    show-scale
-    enable-zoom
-    enable-scroll
+    show-scale="{{true}}"
+    enable-zoom="{{true}}"
+    enable-scroll="{{true}}"
   />
 
-  <view class="map-controls" wx:if="{{!loading && !error}}">
+  <view class="map-controls">
     <view class="map-ctrl-btn" bindtap="moveToLocation">
       <text class="ctrl-icon">📍</text>
     </view>
@@ -38,7 +27,28 @@
     </view>
   </view>
 
-  <view class="map-tips" wx:if="{{!loading && !error}}">
-    <text>📍 点击标记查看景点详情，双击缩放地图</text>
+  <view class="map-tips">
+    <text>📍 点击标记查看景点，双指缩放地图</text>
+  </view>
+
+  <view class="scenic-list">
+    <view class="scenic-list-title">🏔️ 景点列表（点击查看详情）</view>
+
+    <view wx:if="{{scenicProducts.length === 0}}" class="empty-tip">
+      <text>暂无景点数据，请检查网络后下拉刷新</text>
+    </view>
+
+    <view class="scenic-item" wx:for="{{scenicProducts}}" wx:key="id" bindtap="goScenicDetail" data-id="{{item.id}}">
+      <image wx:if="{{item.image_url}}" src="{{item.image_url}}" class="scenic-thumb" mode="aspectFill" lazy-load />
+      <view wx:else class="scenic-thumb scenic-thumb-fb">🏔️</view>
+      <view class="scenic-info">
+        <text class="scenic-name">{{item.name}}</text>
+        <view class="scenic-meta">
+          <text class="scenic-price {{item.price > 0 ? 'has-price' : 'free-price'}}">{{item.price > 0 ? '¥' + item.price : '免费'}}</text>
+          <text class="scenic-distance" wx:if="{{item.distance}}">距{{item.distance}}</text>
+        </view>
+      </view>
+      <text class="scenic-arrow">&gt;</text>
+    </view>
   </view>
 </view>

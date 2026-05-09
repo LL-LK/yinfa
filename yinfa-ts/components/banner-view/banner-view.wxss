@@ -1,0 +1,58 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--water-dark) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  color: var(--text-inverse);
+  margin: 0 20rpx var(--space-md);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.banner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60rpx;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1));
+}
+
+.banner.green {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+}
+
+.banner.sunrise {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 60%, var(--water-dark) 100%);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.banner.sos {
+  background: linear-gradient(135deg, var(--sos), var(--sos-dark));
+}
+
+.banner-icon {
+  font-size: var(--font-huge);
+  flex-shrink: 0;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.banner-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+}
+
+.banner-desc {
+  font-size: var(--font-xs);
+  opacity: 0.8;
+  margin-top: 4rpx;
+}

@@ -1,4 +1,7 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "安全出行"
+  "usingComponents": {
+    "banner-view": "/components/banner-view/banner-view",
+    "loading-view": "/components/loading-view/loading-view",
+    "error-view": "/components/error-view/error-view"
+  }
 }

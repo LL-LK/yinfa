@@ -1,77 +1,77 @@
-<view class="scenic">
-  <view class="banner banner-sunrise">
-    <text class="banner-icon">🏔️</text>
-    <view class="banner-text">
-      <text class="banner-title">景点攻略</text>
-      <text class="banner-desc">桂林必游景点·老人友好推荐</text>
+<view class="scenic font-mode-{{fontSizeMode}}">
+  <banner-view icon="🏔️" title="桂林·景点导览" desc="银发友好 · 精选推荐" theme="sunrise" />
+
+  <view class="filter-bar">
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="filter-scroll">
+      <view class="filter-tabs">
+        <view class="filter-tab {{activeTab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">全部</view>
+        <view class="filter-tab {{activeTab === '5a' ? 'active' : ''}}" bindtap="switchTab" data-tab="5a">5A景区</view>
+        <view class="filter-tab {{activeTab === '4a' ? 'active' : ''}}" bindtap="switchTab" data-tab="4a">4A景区</view>
+        <view class="filter-tab {{activeTab === 'free' ? 'active' : ''}}" bindtap="switchTab" data-tab="free">免费</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <loading-view wx:if="{{loading}}" />
+  <error-view wx:elif="{{error}}" bind:retry="loadScenicSpots" />
+  <empty-view wx:elif="{{empty && filteredList.length === 0}}" icon="🏔️" title="暂无景点" desc="景点数据正在更新中" />
+
+  <block wx:else>
+    <view class="sc-list">
+      <view class="sc-card" wx:for="{{filteredList}}" wx:key="id">
+        <view class="sc-card-img-wrap">
+          <image src="{{item.image}}" class="sc-card-img" mode="aspectFill" lazy-load />
+          <view class="sc-level-badge">{{item.level}}</view>
+          <view class="sc-score-badge">⭐ {{item.elderScore}}</view>
+        </view>
+        <view class="sc-card-body">
+          <view class="sc-card-header">
+            <text class="sc-name">{{item.name}}</text>
+            <view class="sc-price-row">
+              <text class="sc-price" wx:if="{{item.price > 0}}">¥{{item.price}}</text>
+              <text class="sc-price free-tag" wx:else>免费</text>
+            </view>
+          </view>
+          <text class="sc-intro">{{item.intro}}</text>
+          <view class="sc-tags">
+            <text class="sc-tag" wx:if="{{item.walkDistance}}">🚶 {{item.walkDistance}}</text>
+            <text class="sc-tag" wx:if="{{item.stairsCount}}">🪜 {{item.stairsCount}}</text>
+            <text class="sc-tag" wx:if="{{item.restArea}}">🛋️ {{item.restArea}}</text>
+            <text class="sc-tag time-tag">⏱️ {{item.time}}</text>
+          </view>
+
+          <view wx:if="{{item.expanded}}" class="sc-detail-panel">
+            <view class="sd-line"><text class="sd-label">开放时间</text><text class="sd-val">{{item.hours}}</text></view>
+            <view class="sd-line"><text class="sd-label">交通方式</text><text class="sd-val">{{item.transport}}</text></view>
+            <view class="sd-line sd-warning"><text class="sd-label">⚠️ 安全提示</text><text class="sd-val">{{item.safetyTips}}</text></view>
+            <view class="sc-detail-actions">
+              <view class="sc-fav-btn {{item.isFavorited ? 'faved' : ''}}" bindtap="toggleFavorite" data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}" data-index="{{index}}">
+                <text>{{item.isFavorited ? '❤️ 已收藏' : '🤍 收藏'}}</text>
+              </view>
+              <view class="btn-primary sc-go-btn" bindtap="goDetails" data-id="{{item.id}}">查看详情购票</view>
+            </view>
+          </view>
+
+          <view class="sc-expand-btn" bindtap="toggleExpand" data-index="{{index}}">
+            <text>{{item.expanded ? '收起详情 ▲' : '展开详情 ▼'}}</text>
+          </view>
+        </view>
+      </view>
     </view>
-  </view>
+  </block>
 
-  <view class="tips-bar">
-    <text class="tips-icon">{{tips.icon}}</text>
-    <text class="tips-text">{{tips.text}}</text>
-  </view>
-
-  <view wx:if="{{loading}}" class="scenic-list">
-    <view class="scenic-item" wx:for="{{[1,2,3,4]}}" wx:key="*this">
-      <view class="skeleton" style="width:100%; height:300rpx; border-radius:16rpx 16rpx 0 0;"></view>
-      <view style="padding:20rpx 24rpx;">
-        <view class="skeleton skeleton-text-short" style="height:36rpx;"></view>
-        <view class="skeleton skeleton-text-long" style="height:28rpx;"></view>
-        <view class="skeleton skeleton-text" style="height:28rpx;"></view>
-      </view>
+  <view class="quick-actions">
+    <view class="qa-btn" bindtap="goMap">
+      <text class="qa-icon">🗺️</text>
+      <text class="qa-text">景点地图</text>
     </view>
-  </view>
-
-  <view wx:elif="{{error}}" class="error-state">
-    <text class="error-icon">😵</text>
-    <text class="error-title">加载失败</text>
-    <text class="btn-primary" bindtap="loadScenicSpots" style="margin-top:20rpx;">重新加载</text>
-  </view>
-
-  <view wx:elif="{{scenics.length === 0}}" class="empty-state">
-    <text class="empty-icon">🏔️</text>
-    <text class="empty-title">暂无景点信息</text>
-  </view>
-
-  <view wx:else class="scenic-list">
-    <view class="scenic-item" wx:for="{{scenics}}" wx:key="id">
-      <image src="{{item.image}}" class="si-img" mode="aspectFill" lazy-load bindtap="expandInfo" data-index="{{index}}" />
-      <view class="si-tags">
-        <text class="si-level">{{item.level}}</text>
-        <text class="si-time">⏱{{item.time}}</text>
-        <text class="si-price">{{item.price > 0 ? '¥' + item.price : '免费'}}</text>
-      </view>
-      <view class="si-elder-info">
-        <text class="elder-tag">{{item.elderScore}}分</text>
-        <text class="elder-tag">{{item.walkDistance}}</text>
-        <text class="elder-tag">{{item.stairsCount}}</text>
-        <text class="elder-tag">{{item.restArea}}</text>
-      </view>
-      <view class="si-info" bindtap="expandInfo" data-index="{{index}}">
-        <text class="si-name">{{item.name}}</text>
-        <text class="si-intro">{{item.intro}}</text>
-      </view>
-
-      <view class="si-expand" wx:if="{{item.expanded}}">
-        <view class="si-section">
-          <text class="si-label">✨ 精彩看点</text>
-          <text class="si-val">{{item.highlight}}</text>
-        </view>
-        <view class="si-section">
-          <text class="si-label">⚠️ 老人出游提示</text>
-          <text class="si-val warn">{{item.safetyTips}}</text>
-        </view>
-        <view class="si-section">
-          <text class="si-label">🚌 交通指南</text>
-          <text class="si-val">{{item.transport}}</text>
-        </view>
-        <view class="si-section">
-          <text class="si-label">🕐 开放时间</text>
-          <text class="si-val">{{item.hours}}</text>
-        </view>
-        <view class="si-buy-btn" bindtap="goDetails" data-id="{{item.id}}">🎫 购买门票</view>
-      </view>
+    <view class="qa-btn" bindtap="goTraffic">
+      <text class="qa-icon">🚌</text>
+      <text class="qa-text">交通指南</text>
+    </view>
+    <view class="qa-btn" bindtap="goFood">
+      <text class="qa-icon">🍜</text>
+      <text class="qa-text">周边美食</text>
     </view>
   </view>
 

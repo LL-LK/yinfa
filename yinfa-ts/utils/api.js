@@ -1,4 +1,5 @@
-const BASE_URL = 'https://web-production-58353.up.railway.app/api'
+const config = require('./config.js')
+const BASE_URL = config.BASE_URL
 
 let loadingCount = 0
 let loadingTimer = null

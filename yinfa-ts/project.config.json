@@ -2,54 +2,22 @@
   "description": "银发旅游小程序",
   "packOptions": {
     "ignore": [
-      {
-        "type": "folder",
-        "value": "src"
-      },
-      {
-        "type": "folder",
-        "value": "frontend"
-      },
-      {
-        "type": "folder",
-        "value": "frontend/dist"
-      },
-      {
-        "type": "folder",
-        "value": "frontend/node_modules"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/@vue"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/@vitejs"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/estree-walker"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/magic-string"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/rollup"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/vite"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/vue"
-      },
-      {
-        "type": "folder",
-        "value": "node_modules/vue-router"
-      }
+      { "type": "folder", "value": "src" },
+      { "type": "folder", "value": "frontend" },
+      { "type": "folder", "value": "frontend/dist" },
+      { "type": "folder", "value": "frontend/node_modules" },
+      { "type": "folder", "value": "node_modules/@vue" },
+      { "type": "folder", "value": "node_modules/@vitejs" },
+      { "type": "folder", "value": "node_modules/estree-walker" },
+      { "type": "folder", "value": "node_modules/magic-string" },
+      { "type": "folder", "value": "node_modules/rollup" },
+      { "type": "folder", "value": "node_modules/vite" },
+      { "type": "folder", "value": "node_modules/vue" },
+      { "type": "folder", "value": "node_modules/vue-router" },
+      { "type": "folder", "value": "backend" },
+      { "type": "folder", "value": "temp-*" },
+      { "type": "file", "value": "gen-*.js" },
+      { "type": "suffix", "value": ".md" }
     ],
     "include": []
   },

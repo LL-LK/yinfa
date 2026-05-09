@@ -1,4 +1,4 @@
-<view class="index">
+<view class="index font-mode-{{fontSizeMode}}">
   <!-- 顶部天气和安全快报区域 -->
   <view bindtap="goSafety" class="safety-bar">
     <text wx:if="{{weather.condition}}" class="safety-emoji">{{weather.condition === '晴' ? '☀️' : weather.condition === '多云' ? '⛅' : weather.condition === '阴' ? '☁️' : weather.condition.indexOf('雨') >= 0 ? '🌧️' : '🌤️'}}</text>
@@ -9,16 +9,16 @@
   <!-- 轮播图 (首屏关键图片不使用懒加载) -->
   <view class="swiper-box">
     <swiper class="swiper" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" autoplay circular interval="4000">
-      <swiper-item>
-        <image src="/image/IMG_0329.webp" class="slide-image" mode="aspectFill" />
+      <swiper-item wx:if="{{swiperItems.length >= 1}}">
+        <image src="/image/b1.jpg" class="slide-image" mode="aspectFill" binderror="onSwiperImgError" data-index="0" />
         <text class="swiper-label">桂林山水甲天下</text>
       </swiper-item>
-      <swiper-item>
-        <image src="/image/b2.jpg" class="slide-image" mode="aspectFill" />
+      <swiper-item wx:if="{{swiperItems.length >= 2}}">
+        <image src="/image/b2.jpg" class="slide-image" mode="aspectFill" binderror="onSwiperImgError" data-index="1" />
         <text class="swiper-label">象鼻山</text>
       </swiper-item>
-      <swiper-item>
-        <image src="/image/b3.jpg" class="slide-image" mode="aspectFill" />
+      <swiper-item wx:if="{{swiperItems.length >= 3}}">
+        <image src="/image/b3.jpg" class="slide-image" mode="aspectFill" binderror="onSwiperImgError" data-index="2" />
         <text class="swiper-label">阳朔西街</text>
       </swiper-item>
     </swiper>
@@ -26,11 +26,38 @@
 
   <!-- 功能模块 -->
   <view class="module-grid">
-    <view class="function-item" wx:for="{{modules}}" wx:key="name" bindtap="goModule" data-url="{{item.url}}" data-name="{{item.name}}" data-voice="{{item.voice}}">
-      <text class="function-icon">{{item.icon}}</text>
-      <text class="function-name">{{item.name}}</text>
+      <!-- 常规组件 6个，3x2布局，各具主题 -->
+      <view class="function-item normal-item map-themed" bindtap="goMap">
+        <text class="function-icon">🗺️</text>
+        <text class="function-name">地图导览</text>
+        <text class="function-sub">实时定位</text>
+      </view>
+      <view class="function-item normal-item food-themed" bindtap="goFood">
+        <text class="function-icon">🍜</text>
+        <text class="function-name">桂林美食</text>
+        <text class="function-sub">银发推荐</text>
+      </view>
+      <view class="function-item normal-item transport-themed" bindtap="goTransport">
+        <text class="function-icon">🚌</text>
+        <text class="function-name">交通出行</text>
+        <text class="function-sub">出行无忧</text>
+      </view>
+      <view class="function-item normal-item health-themed" bindtap="goHealth">
+        <text class="function-icon">💚</text>
+        <text class="function-name">健康记录</text>
+        <text class="function-sub">每日监测</text>
+      </view>
+      <view class="function-item normal-item emergency-themed" bindtap="goEmergency">
+        <text class="function-icon emergency-pulse">🆘</text>
+        <text class="function-name">紧急求助</text>
+        <text class="function-sub sos-text">一键呼救</text>
+      </view>
+      <view class="function-item normal-item cart-themed" bindtap="goCart">
+        <text class="function-icon">🛒</text>
+        <text class="function-name">全部商品</text>
+        <text class="function-sub">一站购齐</text>
+      </view>
     </view>
-  </view>
 
   <!-- 热门推荐 - 骨架屏 -->
   <view class="hot-section">

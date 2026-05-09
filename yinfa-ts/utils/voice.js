@@ -76,5 +76,16 @@ module.exports = {
 
   onTap(text) {
     this.speak(text, { lang: 'zh_CN' })
+  },
+
+  speakWithLang(text, lang) {
+    var langMap = {
+      'zh': 'zh_CN',
+      'en': 'en_US',
+      'ja': 'ja_JP',
+      'ko': 'ko_KR'
+    }
+    var ttsLang = langMap[lang] || 'zh_CN'
+    this.speak(text, { lang: ttsLang })
   }
 }

@@ -1,22 +1,9 @@
-<view class="transport">
-  <view wx:if="{{loading}}" class="loading-spinner">
-    <view class="loading-ring"></view>
-  </view>
-
-  <view wx:elif="{{error}}" class="error-state">
-    <text class="error-icon">😵</text>
-    <text class="error-title">加载失败</text>
-    <text class="btn-primary" bindtap="loadTransportModes" style="margin-top:20rpx;padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
-  </view>
+<view class="transport font-mode-{{fontSizeMode}}">
+  <loading-view wx:if="{{loading}}" />
+  <error-view wx:elif="{{error}}" bind:retry="loadTransportModes" />
 
   <block wx:else>
-  <view class="banner">
-    <text class="banner-icon">🚌</text>
-    <view class="banner-text">
-      <text class="banner-title">交通出行</text>
-      <text class="banner-desc">出行无忧·老人友好指南</text>
-    </view>
-  </view>
+  <banner-view icon="🚌" title="交通出行" desc="出行无忧·老人友好指南" />
 
   <view class="quick-btns">
     <view class="qb-btn" bindtap="callTaxi">

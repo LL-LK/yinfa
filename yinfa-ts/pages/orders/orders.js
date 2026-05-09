@@ -8,10 +8,12 @@ Page({
     filteredOrders: [],
     selectedTab: 'all',
     loading: true,
-    error: false
+    error: false,
+    fontSizeMode: 'normal'
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     this.loadOrders()
   },
 

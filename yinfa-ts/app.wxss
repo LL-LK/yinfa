@@ -32,16 +32,20 @@ page {
 
   --danger: #C62828;          /* 红色 - 一般危险 */
   --danger-dark: #B71C1C;      /* 深红 - 危险按下 */
+  --danger-light: #FFEBEE;     /* 浅红 - 危险背景 */
   --danger-mild: #1B5E20;     /* 深绿色 - 删除/危险操作（非SOS） */
   --danger-mild-dark: #145218;/* 深绿 - 危险操作按下 */
   --danger-mild-light: #E8F5E9;/* 浅绿 - 危险背景 */
 
   /* === 成功/警告/信息 === */
   --success: #2E7D32;         /* 深绿 - 成功 */
+  --success-dark: #1B5E20;    /* 更深绿 - 成功深色 */
   --success-light: #E8F5E9;   /* 浅绿 - 成功背景 */
   --warning: #F57C00;         /* 橙色 - 警告 */
+  --warning-dark: #E65100;    /* 深橙 - 警告深色 */
   --warning-light: #FFF3E0;   /* 浅橙 - 警告背景 */
   --info: #0288D1;            /* 蓝色 - 信息 */
+  --info-dark: #01579B;       /* 深蓝 - 信息深色 */
   --info-light: #E1F5FE;      /* 浅蓝 - 信息背景 */
 
   /* === 背景色 === */
@@ -68,13 +72,15 @@ page {
   --shadow-sm: 0 2rpx 8rpx rgba(46, 139, 87, 0.08);
   --shadow-md: 0 4rpx 16rpx rgba(46, 139, 87, 0.12);
   --shadow-lg: 0 8rpx 32rpx rgba(46, 139, 87, 0.16);
-  --shadow-sos: 0 4rpx 20rpx rgba(255, 59, 48, 0.4); /* SOS专用阴影 */
+  --shadow-sos: 0 4rpx 20rpx rgba(255, 59, 48, 0.4);
+  --shadow-color: rgba(46, 139, 87, 0.1);
 
   /* === 圆角 === */
   --radius-sm: 8rpx;
   --radius-md: 16rpx;
   --radius-lg: 24rpx;
   --radius-xl: 32rpx;
+  --radius-xs: 4rpx;
   --radius-round: 50%;
   --radius-pill: 100rpx;
 
@@ -113,15 +119,40 @@ page {
   line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-bottom: 88rpx;
+  padding-bottom: calc(88rpx + constant(safe-area-inset-bottom));
   padding-bottom: calc(88rpx + env(safe-area-inset-bottom));
+}
+
+@media (prefers-color-scheme: dark) {
+  page {
+    --bg: #1a1a2e;
+    --bg-card: #16213e;
+    --bg-mask: rgba(255,255,255,0.04);
+    --bg-overlay: rgba(0,0,0,0.55);
+    --text-primary: #e8e8e8;
+    --text-secondary: #b0b0b0;
+    --text-hint: #888;
+    --border: #2a3456;
+    --border-light: #1e2a45;
+    --shadow-sm: 0 2rpx 8rpx rgba(0,0,0,0.25);
+    --shadow-md: 0 8rpx 24rpx rgba(0,0,0,0.3);
+    --shadow-color: rgba(0, 0, 0, 0.15);
+    --primary-light: #1a3a2a;
+    --accent-light: #1a3a2a;
+    --water-light: #1a2a3a;
+    --gold-light: #2a2010;
+    --cloud: #1a1a2e;
+    color: #e8e8e8;
+  }
 }
 
 /* --------------------------------------------
    二、字号模式切换（银发三档）
    -------------------------------------------- */
 
-/* 小字号模式 data-font-small="true" */
-page[data-font-small="true"] {
+/* 小字号模式 */
+.font-mode-small {
   --font-xs: 22rpx;
   --font-sm: 26rpx;
   --font-md: 30rpx;
@@ -131,8 +162,8 @@ page[data-font-small="true"] {
   --font-huge: 56rpx;
 }
 
-/* 大字号模式 data-font-large="true" */
-page[data-font-large="true"] {
+/* 大字号模式 */
+.font-mode-large {
   --font-xs: 28rpx;
   --font-sm: 34rpx;
   --font-md: 40rpx;
@@ -140,6 +171,31 @@ page[data-font-large="true"] {
   --font-xl: 54rpx;
   --font-xxl: 64rpx;
   --font-huge: 80rpx;
+}
+
+/* 极端大字号模式 (≥24px/48rpx) */
+.font-mode-huge {
+  --font-xs: 48rpx;
+  --font-sm: 52rpx;
+  --font-md: 56rpx;
+  --font-lg: 60rpx;
+  --font-xl: 68rpx;
+  --font-xxl: 80rpx;
+  --font-huge: 96rpx;
+  --space-xs: 16rpx;
+  --space-sm: 24rpx;
+  --space-md: 40rpx;
+  --space-lg: 56rpx;
+  --space-xl: 72rpx;
+  --space-xxl: 96rpx;
+}
+
+/* 响应式 - 宽屏适配 */
+@media (min-width: 768px) {
+  .page {
+    max-width: 750rpx;
+    margin: 0 auto;
+  }
 }
 
 /* --------------------------------------------
@@ -196,10 +252,15 @@ page[data-font-large="true"] {
    -------------------------------------------- */
 
 .card {
+  background: #fff;
   background: var(--bg-card);
+  border-radius: 16rpx;
   border-radius: var(--radius-md);
+  padding: 28rpx;
   padding: var(--space-lg);
+  margin-bottom: 24rpx;
   margin-bottom: var(--space-md);
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
   box-shadow: var(--shadow-sm);
 }
 
@@ -266,10 +327,15 @@ page[data-font-large="true"] {
 
 /* 主按钮 - 绿色 */
 .btn-primary {
+  background: #2E8B57;
   background: var(--primary);
+  color: #fff;
   color: var(--text-inverse);
+  border-radius: 16rpx;
   border-radius: var(--radius-md);
+  padding: 16rpx 56rpx;
   padding: var(--space-sm) var(--space-xl);
+  font-size: 36rpx;
   font-size: var(--font-lg);
   font-weight: 600;
   text-align: center;
@@ -277,7 +343,8 @@ page[data-font-large="true"] {
   min-height: 96rpx;
   line-height: 96rpx;
   border: none;
-  transition: all var(--transition-fast);
+  transition: all 0.15s ease;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
   box-shadow: var(--shadow-sm);
 }
 
@@ -336,10 +403,15 @@ page[data-font-large="true"] {
 
 /* ===== SOS紧急按钮 - 纯红色 ===== */
 .btn-sos {
+  background: #FF3B30;
   background: var(--sos);
+  color: #fff;
   color: var(--text-inverse);
+  border-radius: 24rpx;
   border-radius: var(--radius-lg);
+  padding: 24rpx 64rpx;
   padding: var(--space-md) var(--space-xxl);
+  font-size: 44rpx;
   font-size: var(--font-xl);
   font-weight: 700;
   text-align: center;
@@ -347,8 +419,8 @@ page[data-font-large="true"] {
   min-height: 120rpx;
   line-height: 120rpx;
   border: none;
-  transition: all var(--transition-fast);
-  box-shadow: var(--shadow-sos);
+  transition: all 0.15s ease;
+  box-shadow: 0 4rpx 16rpx rgba(255, 59, 48, 0.3);
   letter-spacing: 2rpx;
 }
 
@@ -972,11 +1044,17 @@ page[data-font-large="true"] {
    -------------------------------------------- */
 
 .banner {
+  background: linear-gradient(135deg, #2E8B57 0%, #3A7CC3 100%);
   background: linear-gradient(135deg, var(--primary) 0%, var(--water-dark) 100%);
+  border-radius: 24rpx;
   border-radius: var(--radius-lg);
+  padding: 36rpx 28rpx;
   padding: var(--space-xl) var(--space-lg);
+  color: #fff;
   color: var(--text-inverse);
+  margin-bottom: 24rpx;
   margin-bottom: var(--space-md);
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.08);
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
@@ -993,17 +1071,17 @@ page[data-font-large="true"] {
 }
 
 .banner-green {
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
 }
 
 .banner-sunrise {
-  background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 60%, var(--water-dark) 100%);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #D4A853 0%, #2E8B57 60%, #3A7CC3 100%);
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.1);
 }
 
 .banner-sos {
-  background: linear-gradient(135deg, var(--sos), var(--sos-dark));
-  box-shadow: var(--shadow-sos);
+  background: linear-gradient(135deg, #FF3B30, #D32F2F);
+  box-shadow: 0 4rpx 16rpx rgba(255, 59, 48, 0.25);
 }
 
 .banner-icon {

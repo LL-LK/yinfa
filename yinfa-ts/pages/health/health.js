@@ -14,6 +14,7 @@ Page({
       record_date: ''
     },
     submitting: false,
+    fontSizeMode: 'normal',
     chartData: {
       bpLabels: [],
       bpSystolic: [],
@@ -24,6 +25,7 @@ Page({
   },
 
   onLoad: function () {
+    this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     const today = new Date().toISOString().split('T')[0]
     this.setData({ 'formData.record_date': today })
     this.loadRecords()

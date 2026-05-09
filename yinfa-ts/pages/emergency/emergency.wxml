@@ -1,4 +1,4 @@
-<view class="emergency">
+<view class="emergency font-mode-{{fontSizeMode}}">
   <view class="header">
     <view class="header-icon">👨‍👩‍👧</view>
     <text class="header-title">紧急联系人</text>

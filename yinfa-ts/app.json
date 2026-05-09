@@ -24,33 +24,22 @@
     "navigationBarTitleText": "桂林银发旅游",
     "navigationBarTextStyle": "white"
   },
+  "darkmode": true,
   "permission": {
     "scope.userLocation": {
       "desc": "获取位置信息用于地图显示和景点定位"
     }
   },
   "tabBar": {
-    "color": "#7A9A7E",
+    "color": "#999999",
     "selectedColor": "#2E8B57",
-    "borderStyle": "white",
+    "borderStyle": "black",
     "backgroundColor": "#FFFFFF",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/scenic/scenic",
-        "text": "景点"
-      },
-      {
-        "pagePath": "pages/safety/safety",
-        "text": "安全"
-      },
-      {
-        "pagePath": "pages/user/user",
-        "text": "我的"
-      }
+      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "image/tabbar/home.png", "selectedIconPath": "image/tabbar/home-active.png" },
+      { "pagePath": "pages/scenic/scenic", "text": "景点导览", "iconPath": "image/tabbar/scenic.png", "selectedIconPath": "image/tabbar/scenic-active.png" },
+      { "pagePath": "pages/safety/safety", "text": "安全防护", "iconPath": "image/tabbar/safety.png", "selectedIconPath": "image/tabbar/safety-active.png" },
+      { "pagePath": "pages/user/user", "text": "个人中心", "iconPath": "image/tabbar/user.png", "selectedIconPath": "image/tabbar/user-active.png" }
     ]
   },
   "style": "v2",

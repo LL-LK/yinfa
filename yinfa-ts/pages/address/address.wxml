@@ -1,4 +1,4 @@
-<view class="address">
+<view class="address font-mode-{{fontSizeMode}}">
   <view wx:if="{{notLoggedIn}}" class="empty-state">
     <text class="empty-icon">🔐</text>
     <text class="empty-title">请先登录</text>

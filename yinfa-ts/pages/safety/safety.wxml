@@ -1,208 +1,113 @@
-<view class="safety-poster">
-  <!-- 背景层 -->
-  <view class="poster-bg">
-    <view class="bamboo-pattern"></view>
-    <image src="/image/b1.jpg" class="bg-bird" mode="aspectFit"></image>
+<view class="safety font-mode-{{fontSizeMode}}">
+  <!-- 海报区域：WebP → JPG → CSS渐变 三层降级 -->
+  <view class="poster-section">
+    <image src="{{posterSrc}}" class="poster-img" mode="widthFix" show-menu-by-longpress binderror="onPosterError" lazy-load />
+    <view class="poster-overlay">
+      <text class="poster-title">桂林·银发安全防护</text>
+      <text class="poster-subtitle">出行安全 · 健康守护</text>
+    </view>
   </view>
-  
-  <!-- 内容层 -->
-  <view class="poster-content">
-    <!-- 顶部标题区 - 重新编排布局 -->
-    <view class="header-section">
-      <!-- 左侧：橙色箭头 -->
-      <view class="header-arrow">→</view>
-      
-      <!-- 中间：标题栏（居中） -->
-      <view class="header-title-wrapper">
-        <view class="header-title-bar">
-          <text class="header-title-text">常见滑倒场景及预防</text>
-        </view>
+
+  <scroll-view scroll-y enhanced show-scrollbar="{{false}}" class="safety-scroll">
+    <!-- 天气与路况 -->
+    <view class="section-card weather-card">
+      <view class="card-title-row">
+        <text class="card-icon">🌤️</text>
+        <text class="card-title-text">今日天气 · 路面状况</text>
+        <text class="refresh-btn" bindtap="loadWeather">刷新</text>
       </view>
-      
-      <!-- 右侧：喇叭图标 -->
-      <view class="header-megaphone">
-        <image src="/image/IMG_0333.webp" class="megaphone-img" mode="aspectFit"></image>
+      <view class="weather-grid">
+        <view class="wg-item">
+          <text class="wg-label">天气</text>
+          <text class="wg-value">{{weather.condition || '--'}} {{weather.temp || '--'}}</text>
+        </view>
+        <view class="wg-item">
+          <text class="wg-label">湿度</text>
+          <text class="wg-value">{{weather.humidity || '--'}}</text>
+        </view>
+        <view class="wg-item">
+          <text class="wg-label">风力</text>
+          <text class="wg-value">{{weather.wind || '--'}}</text>
+        </view>
+        <view class="wg-item wg-highlight">
+          <text class="wg-label">路面</text>
+          <text class="wg-value road-{{slippery.level}}">{{slippery.title || '--'}}</text>
+        </view>
       </view>
     </view>
 
-    <!-- 场景卡片列表 -->
-    <scroll-view scroll-y class="scenes-container">
-      
-      <!-- 风险高区域 -->
-      <view class="risk-section section-high">
-        <view class="section-divider">
-          <view class="divider-line"></view>
+    <!-- 出行建议 -->
+    <view class="section-card advice-card">
+      <view class="card-title-row">
+        <text class="card-icon">💡</text>
+        <text class="card-title-text">今日出行建议</text>
+      </view>
+      <view class="advice-main-box">
+        <text class="advice-main">{{travelAdvice.advice || '今日天气适宜外出游览，建议携带遮阳用品和饮用水。'}}</text>
+      </view>
+      <view class="advice-cols">
+        <view class="advice-col col-ok">
+          <view class="col-head"><text class="col-ic">✅</text><text class="col-tit">推荐游览</text></view>
+          <view class="col-body">
+            <text class="col-item" wx:for="{{travelAdvice.suitable}}" wx:key="*this" wx:for-item="spot">{{spot}}</text>
+          </view>
         </view>
-        
-        <view class="cards-grid">
-          <view class="scene-card-mini" wx:for="{{warnings}}" wx:key="name" wx:if="{{index < 2}}">
-            <view class="card-top-row">
-              <view class="character-wrapper">
-                <image src="{{item.girlImage}}" class="girl-avatar" mode="aspectFit" lazy-load></image>
-              </view>
-              <!-- 只在第一个卡片显示风险标签 -->
-              <view class="risk-tag-inline tag-high" wx:if="{{index === 0}}">
-                <text class="tag-text">风险高</text>
-              </view>
-            </view>
-            
-            <view class="card-name-bar">
-              <text class="card-name">{{item.name}}</text>
-            </view>
-            
-            <view class="card-desc-row">
-              <view class="play-btn-3d" catchtap="readWarning" data-index="{{index}}">
-                <image src="/image/IMG_0337.webp" class="play-icon-img" mode="aspectFit" lazy-load></image>
-              </view>
-              <text class="card-desc-text">{{item.desc}}</text>
-            </view>
+        <view class="advice-col col-no">
+          <view class="col-head"><text class="col-ic">❌</text><text class="col-tit">建议避开</text></view>
+          <view class="col-body">
+            <text class="col-item" wx:for="{{travelAdvice.avoid}}" wx:key="*this" wx:for-item="spot">{{spot}}</text>
           </view>
         </view>
       </view>
+    </view>
 
-      <!-- 风险中区域 -->
-      <view class="risk-section section-medium" wx:if="{{warnings.length > 2}}">
-        <view class="section-divider">
-          <view class="divider-line"></view>
-        </view>
-        
-        <view class="cards-grid">
-          <view class="scene-card-mini" wx:for="{{warnings}}" wx:key="name" wx:if="{{index >= 2 && index < 4}}">
-            <view class="card-top-row">
-              <view class="character-wrapper">
-                <image src="{{item.girlImage}}" class="girl-avatar" mode="aspectFit" lazy-load></image>
-              </view>
-              <!-- 只在第一个卡片显示风险标签 -->
-              <view class="risk-tag-inline tag-medium" wx:if="{{index === 2}}">
-                <text class="tag-text">风险中</text>
-              </view>
-            </view>
-            
-            <view class="card-name-bar">
-              <text class="card-name">{{item.name}}</text>
-            </view>
-            
-            <view class="card-desc-row">
-              <view class="play-btn-3d" catchtap="readWarning" data-index="{{index}}">
-                <image src="/image/IMG_0337.webp" class="play-icon-img" mode="aspectFit" lazy-load></image>
-              </view>
-              <text class="card-desc-text">{{item.desc}}</text>
-            </view>
-          </view>
-        </view>
+    <!-- 紧急操作 -->
+    <view class="emergency-section">
+      <view class="em-btn sos-em-btn" bindtap="callEmergency">
+        <text class="em-icon">🆘</text>
+        <text class="em-text">一键呼救</text>
       </view>
+      <view class="em-btn loc-em-btn" bindtap="shareLocation">
+        <text class="em-icon">📍</text>
+        <text class="em-text">分享位置</text>
+      </view>
+      <view class="em-btn contact-em-btn" bindtap="goEmergency">
+        <text class="em-icon">📞</text>
+        <text class="em-text">紧急联系人</text>
+      </view>
+    </view>
 
-      <!-- 风险低区域 -->
-      <view class="risk-section section-low" wx:if="{{warnings.length > 4}}">
-        <view class="section-divider">
-          <view class="divider-line"></view>
-        </view>
-        
-        <view class="cards-grid">
-          <view class="scene-card-mini" wx:for="{{warnings}}" wx:key="name" wx:if="{{index >= 4}}">
-            <view class="card-top-row">
-              <view class="character-wrapper">
-                <image src="{{item.girlImage}}" class="girl-avatar" mode="aspectFit" lazy-load></image>
-              </view>
-              <!-- 只在第一个卡片显示风险标签 -->
-              <view class="risk-tag-inline tag-low" wx:if="{{index === 4}}">
-                <text class="tag-text">风险低</text>
-              </view>
-            </view>
-            
-            <view class="card-name-bar">
-              <text class="card-name">{{item.name}}</text>
-            </view>
-            
-            <view class="card-desc-row">
-              <view class="play-btn-3d" catchtap="readWarning" data-index="{{index}}">
-                <image src="/image/IMG_0337.webp" class="play-icon-img" mode="aspectFit" lazy-load></image>
-              </view>
-              <text class="card-desc-text">{{item.desc}}</text>
-            </view>
+    <!-- 安全提示 -->
+    <view class="section-card tips-card">
+      <view class="card-title-row">
+        <text class="card-icon">⚠️</text>
+        <text class="card-title-text">银发出行安全提示</text>
+      </view>
+      <view class="tips-list">
+        <view class="tip-item" wx:for="{{safetyTips}}" wx:key="index" bindtap="readTip" data-index="{{index}}">
+          <text class="tip-level tip-{{item.level}}">{{item.icon}}</text>
+          <view class="tip-content">
+            <text class="tip-name">{{item.name}}</text>
+            <text class="tip-desc">{{item.desc}}</text>
           </view>
         </view>
       </view>
+    </view>
 
-      <!-- 天气信息卡片 -->
-      <view class="info-card weather-info">
-        <view class="info-title-row">
-          <text class="info-icon">🌤️</text>
-          <text class="info-title">今日天气 · 路面状况</text>
-        </view>
-        <view class="info-grid">
-          <view class="grid-item">
-            <text class="item-label">天气</text>
-            <text class="item-value">{{weather.condition}} {{weather.temp}}°C</text>
-          </view>
-          <view class="grid-item">
-            <text class="item-label">湿度</text>
-            <text class="item-value">{{weather.humidity}}</text>
-          </view>
-          <view class="grid-item">
-            <text class="item-label">风力</text>
-            <text class="item-value">{{weather.wind}}</text>
-          </view>
-          <view class="grid-item grid-highlight">
-            <text class="item-label">路面</text>
-            <text class="item-value road-status-{{slippery.level}}">{{slippery.title}}</text>
-          </view>
+    <!-- 健康提醒 -->
+    <view class="section-card health-card">
+      <view class="card-title-row">
+        <text class="card-icon">💚</text>
+        <text class="card-title-text">今日健康提醒</text>
+      </view>
+      <view class="health-tips">
+        <view class="ht-item" wx:for="{{healthTips}}" wx:key="index">
+          <text class="ht-icon">{{item.icon}}</text>
+          <text class="ht-text">{{item.text}}</text>
         </view>
       </view>
+    </view>
 
-      <!-- 出行建议卡片 -->
-      <view class="info-card advice-info">
-        <view class="info-title-row">
-          <text class="info-icon">💡</text>
-          <text class="info-title">今日出行建议</text>
-        </view>
-        <view class="advice-text-box">
-          <text class="advice-main">{{travelAdvice.advice}}</text>
-        </view>
-        <view class="advice-columns">
-          <view class="advice-col col-suitable">
-            <view class="col-header">
-              <text class="col-icon">✅</text>
-              <text class="col-title">推荐游览</text>
-            </view>
-            <view class="col-list">
-              <text class="col-item" wx:for="{{travelAdvice.suitable}}" wx:key="*this" wx:for-item="spot">{{spot}}</text>
-            </view>
-          </view>
-          <view class="advice-col col-avoid">
-            <view class="col-header">
-              <text class="col-icon">❌</text>
-              <text class="col-title">建议避开</text>
-            </view>
-            <view class="col-list">
-              <text class="col-item" wx:for="{{travelAdvice.avoid}}" wx:key="*this" wx:for-item="spot">{{spot}}</text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 紧急按钮区 -->
-      <view class="emergency-buttons">
-        <view class="em-btn sos-btn" bindtap="callEmergency">
-          <text class="em-btn-icon">🆘</text>
-          <text class="em-btn-text">一键呼救</text>
-        </view>
-        <view class="em-btn loc-btn" bindtap="shareLocation">
-          <text class="em-btn-icon">📍</text>
-          <text class="em-btn-text">分享位置</text>
-        </view>
-      </view>
-
-      <!-- 底部老人插图区 -->
-      <view class="footer-illustration">
-        <view class="elderly-images">
-          <image src="/image/IMG_0347.webp" class="elderly-img elderly-1" mode="aspectFit" lazy-load></image>
-          <image src="/image/IMG_0349.webp" class="elderly-img elderly-2" mode="aspectFit" lazy-load></image>
-        </view>
-        <view class="footer-bird">
-          <text class="bird-icon">🐦</text>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
+    <view class="bottom-space"></view>
+  </scroll-view>
 </view>

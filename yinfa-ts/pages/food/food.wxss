@@ -4,35 +4,6 @@
   padding-bottom: 40rpx;
 }
 
-.banner {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  padding: 36rpx 30rpx;
-  display: flex;
-  align-items: center;
-}
-
-.banner-icon {
-  font-size: 52rpx;
-  margin-right: 20rpx;
-}
-
-.banner-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.banner-title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: var(--text-inverse);
-}
-
-.banner-desc {
-  font-size: 24rpx;
-  color: rgba(255,255,255,0.8);
-  margin-top: 4rpx;
-}
-
 .featured {
   display: flex;
   margin: 16rpx 20rpx;
@@ -49,13 +20,19 @@
   align-items: center;
   box-shadow: var(--shadow-sm);
   position: relative;
+  transition: all var(--transition-fast);
+}
+
+.ft-item:active {
+  background: var(--bg-hover);
+  transform: scale(0.97);
 }
 
 .ft-badge {
   position: absolute;
   top: 6rpx;
   right: 8rpx;
-  font-size: 18rpx;
+  font-size: var(--font-xs);
   background: var(--accent);
   color: var(--text-inverse);
   padding: 2rpx 10rpx;
@@ -70,7 +47,7 @@
 }
 
 .ft-sub {
-  font-size: 20rpx;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
   margin-top: 4rpx;
 }
@@ -92,6 +69,7 @@
 
 .food-item.selected {
   box-shadow: var(--shadow-md);
+  border: 2rpx solid var(--accent-light);
 }
 
 .fi-img {
@@ -147,10 +125,10 @@
   padding: 20rpx 24rpx;
   background: var(--bg);
   border-top: 1rpx solid var(--border-light);
-  animation: fadeIn var(--transition-normal);
+  animation: foodFadeIn var(--transition-normal);
 }
 
-@keyframes fadeIn {
+@keyframes foodFadeIn {
   from { opacity: 0; transform: translateY(-8rpx); }
   to { opacity: 1; transform: translateY(0); }
 }
@@ -167,11 +145,4 @@
   display: block;
   font-size: var(--font-sm);
   color: var(--text-hint);
-}
-
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 200rpx 0;
 }

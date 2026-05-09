@@ -3,35 +3,6 @@
   padding-bottom: 40rpx;
 }
 
-.banner {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  padding: 36rpx 30rpx;
-  display: flex;
-  align-items: center;
-}
-
-.banner-icon {
-  font-size: 52rpx;
-  margin-right: 20rpx;
-}
-
-.banner-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.banner-title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: var(--text-inverse);
-}
-
-.banner-desc {
-  font-size: 24rpx;
-  color: rgba(255,255,255,0.8);
-  margin-top: 4rpx;
-}
-
 .quick-btns {
   display: flex;
   margin: 20rpx;
@@ -57,7 +28,7 @@
 }
 
 .qb-icon {
-  font-size: 40rpx;
+  font-size: var(--font-xl);
 }
 
 .qb-label {
@@ -73,9 +44,10 @@
 .mode-item {
   background: var(--bg-card);
   border-radius: var(--radius-md);
-  padding: 28rpx;
+  padding: var(--space-lg);
   margin-bottom: 16rpx;
   box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .mi-header {
@@ -85,7 +57,7 @@
 }
 
 .mi-icon {
-  font-size: 48rpx;
+  font-size: var(--font-huge);
   margin-right: 20rpx;
   width: 80rpx;
   height: 80rpx;
@@ -157,7 +129,7 @@
 }
 
 .tl-icon {
-  font-size: 36rpx;
+  font-size: var(--font-xl);
   margin-right: 16rpx;
 }
 
