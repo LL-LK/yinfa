@@ -2,7 +2,7 @@
 nixPkgs = ["nodejs"]
 
 [phases.install]
-cmds = ["cd yinfa-ts/backend/server && npm install"]
+cmds = ["cd yinfa-ts/backend/server && npm install --include=dev"]
 
 [phases.build]
 cmds = ["cd yinfa-ts/backend/server && npm run build"]
