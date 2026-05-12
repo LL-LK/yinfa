@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import routes from './routes';
+import paymentRoutes from './routes/payment';
 import { initDatabase, stopBackupTimer } from './database';
 import logger from './logger';
 import { requestLogger } from './middleware/requestLogger';
@@ -25,6 +26,12 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json({ limit: '1mb' }));
+// 保存原始body用于微信支付回调验签（必须在express.json之后）
+app.use('/api/pay/callback', express.json({
+  verify: (req: import('http').IncomingMessage, _res, buf: Buffer) => {
+    (req as any).rawBody = buf.toString();
+  }
+}));
 app.use(requestLogger);
 
 const limiter = rateLimit({
@@ -66,6 +73,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', routes);
+app.use('/api/pay', paymentRoutes);
 
 async function startServer() {
   try {

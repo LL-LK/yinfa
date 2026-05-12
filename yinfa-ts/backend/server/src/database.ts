@@ -3,9 +3,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 import logger from './logger';
 
+// PostgreSQL pool类型内联，避免编译时需要安装 pg 模块
+type PgPool = any;
+type PgClient = any;
+
 let db: Database | null = null;
+let pgPool: PgPool | null = null;
+let usePostgres = false;
+let pgQueryFn: ((sql: string, params: Record<string, unknown>) => Promise<Record<string, unknown>[]>) | null = null;
+let pgExecuteFn: ((sql: string, params: Record<string, unknown>) => Promise<void>) | null = null;
+
 const isProduction = process.env.NODE_ENV === 'production';
-const dataDir = isProduction 
+const dataDir = isProduction
   ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH || '/app', 'data')
   : path.join(__dirname, '..', '..', '..', 'data');
 const dbPath = path.join(dataDir, 'shop.db');
@@ -14,12 +23,71 @@ const MAX_BACKUPS = 24;
 const BACKUP_INTERVAL_MS = 60 * 60 * 1000;
 let backupTimer: ReturnType<typeof setInterval> | null = null;
 
+export function isUsingPostgres(): boolean {
+  return usePostgres;
+}
+
 export async function initDatabase(): Promise<Database> {
-  if (db) return db;
+  // 优先尝试 PostgreSQL（当 DATABASE_URL 环境变量存在时）
+  if (process.env.DATABASE_URL) {
+    try {
+      const { Pool } = await import('pg');
+      pgPool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        max: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 5000,
+      });
+      // 测试连接
+      const testClient = await pgPool.connect();
+      testClient.release();
+      usePostgres = true;
 
+      // PostgreSQL 参数转换: :name → $N
+      const convertParams = (sql: string, params: Record<string, unknown>): { text: string; values: unknown[] } => {
+        const keys = Object.keys(params);
+        let text = sql;
+        const values: unknown[] = [];
+        keys.forEach((key, index) => {
+          const placeholder = `:${key}`;
+          let pos = 0;
+          while ((pos = text.indexOf(placeholder, pos)) !== -1) {
+            const before = pos === 0 ? ' ' : text[pos - 1];
+            const afterPos = pos + placeholder.length;
+            const after = afterPos >= text.length ? ' ' : text[afterPos];
+            if (!/[a-zA-Z0-9_]/.test(before) && !/[a-zA-Z0-9_]/.test(after)) {
+              text = text.slice(0, pos) + `$${index + 1}` + text.slice(afterPos);
+              values.push(params[key]);
+            }
+            pos += placeholder.length;
+          }
+        });
+        return { text, values };
+      };
+
+      pgQueryFn = async (sql: string, params: Record<string, unknown> = {}): Promise<Record<string, unknown>[]> => {
+        const { text, values } = convertParams(sql, params);
+        const result = await pgPool!.query(text, values);
+        return result.rows as Record<string, unknown>[];
+      };
+
+      pgExecuteFn = async (sql: string, params: Record<string, unknown> = {}): Promise<void> => {
+        const { text, values } = convertParams(sql, params);
+        await pgPool!.query(text, values);
+      };
+
+      logger.info('[DB] PostgreSQL 已启用（Railway）');
+      return null as unknown as Database; // PostgreSQL 模式下返回 null，路由使用 pgQueryFn/pgExecuteFn
+    } catch (e) {
+      logger.warn({ err: e }, '[DB] PostgreSQL 连接失败，回退到 SQL.js');
+      usePostgres = false;
+    }
+  }
+
+  // SQL.js 初始化（开发和生产无 DATABASE_URL 时）
   const SQL = await initSqlJs();
+  if (db) return db; // 已初始化
 
-  // 确保数据目录存在
   ensureDataDir();
 
   if (fs.existsSync(dbPath)) {
@@ -51,6 +119,65 @@ export async function initDatabase(): Promise<Database> {
   saveDatabase();
   startBackupTimer();
   return db;
+}
+
+/**
+ * PostgreSQL 参数化查询（异步，替代 SQL.js 同步 dbQuery）
+ * 使用方式与 dbQuery 相同：await dbQuery(sql, { paramName: value })
+ */
+export async function dbQuery(sql: string, params: Record<string, unknown> = {}): Promise<Record<string, unknown>[]> {
+  if (usePostgres && pgQueryFn) {
+    return pgQueryFn(sql, params);
+  }
+  // SQL.js 同步模式（兼容未迁移的路由）
+  const database = getDatabase();
+  const stmt = database.prepare(sql);
+  if (Object.keys(params).length > 0) {
+    const bindObj: Record<string, unknown> = {};
+    Object.keys(params).forEach((key, i) => {
+      bindObj[`$${i + 1}`] = params[key];
+    });
+    // SQL.js 使用 $1, $2 格式绑定
+    const keys = Object.keys(params);
+    let idx = 0;
+    const rewritten = sql.replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, () => {
+      return `$${++idx}`;
+    });
+    const stmt2 = database.prepare(rewritten);
+    keys.forEach((key, i) => stmt2.bind({ [`$${i + 1}`]: params[key] as import('sql.js').SqlValue }));
+    const rows: Record<string, unknown>[] = [];
+    while (stmt2.step()) rows.push(stmt2.getAsObject() as Record<string, unknown>);
+    stmt2.free();
+    return rows;
+  }
+  const result = database.exec(sql);
+  if (result.length === 0) return [];
+  return result[0].values.map(row => {
+    const obj: Record<string, unknown> = {};
+    result[0].columns.forEach((col, i) => { obj[col] = row[i]; });
+    return obj;
+  });
+}
+
+/**
+ * PostgreSQL 参数化执行（异步，替代 SQL.js 同步 dbExecute）
+ */
+export async function dbExecute(sql: string, params: Record<string, unknown> = {}): Promise<void> {
+  if (usePostgres && pgExecuteFn) {
+    return pgExecuteFn(sql, params);
+  }
+  // SQL.js 同步模式
+  const database = getDatabase();
+  if (Object.keys(params).length > 0) {
+    const keys = Object.keys(params);
+    let idx = 0;
+    const rewritten = sql.replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, () => {
+      return `$${++idx}`;
+    });
+    keys.forEach((key, i) => database.run(rewritten, { [`$${i + 1}`]: params[key] as import('sql.js').SqlValue }));
+    return;
+  }
+  database.run(sql);
 }
 
 function createTables(database: Database): void {
@@ -167,10 +294,10 @@ function insertSampleData(database: Database): void {
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (1, '杨堤码头竹筏漂流', '漓江精华段起点，乘竹筏漂流至九马画山，欣赏两岸如画美景，约2小时', 160.00, 120, '/image/b1.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '桂林漓江大瀑布酒店', '五星级景观酒店，毗邻两江四湖，提供老年人专属无障碍房间', 680.00, 50, '/image/b2.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (2, '阳朔悦榕庄', '高端度假酒店，环境清幽，适合静养休闲', 1200.00, 30, '/image/b3.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '桂林米粉体验套餐', '正宗桂林米粉+锅烧+卤牛肉，配一碗大骨汤', 38.00, 500, '/image/72.png', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '啤酒鱼套餐', '阳朔名菜，漓江鲜鱼配啤酒烹制，鱼肉鲜嫩', 88.00, 100, '/image/11.png', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '桂林米粉体验套餐', '正宗桂林米粉+锅烧+卤牛肉，配一碗大骨汤', 38.00, 500, '/image/food-icon.webp', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (3, '啤酒鱼套餐', '阳朔名菜，漓江鲜鱼配啤酒烹制，鱼肉鲜嫩', 88.00, 100, '/image/b1.jpg', 1)`);
   database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (4, '桂林阳朔三日游', '含漓江游船+阳朔西街+龙脊梯田，全程导游陪同，适合老年团', 799.00, 60, '/image/b1.jpg', 1)`);
-  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (5, '桂林山水画扇', '手工绘制漓江风景折扇，精美雅致', 68.00, 500, '/image/82.png', 1)`);
+  database.run(`INSERT INTO products (category_id, name, description, price, stock, image_url, is_active) VALUES (5, '桂林山水画扇', '手工绘制漓江风景折扇，精美雅致', 68.00, 500, '/image/b2.jpg', 1)`);
 
   ensureDataDir();
   const data = database.export();

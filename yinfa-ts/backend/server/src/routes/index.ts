@@ -148,14 +148,14 @@ router.get('/products', (req: Request, res: Response) => {
     while (stmt.step()) {
       const row = stmt.getAsObject();
       products.push({
-        id: row.id,
-        name: row.name,
-        description: row.description || '',
-        price: row.price,
-        stock: row.stock,
-        image_url: row.image_url || '',
+        id: row.id as number,
+        name: row.name as string,
+        description: (row.description as string) || '',
+        price: row.price as number,
+        stock: row.stock as number,
+        image_url: (row.image_url as string) || '',
         is_active: row.is_active === 1,
-        category: row.category_name ? { id: row.category_id, name: row.category_name, slug: row.category_slug } : null
+        category: row.category_name ? { id: row.category_id as number, name: row.category_name as string, slug: row.category_slug as string } : null
       });
     }
     stmt.free();
@@ -170,7 +170,7 @@ router.get('/products', (req: Request, res: Response) => {
 router.get('/products/:id', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const id = sanitizePathParam(req.params.id);
+    const id = sanitizePathParam(req.params.id as string);
     const stmt = db.prepare('SELECT p.*, c.name as category_name, c.slug as category_slug FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = :id AND p.is_active = 1');
     stmt.bind({ ':id': id });
     if (!stmt.step()) {
@@ -356,7 +356,7 @@ router.post('/users/login', auditLog('login'), validate(loginSchema), (req: Requ
 router.get('/users/:openid', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const openid = req.params.openid;
+    const openid = req.params.openid as string;
     const stmt = db.prepare('SELECT * FROM user_profiles WHERE openid = :openid');
     stmt.bind({ ':openid': openid });
 
@@ -466,13 +466,14 @@ router.get('/addresses', (req: Request, res: Response) => {
     while (addrStmt.step()) {
       const row = addrStmt.getAsObject();
       addresses.push({
-        id: row.id,
-        full_name: row.full_name,
-        phone: row.phone,
-        address_line: row.address_line,
-        city: row.city,
-        postal_code: row.postal_code,
-        is_default: row.is_default === 1
+        id: row.id as number,
+        full_name: row.full_name as string,
+        phone: row.phone as string,
+        address_line: row.address_line as string,
+        city: (row.city as string) || '',
+        postal_code: (row.postal_code as string) || '',
+        is_default: row.is_default as number === 1,
+        created_at: row.created_at as string
       });
     }
     addrStmt.free();
@@ -570,17 +571,17 @@ router.post('/order/create', auditLog('create_order'), validate(createOrderSchem
     itemsStmt.bind({ ':orderId': orderId });
     while (itemsStmt.step()) {
       const row = itemsStmt.getAsObject();
-      order.items.push({
-        id: row.id,
+      order.items!.push({
+        id: row.id as number,
         product: row.product_id ? {
-          id: row.product_id,
-          name: row.name,
-          description: row.description,
-          image_url: row.image_url
+          id: row.product_id as number,
+          name: row.name as string,
+          description: row.description as string,
+          image_url: row.image_url as string
         } : null,
-        quantity: row.quantity,
-        unit_price: row.unit_price,
-        subtotal: (row.quantity || 0) * (row.unit_price || 0)
+        quantity: row.quantity as number,
+        unit_price: row.unit_price as number,
+        subtotal: (row.quantity as number || 0) * (row.unit_price as number || 0)
       });
     }
     itemsStmt.free();
@@ -616,12 +617,12 @@ router.get('/orders', (req: Request, res: Response) => {
     while (ordersStmt.step()) {
       const row = ordersStmt.getAsObject();
       orders.push({
-        id: row.id,
-        order_no: row.order_no,
-        total_price: row.total_price,
-        status: row.status,
-        created_at: row.created_at,
-        updated_at: row.updated_at,
+        id: row.id as number,
+        order_no: row.order_no as string,
+        total_price: row.total_price as number,
+        status: row.status as OrderStatus,
+        created_at: row.created_at as string,
+        updated_at: row.updated_at as string,
         items: []
       });
     }
@@ -635,16 +636,16 @@ router.get('/orders', (req: Request, res: Response) => {
       while (itemsStmt.step()) {
         const row = itemsStmt.getAsObject();
         order.items!.push({
-          id: row.id,
+          id: row.id as number,
           product: row.product_id ? {
-            id: row.product_id,
-            name: row.name,
-            description: row.description,
-            image_url: row.image_url
+            id: row.product_id as number,
+            name: row.name as string,
+            description: row.description as string,
+            image_url: row.image_url as string
           } : null,
-          quantity: row.quantity,
-          unit_price: row.unit_price,
-          subtotal: (row.quantity || 0) * (row.unit_price || 0)
+          quantity: row.quantity as number,
+          unit_price: row.unit_price as number,
+          subtotal: (row.quantity as number || 0) * (row.unit_price as number || 0)
         });
       }
       itemsStmt.free();
@@ -659,7 +660,7 @@ router.get('/orders', (req: Request, res: Response) => {
 router.get('/orders/:id', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const id = sanitizePathParam(req.params.id);
+    const id = sanitizePathParam(req.params.id as string);
 
     const orderStmt = db.prepare('SELECT * FROM orders WHERE id = :id');
     orderStmt.bind({ ':id': id });
@@ -687,16 +688,16 @@ router.get('/orders/:id', (req: Request, res: Response) => {
     while (itemsStmt.step()) {
       const itemRow = itemsStmt.getAsObject();
       order.items!.push({
-        id: itemRow.id,
+        id: itemRow.id as number,
         product: itemRow.product_id ? {
-          id: itemRow.product_id,
-          name: itemRow.name,
-          description: itemRow.description,
-          image_url: itemRow.image_url
+          id: itemRow.product_id as number,
+          name: itemRow.name as string,
+          description: itemRow.description as string,
+          image_url: itemRow.image_url as string
         } : null,
-        quantity: itemRow.quantity,
-        unit_price: itemRow.unit_price,
-        subtotal: (itemRow.quantity || 0) * (itemRow.unit_price || 0)
+        quantity: itemRow.quantity as number,
+        unit_price: itemRow.unit_price as number,
+        subtotal: (itemRow.quantity as number || 0) * (itemRow.unit_price as number || 0)
       });
     }
     itemsStmt.free();
@@ -710,7 +711,7 @@ router.get('/orders/:id', (req: Request, res: Response) => {
 router.post('/orders/:id/paid', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const id = sanitizePathParam(req.params.id);
+    const id = sanitizePathParam(req.params.id as string);
 
     const orderStmt = db.prepare('SELECT * FROM orders WHERE id = :id');
     orderStmt.bind({ ':id': id });
@@ -763,12 +764,12 @@ router.get('/cart', (req: Request, res: Response) => {
     while (cartStmt.step()) {
       const row = cartStmt.getAsObject();
       items.push({
-        id: row.id,
-        product_id: row.product_id,
-        name: row.name,
-        price: row.price,
-        image: row.image_url || '',
-        quantity: row.quantity
+        id: row.id as number,
+        product_id: row.product_id as number,
+        name: row.name as string,
+        price: row.price as number,
+        image: (row.image_url as string) || '',
+        quantity: row.quantity as number
       });
     }
     cartStmt.free();
@@ -805,7 +806,7 @@ router.post('/cart/add', validate(addCartSchema), (req: Request, res: Response) 
       const existRow = existStmt.getAsObject();
       existStmt.free();
       db.run('UPDATE cart_items SET quantity = :qty WHERE id = :id', {
-        ':qty': existRow.quantity + qty, ':id': existRow.id
+        ':qty': (existRow.quantity as number) + qty, ':id': existRow.id
       });
     } else {
       existStmt.free();
@@ -825,7 +826,7 @@ router.post('/cart/add', validate(addCartSchema), (req: Request, res: Response) 
 router.put('/cart/:itemId', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const itemId = sanitizePathParam(req.params.itemId);
+    const itemId = sanitizePathParam(req.params.itemId as string);
     const { quantity } = req.body;
     const qty = parseInt(quantity, 10) || 1;
 
@@ -845,7 +846,7 @@ router.put('/cart/:itemId', (req: Request, res: Response) => {
 router.delete('/cart/:itemId', (req: Request, res: Response) => {
   try {
     const db = getDatabase();
-    const itemId = sanitizePathParam(req.params.itemId);
+    const itemId = sanitizePathParam(req.params.itemId as string);
 
     db.run('DELETE FROM cart_items WHERE id = :id', { ':id': itemId });
     saveDatabase();
@@ -1178,13 +1179,13 @@ router.get('/emergency-contacts', (req: Request, res: Response) => {
     while (contactStmt.step()) {
       const row = contactStmt.getAsObject();
       contacts.push({
-        id: row.id,
-        user_id: row.user_id,
-        name: row.name,
-        phone: row.phone,
-        relationship: row.relationship,
-        is_primary: row.is_primary === 1,
-        created_at: row.created_at
+        id: row.id as number,
+        user_id: row.user_id as number,
+        name: row.name as string,
+        phone: row.phone as string,
+        relationship: row.relationship as string,
+        is_primary: row.is_primary as number === 1,
+        created_at: row.created_at as string
       });
     }
     contactStmt.free();
@@ -1196,7 +1197,7 @@ router.get('/emergency-contacts', (req: Request, res: Response) => {
 
 router.delete('/emergency-contacts/:id', (req: Request, res: Response) => {
   try {
-    const id = sanitizePathParam(req.params.id);
+    const id = sanitizePathParam(req.params.id as string);
     const db = getDatabase();
     db.run('DELETE FROM emergency_contacts WHERE id = :id', { ':id': id });
     saveDatabase();
@@ -1208,7 +1209,7 @@ router.delete('/emergency-contacts/:id', (req: Request, res: Response) => {
 
 router.put('/emergency-contacts/:id', (req: Request, res: Response) => {
   try {
-    const id = sanitizePathParam(req.params.id);
+    const id = sanitizePathParam(req.params.id as string);
     const db = getDatabase();
 
     const contactStmt = db.prepare('SELECT * FROM emergency_contacts WHERE id = :id');
@@ -1301,13 +1302,13 @@ router.get('/health-records', (req: Request, res: Response) => {
     while (recordStmt.step()) {
       const row = recordStmt.getAsObject();
       records.push({
-        id: row.id,
-        user_id: row.user_id,
-        blood_pressure: row.blood_pressure,
-        heart_rate: row.heart_rate,
-        notes: row.notes,
-        record_date: row.record_date,
-        created_at: row.created_at
+        id: row.id as number,
+        user_id: row.user_id as number,
+        blood_pressure: row.blood_pressure as string,
+        heart_rate: row.heart_rate as string,
+        notes: row.notes as string,
+        record_date: row.record_date as string,
+        created_at: row.created_at as string
       });
     }
     recordStmt.free();
@@ -1331,12 +1332,12 @@ router.post('/sos/alert', validate(sosAlertSchema), (req: Request, res: Response
     while (contactStmt.step()) {
       const row = contactStmt.getAsObject();
       contacts.push({
-        id: row.id,
-        name: row.name,
-        phone: row.phone,
-        relationship: row.relationship,
+        id: row.id as number,
+        name: row.name as string,
+        phone: row.phone as string,
+        relationship: row.relationship as string,
         is_primary: true,
-        created_at: row.created_at
+        created_at: row.created_at as string
       });
     }
     contactStmt.free();
