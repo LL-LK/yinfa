@@ -2,12 +2,34 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "cd yinfa-ts/backend/server && npm install && npx tsc"
+    "buildCommand": "cd yinfa-ts/backend/server && npm install && npm run build"
   },
   "deploy": {
     "startCommand": "cd yinfa-ts/backend/server && node dist/index.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "healthcheckPath": "/health"
-  }
+    "healthcheckPath": "/health",
+    "numReplicas": 1
+  },
+  "variables": {
+    "NODE_ENV": "production",
+    "PORT": "8000",
+    "TZ": "Asia/Shanghai",
+    "WECHAT_APPID": "${WECHAT_APPID}",
+    "WECHAT_SECRET": "${WECHAT_SECRET}",
+    "WECHAT_MCHID": "${WECHAT_MCHID}",
+    "WECHAT_API_KEY": "${WECHAT_API_KEY}",
+    "AMAP_KEY": "${AMAP_KEY}",
+    "ALLOWED_ORIGINS": "${ALLOWED_ORIGINS}",
+    "LVYOU_AGI_URL": "${LVYOU_AGI_URL}",
+    "LVYOU_AGI_API_KEY": "${LVYOU_AGI_API_KEY}",
+    "AGENT_BASE_URL": "${AGENT_BASE_URL}",
+    "DATABASE_URL": "${DATABASE_URL}"
+  },
+  "volumes": [
+    {
+      "mountPath": "/data",
+      "directory": true
+    }
+  ]
 }

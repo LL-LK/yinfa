@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs"]
+
+[phases.install]
+cmds = ["cd yinfa-ts/backend/server && npm install"]
+
+[phases.build]
+cmds = ["cd yinfa-ts/backend/server && npm run build"]
+
+[start]
+cmd = "cd yinfa-ts/backend/server && node dist/index.js"
