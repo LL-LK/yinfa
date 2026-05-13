@@ -6,12 +6,12 @@ var IMG = require('../../utils/image-paths.js')
 
 var FALLBACK_PRODUCTS = {
   1: { id: 1, name: '漓江精华段', price: 215, image_url: IMG.SCENIC.b1, description: '桂林山水精华，乘船欣赏黄布倒影、九马画山等经典景观。', stock: 999, wheelchairAccess: true, restArea: '充足', suggestedDuration: '4小时', stairsCount: 0, tag_name: '5A景区', voiceUrl: '' },
-  2: { id: 2, name: '象鼻山公园', price: 55, image_url: IMG.SCENIC.b2, description: '桂林城徽象鼻山，形状酷似大象饮水，是桂林的标志性景点。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '1.5小时', stairsCount: 80, tag_name: '5A景区', voiceUrl: '' },
+  2: { id: 2, name: '象鼻山公园', price: 0, image_url: IMG.SCENIC.b2, description: '桂林城徽象鼻山，2022年起免费开放，桂林标志性景点。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '1.5小时', stairsCount: 80, tag_name: '5A景区·免费', voiceUrl: '' },
   3: { id: 3, name: '阳朔西街', price: 0, image_url: IMG.SCENIC.b3, description: '中西文化交融的千年古街，可品尝地道啤酒鱼和桂林米粉。', stock: 999, wheelchairAccess: true, restArea: '充足', suggestedDuration: '2小时', stairsCount: 0, tag_name: '4A景区', voiceUrl: '' },
-  4: { id: 4, name: '龙脊梯田', price: 80, image_url: IMG.SCENIC.b1, description: '世界人工奇观，层层梯田从山脚盘绕到山顶，秋季金黄最美。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '半天', stairsCount: 200, tag_name: '4A景区', voiceUrl: '' },
-  5: { id: 5, name: '芦笛岩', price: 90, image_url: IMG.SCENIC.b2, description: '著名溶洞景观，钟乳石千姿百态，被誉为"大自然艺术之宫"。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '1.5小时', stairsCount: 60, tag_name: '4A景区', voiceUrl: '' },
-  6: { id: 6, name: '两江四湖', price: 220, image_url: IMG.SCENIC.b3, description: '桂林市中心环城水系，夜游灯光璀璨，景色迷人。', stock: 999, wheelchairAccess: true, restArea: '充足', suggestedDuration: '2小时', stairsCount: 0, tag_name: '5A景区', voiceUrl: '' },
-  7: { id: 7, name: '杨堤码头', price: 160, image_url: IMG.SCENIC.b1, description: '漓江竹筏漂流的起点，欣赏漓江美景的最佳方式。', stock: 999, wheelchairAccess: false, restArea: '充足', suggestedDuration: '2小时', stairsCount: 0, tag_name: '漓江精华段起点', voiceUrl: '' }
+  4: { id: 4, name: '龙脊梯田', price: 80, image_url: IMG.SCENIC.C2, description: '世界人工奇观，层层梯田从山脚盘绕到山顶，秋季金黄最美。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '半天', stairsCount: 200, tag_name: '4A景区', voiceUrl: '' },
+  5: { id: 5, name: '芦笛岩', price: 82, image_url: IMG.SCENIC.b2, description: '著名溶洞景观，钟乳石千姿百态，被誉为"大自然艺术之宫"。', stock: 999, wheelchairAccess: false, restArea: '一般', suggestedDuration: '1.5小时', stairsCount: 60, tag_name: '4A景区', voiceUrl: '' },
+  6: { id: 6, name: '两江四湖', price: 210, image_url: IMG.SCENIC.c1, description: '桂林市中心环城水系，夜游灯光璀璨，景色迷人。', stock: 999, wheelchairAccess: true, restArea: '充足', suggestedDuration: '2小时', stairsCount: 0, tag_name: '5A景区', voiceUrl: '' },
+  7: { id: 7, name: '杨堤码头', price: 170, image_url: IMG.SCENIC.b1, description: '漓江竹筏漂流的起点，欣赏漓江美景的最佳方式。', stock: 999, wheelchairAccess: false, restArea: '充足', suggestedDuration: '2小时', stairsCount: 0, tag_name: '漓江精华段起点', voiceUrl: '' }
 }
 
 function getOpenid() {

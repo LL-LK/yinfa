@@ -1,0 +1,38 @@
+<view class="assistant-page font-mode-{{fontSizeMode}}">
+  <view class="agent-bar">
+    <view class="agent-status {{agentOnline ? 'online' : 'offline'}}" bindtap="refreshAgent">
+      <view class="status-dot"></view>
+      <text class="status-text">{{agentOnline ? 'AGI服务在线' : 'AGI离线 · 点击重连'}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="chat-list" scroll-y scroll-with-animation scroll-into-view="{{scrollToView}}">
+    <view class="chat-msg {{item.type}}-msg" wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}">
+      <view class="msg-bubble {{item.type}}-bubble">
+        <text class="msg-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <view class="chat-msg bot-msg" wx:if="{{thinking}}">
+      <view class="msg-bubble bot-bubble thinking-bubble">
+        <text class="thinking-dots">思考中</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="quick-tags">
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="tag-list">
+        <view class="quick-tag" wx:for="{{['🏔️ 景点推荐','🌤️ 天气趋势','🍜 美食推荐','🚌 交通指南','🎫 杨堤码头','📋 行程规划','👥 客流预测','🛡️ 安全提示']}}" wx:key="*this"
+              bindtap="tapQuick" data-q="{{item.indexOf(' ') >= 0 ? item.substring(item.indexOf(' ') + 1) : item}}">
+          {{item}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="input-bar">
+    <input class="chat-input" value="{{inputText}}" placeholder="{{thinking ? '正在思考中...' : '输入您的问题...'}}" bindinput="onInput" bindconfirm="sendMessage" confirm-type="send" disabled="{{thinking}}" />
+    <view class="send-btn {{thinking ? 'send-btn-disabled' : ''}}" bindtap="sendMessage">发送</view>
+  </view>
+</view>

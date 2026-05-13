@@ -5,7 +5,7 @@
 }
 
 .banner {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #283593 40%, #3949ab 100%);
   padding: 36rpx 30rpx;
   display: flex;
   align-items: center;
@@ -16,16 +16,81 @@
   margin-right: 20rpx;
 }
 
+.banner-info {
+  flex: 1;
+}
+
 .banner-title {
+  display: block;
   font-size: var(--font-xl);
   font-weight: 700;
-  color: var(--text-inverse);
+  color: #FFFFFF;
 }
 
 .banner-desc {
+  display: block;
   font-size: var(--font-xs);
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.85);
   margin-top: 4rpx;
+}
+
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 20rpx;
+}
+
+.loading-pulse {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: pulse-ring 1.2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.5); opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.loading-label {
+  margin-top: 30rpx;
+  font-size: var(--font-sm);
+  color: var(--text-hint);
+}
+
+.error-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 20rpx;
+}
+
+.error-emoji {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.error-label {
+  font-size: var(--font-md);
+  color: var(--text-secondary);
+  margin-bottom: 30rpx;
+}
+
+.retry-btn {
+  padding: 20rpx 64rpx;
+  background: var(--primary);
+  color: #FFF;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-md);
+  font-weight: 600;
+}
+
+.retry-btn:active {
+  transform: scale(0.95);
+  opacity: 0.85;
 }
 
 .road-list {
@@ -34,115 +99,189 @@
 
 .road-item {
   display: flex;
-  align-items: center;
-  gap: 20rpx;
+  align-items: flex-start;
+  gap: 16rpx;
   background: var(--bg-card);
   border-radius: var(--radius-md);
-  padding: 28rpx;
+  padding: 24rpx;
   margin-bottom: 16rpx;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
+  border-left: 6rpx solid transparent;
 }
 
 .road-item:active {
   transform: scale(0.98);
 }
 
-.road-icon {
-  font-size: 48rpx;
-  width: 88rpx;
-  height: 88rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  border-radius: var(--radius-round);
+.road-smooth { border-left-color: #4CAF50; }
+.road-slow { border-left-color: #FFC107; }
+.road-congested { border-left-color: #FF5722; }
+.road-blocked { border-left-color: #D32F2F; }
+
+.road-status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-top: 8rpx;
   flex-shrink: 0;
 }
+
+.smooth-dot { background: #4CAF50; }
+.slow-dot { background: #FFC107; }
+.congested-dot { background: #FF5722; }
+.blocked-dot { background: #D32F2F; }
 
 .road-info {
   flex: 1;
   min-width: 0;
 }
 
+.road-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 4rpx;
+}
+
 .road-name {
   font-size: var(--font-lg);
   font-weight: 700;
   color: var(--text-primary);
+}
+
+.road-status-tag {
+  padding: 4rpx 14rpx;
+  border-radius: var(--radius-xs);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.smooth-tag { background: #E8F5E9; color: #2E7D32; }
+.slow-tag { background: #FFF8E1; color: #F57F17; }
+.congested-tag { background: #FBE9E7; color: #BF360C; }
+.blocked-tag { background: #FFEBEE; color: #B71C1C; }
+
+.road-detail {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.road-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
   margin-bottom: 6rpx;
 }
 
-.road-detail {
+.metric {
   font-size: var(--font-sm);
-  color: var(--text-secondary);
-  line-height: var(--line-height-relaxed);
-}
-
-.road-status {
-  padding: 8rpx 20rpx;
-  border-radius: var(--radius-pill);
-  font-size: var(--font-sm);
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.road-status.smooth {
-  background: var(--primary-light);
+  font-weight: 600;
   color: var(--primary-dark);
 }
 
-.road-status.slow {
-  background: #FFF8E1;
-  color: var(--warning-dark);
+.metric-sep {
+  color: var(--border);
+  font-size: var(--font-xs);
 }
 
-.road-status.congested {
-  background: var(--danger-light);
-  color: var(--danger);
+.road-extra {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--text-hint);
+  line-height: var(--line-height-relaxed);
 }
 
-.tips-list {
+.road-nav-arrow {
+  font-size: var(--font-sm);
+  color: var(--primary);
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 6rpx;
+}
+
+.tips-section {
+  padding: 0 20rpx 20rpx;
+}
+
+.tips-title {
+  display: block;
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+  padding-left: 8rpx;
+}
+
+.tips-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10rpx;
-  padding: 0 20rpx 20rpx;
 }
 
 .tl-item {
   flex: 1;
   min-width: calc(50% - 10rpx);
   background: var(--bg-card);
-  padding: 20rpx;
+  padding: 16rpx 18rpx;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
   display: flex;
-  align-items: center;
-  gap: 12rpx;
+  align-items: flex-start;
+  gap: 10rpx;
 }
 
 .tl-icon {
-  font-size: 32rpx;
+  font-size: 28rpx;
+  flex-shrink: 0;
 }
 
 .tl-text {
-  font-size: var(--font-sm);
-  font-weight: 600;
+  font-size: var(--font-xs);
+  font-weight: 500;
   color: var(--text-primary);
+  line-height: var(--line-height-relaxed);
 }
 
-.back-btn {
+.bottom-bar {
+  display: flex;
+  gap: 16rpx;
   margin: 0 20rpx 20rpx;
+}
+
+.bb-btn {
+  flex: 1;
   text-align: center;
-  padding: 28rpx;
-  background: var(--primary);
-  color: var(--text-inverse);
-  font-size: var(--font-lg);
-  font-weight: 700;
+  padding: 24rpx;
+  background: var(--bg-card);
   border-radius: var(--radius-md);
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
   transition: all var(--transition-fast);
 }
 
-.back-btn:active {
-  background: var(--primary-dark);
+.bb-btn:active {
   transform: scale(0.97);
+  background: var(--primary-light);
+}
+
+.bb-btn-primary {
+  background: var(--primary);
+  color: #FFF;
+}
+
+.bb-btn-primary:active {
+  background: var(--primary-dark);
+}
+
+.bb-icon {
+  font-size: var(--font-md);
 }

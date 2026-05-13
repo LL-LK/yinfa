@@ -92,3 +92,12 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
 }
+
+// 扩展 Express Request 以支持微信支付回调的原始 body
+declare global {
+  namespace Express {
+    interface Request {
+      rawBody?: string;
+    }
+  }
+}

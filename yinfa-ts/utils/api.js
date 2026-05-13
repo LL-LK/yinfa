@@ -27,19 +27,25 @@ function request(options) {
   const method = options.method || 'GET'
   const data = options.data || {}
   const showLoading = options.showLoading !== undefined ? options.showLoading : true
+  const timeout = options.timeout !== undefined ? options.timeout : 8000
 
   return new Promise((resolve, reject) => {
     if (showLoading) {
       showLoadingIfNeeded()
     }
 
+    var timer = setTimeout(function() {
+      reject({ errMsg: '请求超时', timeout: true })
+    }, timeout)
+
     wx.request({
       url: BASE_URL + url,
       method: method,
       header: { 'content-type': 'application/json' },
       data: data,
-      timeout: 10000,
+      timeout: timeout,
       success(res) {
+        clearTimeout(timer)
         if (showLoading) hideLoadingIfNeeded()
         if (res.statusCode === 200 && res.data) {
           resolve(res.data.data || res.data)
@@ -54,6 +60,7 @@ function request(options) {
         }
       },
       fail(err) {
+        clearTimeout(timer)
         if (showLoading) hideLoadingIfNeeded()
         reject(err)
       }
@@ -74,7 +81,7 @@ function getProductById(id) {
 }
 
 function getCart(openid) {
-  return request({ url: '/cart', method: 'GET', data: { openid }, showLoading: false })
+  return request({ url: '/cart', method: 'GET', data: { openid }, showLoading: false, timeout: 3000 })
 }
 
 function addToCart(openid, productId, quantity) {

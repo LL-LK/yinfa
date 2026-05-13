@@ -1,12 +1,10 @@
 <view class="index font-mode-{{fontSizeMode}}">
-  <!-- 顶部天气和安全快报区域 -->
   <view bindtap="goSafety" class="safety-bar">
     <text wx:if="{{weather.condition}}" class="safety-emoji">{{weather.condition === '晴' ? '☀️' : weather.condition === '多云' ? '⛅' : weather.condition === '阴' ? '☁️' : weather.condition.indexOf('雨') >= 0 ? '🌧️' : '🌤️'}}</text>
     <text class="safety-text">{{weather.condition || '多云'}} {{weather.temp || '22°C'}}</text>
     <text class="safety-text2">桂林·银发宜居</text>
   </view>
 
-  <!-- 轮播图 (首屏关键图片不使用懒加载) -->
   <view class="swiper-box">
     <swiper class="swiper" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" autoplay circular interval="4000">
       <swiper-item wx:if="{{swiperItems.length >= 1}}">
@@ -24,46 +22,53 @@
     </swiper>
   </view>
 
-  <!-- 功能模块 -->
   <view class="module-grid">
-      <!-- 常规组件 6个，3x2布局，各具主题 -->
       <view class="function-item normal-item map-themed" bindtap="goMap">
-        <text class="function-icon">🗺️</text>
+        <image src="/image/map-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">地图导览</text>
         <text class="function-sub">实时定位</text>
       </view>
       <view class="function-item normal-item food-themed" bindtap="goFood">
-        <text class="function-icon">🍜</text>
+        <image src="/image/food-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">桂林美食</text>
         <text class="function-sub">银发推荐</text>
       </view>
       <view class="function-item normal-item transport-themed" bindtap="goTransport">
-        <text class="function-icon">🚌</text>
+        <image src="/image/transport-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">交通出行</text>
         <text class="function-sub">出行无忧</text>
       </view>
       <view class="function-item normal-item health-themed" bindtap="goHealth">
-        <text class="function-icon">💚</text>
+        <image src="/image/health-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">健康记录</text>
         <text class="function-sub">每日监测</text>
       </view>
       <view class="function-item normal-item emergency-themed" bindtap="goEmergency">
-        <text class="function-icon emergency-pulse">🆘</text>
+        <image src="/image/sos-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">紧急求助</text>
         <text class="function-sub sos-text">一键呼救</text>
       </view>
       <view class="function-item normal-item cart-themed" bindtap="goCart">
-        <text class="function-icon">🛒</text>
+        <image src="/image/cart-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
         <text class="function-name">全部商品</text>
         <text class="function-sub">一站购齐</text>
       </view>
+      <view class="function-item normal-item traffic-themed" bindtap="goTraffic">
+        <image src="/image/traffic-icon.webp" class="function-icon-img" mode="aspectFit" lazy-load />
+        <text class="function-name">实时路况</text>
+        <text class="function-sub">路况查询</text>
+      </view>
+      <view class="function-item normal-item assistant-themed" bindtap="goAssistant">
+        <image src="/image/assistant-icon-v2.webp" class="function-icon-img" mode="aspectFit" lazy-load />
+        <text class="function-name">智能助手</text>
+        <text class="function-sub">AI问答</text>
+      </view>
     </view>
 
-  <!-- 热门推荐 - 骨架屏 -->
   <view class="hot-section">
     <view class="section-header">
       <text class="section-title">🔥 热门推荐</text>
-      <text class="section-more" bindtap="goMoreHot">更多 ></text>
+      <text class="section-more" bindtap="goMoreHot">更多</text>
     </view>
 
     <view wx:if="{{loadingHot}}" class="hot-grid">

@@ -30,7 +30,7 @@ Page({
   onShow: function () {
     this.setData({ fontSizeMode: app.globalData.fontSizeMode || 'normal' })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ current: 3 });
+      this.getTabBar().setData({ selected: 3 });
     }
     this.loadCart()
   },

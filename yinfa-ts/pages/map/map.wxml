@@ -48,7 +48,7 @@
           <text class="scenic-distance" wx:if="{{item.distance}}">距{{item.distance}}</text>
         </view>
       </view>
-      <text class="scenic-arrow">&gt;</text>
+      <text class="scenic-arrow"></text>
     </view>
   </view>
 </view>

@@ -1,1 +1,1 @@
-web: cd backend/server && npm install && npm run build && node dist/index.js
+web: cd yinfa-ts/backend/server && npm install && npm run build && npm run start

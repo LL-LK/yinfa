@@ -5,7 +5,7 @@ const app = getApp()
 
 Page({
   data: {
-    posterSrc: '/image/IMG_0329.webp',
+    posterSrc: '/image/IMG_3710.webp',
     posterTried: false,
     weather: {},
     travelAdvice: { suitable: [], avoid: [] },
@@ -23,6 +23,9 @@ Page({
 
   onShow: function () {
     baseRefreshFontMode.call(this)
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 })
+    }
   },
 
   onTabItemTap: function () {

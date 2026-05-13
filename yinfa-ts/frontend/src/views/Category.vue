@@ -48,8 +48,8 @@ const products = [
   { id: 4, name: '桂林漓江大瀑布酒店', price: 600, categoryId: 2, image: '/image/b2.jpg' },
   { id: 5, name: '阳朔悦榕庄', price: 900, categoryId: 2, image: '/image/b3.jpg' },
   { id: 6, name: '桂林阳朔三日游', price: 599, categoryId: 4, image: '/image/b1.jpg' },
-  { id: 7, name: '桂林米粉', price: 25, categoryId: 3, image: '/image/72.png' },
-  { id: 8, name: '桂林山水画扇', price: 68, categoryId: 5, image: '/image/82.png' }
+  { id: 7, name: '桂林米粉', price: 25, categoryId: 3, image: '/image/food-icon.webp' },
+  { id: 8, name: '桂林山水画扇', price: 68, categoryId: 5, image: '/image/b2.jpg' }
 ]
 
 const filteredProducts = computed(() => {

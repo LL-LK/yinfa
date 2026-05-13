@@ -1,240 +1,213 @@
-# 桂林银发旅游小程序 - 项目修复总结
+# 桂林银发旅游小程序 - 项目总结
 
-## 一、项目概述
+## 项目概述
 
-本项目是一个面向银发人群的桂林旅游服务小程序，提供景点导览、安全防护、地图导航、美食推荐等核心功能。
+桂林银发旅游小程序（Guilin Silver Hair Tourism）是一个专为银发（老年）群体打造的智慧导览与文旅电商平台，覆盖桂林核心景点和文旅服务。
 
-## 二、问题修复汇总
-
-### 1. CSS变量系统问题（最高优先级）
-
-**问题**：CSS变量未设置硬值降级，部分设备无法识别`var()`语法
-
-**修复**：
-- `app.wxss`：为所有关键属性添加硬值fallback
-- 添加完整的CSS变量系统：字体大小、颜色、间距、圆角、阴影等
-
-**关键变量**：
-```css
---font-xs: 24rpx; --font-sm: 28rpx; --font-md: 32rpx; --font-lg: 36rpx; --font-xl: 44rpx; --font-xxl: 52rpx;
---primary: #2E8B57; --accent: #FF6B35; --sos: #EF5350; --gold: #FFD700;
---radius-xs: 4rpx; --radius-sm: 8rpx; --radius-md: 12rpx; --radius-lg: 16rpx; --radius-pill: 100rpx;
---shadow-sm: 0 4rpx 12rpx rgba(0,0,0,0.06);
-```
-
-### 2. 导航栏(TabBar)配置问题
-
-**问题**：TabBar图标不显示、颜色配置错误
-
-**修复**：
-- `app.json`：添加`darkmode: true`，修复`borderStyle`为`"black"`
-- 重新生成8个PNG图标（81×81尺寸）：
-  - home.png/home-active.png（🏠）
-  - scenic.png/scenic-active.png（⛰️）
-  - safety.png/safety-active.png（🛡️）
-  - user.png/user-active.png（👤）
-
-### 3. 图片资源问题
-
-**问题**：图片路径错误、格式不兼容（WebP在TabBar中不支持）
-
-**修复**：
-- 修复9处图片扩展名错误（`.webp`→`.png/.jpg`）
-- 创建`utils/image-paths.js`集中管理图片路径
-- TabBar图标统一使用PNG格式
-
-### 4. 全局布局混乱
-
-**问题**：安全区域适配问题、布局错乱
-
-**修复**：
-- `app.wxss`：安全区域三重fallback（88rpx、constant()、env()）
-- `user.wxss`：完全重写，修复类名不匹配问题
-
-### 5. 轮播图问题
-
-**问题**：轮播图加载失败无兜底
-
-**修复**：
-- `index.wxml`：添加`wx:if`条件判断+`binderror`错误处理
-- 统一使用JPG格式：b1.jpg、b2.jpg、b3.jpg
-
-### 6. 响应式设计缺失
-
-**问题**：字体大小切换无效
-
-**根因**：`page[data-font-*="true"]`选择器无法命中虚拟`<page>`元素
-
-**修复**：
-- 改用`.font-mode-small`/`.font-mode-large`/`.font-mode-huge`类选择器
-- 在所有页面根view添加`font-mode-{{fontSizeMode}}`绑定
-- `app.js`：`updateFontSize`通过`getCurrentPages()`广播到所有活跃页面
-
-### 7. "我的"页面功能完善
-
-**问题**：虚假数据、硬编码内容、功能缺失
-
-**修复**：
-- `user.js`：集成真实API（GET /orders）、localStorage收藏系统、登录/登出、字体切换、语音控制、SOS功能
-- `details.js`/`scenic.js`：添加收藏功能，跨页同步
-
-### 8. 热门推荐显示问题
-
-**问题**：商品网格空白、骨架屏缺失
-
-**根因**：`loadHotProducts`使用`base.finishLoad`设置通用`loading`，而非WXML使用的`loadingHot`
-
-**修复**：
-- 直接设置`loadingHot: false`
-- 添加骨架屏样式和动画
-- 添加错误状态、空状态样式
-
-## 三、页面结构
-
-### 首页(index)布局
-
-```
-┌─────────────────────────────────────────────┐
-│ [区域1] 安全栏 .safety-bar                  │
-│   天气emoji + 温度 + "桂林·银发宜居"       │
-├─────────────────────────────────────────────┤
-│ [区域2] 轮播图 .swiper-box (360rpx)        │
-│   b1.jpg / b2.jpg / b3.jpg                 │
-├─────────────────────────────────────────────┤
-│ [区域3] 功能模块网格 .module-grid           │
-│   ┌─────────┬─────────┬─────────┐          │
-│   │ 🗺️地图  │ 🍜美食  │ 🚌交通   │ 第1行   │
-│   ├─────────┼─────────┼─────────┤          │
-│   │ 💚健康  │ 🆘紧急  │ 🛒商品   │ 第2行   │
-│   └─────────┴─────────┴─────────┘          │
-├─────────────────────────────────────────────┤
-│ [区域4] 热门推荐 .hot-section               │
-│   标题 + 2×3商品卡片网格                    │
-└─────────────────────────────────────────────┘
-```
-
-### TabBar配置
-
-| 序号 | 图标 | 文字 | 页面路径 |
-|------|------|------|----------|
-| 1 | 🏠 | 首页 | `pages/index/index` |
-| 2 | ⛰️ | 景点导览 | `pages/scenic/scenic` |
-| 3 | 🛡️ | 安全防护 | `pages/safety/safety` |
-| 4 | 👤 | 我的 | `pages/user/user` |
-
-## 四、核心功能
-
-### 1. 字体大小切换
-
-**三档字体**：
-- 标准字体（normal）：默认大小
-- 较大字体（large）：整体放大1.2倍
-- 超大字体（huge）：整体放大1.5倍
-
-**切换流程**：
-```
-用户点击 → user.js setFontSize() → app.updateFontSize()
-  → globalData.fontSizeMode 更新
-  → wx.setStorageSync 持久化
-  → getCurrentPages() 广播到所有页面
-  → 各页面 setData({ fontSizeMode })
-  → CSS类名变化 → 字体变量覆盖生效
-```
-
-### 2. 收藏系统
-
-- 基于localStorage，key为`user_favorites`
-- 支持景点收藏/取消收藏
-- 跨页面实时同步
-
-### 3. 安全防护
-
-- 天气与路况卡片
-- 出行建议（推荐/避开列表）
-- 紧急操作三按钮（呼救、分享位置、紧急联系人）
-- 银发安全提示（6条分级提示）
-- 健康提醒（5条每日贴士）
-
-### 4. 地图优化
-
-- 采用fallback-first渲染策略
-- 立即显示6个本地marker，后台静默刷新
-- 解决2-10秒加载延迟问题
-
-## 五、文件结构
-
-```
-yinfa-ts/
-├── app.js              # 全局配置、字体切换广播
-├── app.json            # 页面路由、TabBar配置
-├── app.wxss            # 全局样式、CSS变量
-├── project.config.json # 项目配置、忽略规则
-├── utils/
-│   ├── api.js          # API接口封装
-│   ├── navigate.js     # 导航工具函数
-│   ├── page-base.js    # 页面基础行为
-│   ├── image-paths.js  # 图片路径管理
-│   ├── weather.js      # 天气工具
-│   └── voice.js        # 语音播报
-├── pages/
-│   ├── index/          # 首页
-│   ├── scenic/         # 景点导览
-│   ├── safety/         # 安全防护
-│   ├── user/           # 我的
-│   ├── food/           # 桂林美食
-│   ├── transport/      # 交通出行
-│   ├── map/            # 地图导览
-│   ├── health/         # 健康记录
-│   ├── emergency/      # 紧急求助
-│   ├── cart/           # 购物车
-│   ├── details/        # 商品详情
-│   └── ...
-├── components/
-│   ├── banner-view/    # 轮播组件
-│   ├── loading-view/   # 加载组件
-│   ├── error-view/     # 错误组件
-│   └── empty-view/     # 空状态组件
-└── image/
-    ├── tabbar/         # TabBar图标
-    └── ...             # 其他图片资源
-```
-
-## 六、状态管理
-
-### 热门推荐状态切换
-
-```
-loadingHot=true          → 显示骨架屏
-loadingHot=false + hotError=true          → 显示错误状态(重新加载)
-loadingHot=false + hotError=false + length=0 → 显示空状态
-loadingHot=false + hotError=false + length>0 → 显示商品网格
-```
-
-### 字体模式状态
-
-```javascript
-// page-base.js 统一注入
-fontSizeMode: app.globalData.fontSizeMode || 'normal'
-
-// onShow时刷新同步
-refreshFontMode()
-```
-
-## 七、技术亮点
-
-1. **CSS变量系统**：统一的设计token，支持主题切换和响应式字体
-2. **组件模块化**：banner-view、loading-view等可复用组件
-3. **fallback-first渲染**：地图、热门推荐等采用本地数据优先策略
-4. **状态广播机制**：字体切换实时同步所有活跃页面
-5. **错误边界处理**：图片加载失败、API请求失败均有兜底方案
-
-## 八、待优化项
-
-1. API接口404问题（后端服务未就绪）
-2. WechatSI语音插件不可用（需在微信开发者工具中配置）
-3. 部分页面数据mock需要替换为真实API
+**版本**: v1.0.0  
+**开发完成**: 2026年5月
 
 ---
 
-*文档生成时间：2026年5月9日*
-*基于50轮对话浓缩整理*
+## 技术栈
+
+| 层级 | 技术 | 说明 |
+|------|------|------|
+| 微信小程序 | 原生框架 WXML/WXSS/JS | 18个页面 + 4个组件 + 自定义TabBar |
+| Web管理后台 | Vue 3 + TypeScript + Vite + Pinia | 10个管理页面 |
+| 后端API | Express + TypeScript + Node.js | RESTful API 20+端点 |
+| 数据库 | SQL.js (SQLite/WASM) / PostgreSQL | 双模式支持，9张表 |
+| 部署 | Railway | 云端一键部署，持久化卷 |
+| CI/CD | GitHub Actions | 自动类型检查 + 构建 + 部署 |
+
+
+## 系统架构
+
+```
+┌─────────────────────────────────────────────────┐
+│                  微信小程序 (18 pages)             │
+│   WechatSI语音插件 · 高德地图SDK · 自定义TabBar    │
+└────────────────────┬────────────────────────────┘
+                     │ HTTP / REST API
+┌────────────────────▼────────────────────────────┐
+│              Express 后端 (TypeScript)            │
+│  ┌──────────┐ ┌──────────┐ ┌──────────────────┐ │
+│  │ Helmet   │ │ Zod验证   │ │ 审计日志         │ │
+│  │ CORS     │ │ RateLimit│ │ 请求日志         │ │
+│  │ Compress │ │ Body 1MB │ │ SQL参数化防注入   │ │
+│  └──────────┘ └──────────┘ └──────────────────┘ │
+└────────────────────┬────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────┐
+│   SQL.js (主) / PostgreSQL (可选)                  │
+│   9张表 · 每小时备份(24份) · 灾难恢复              │
+└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│            Vue 3 Web管理后台 (10 pages)            │
+│   Pinia状态管理 · Vue Router · Vite构建            │
+└─────────────────────────────────────────────────┘
+```
+
+
+## 页面清单（18个）
+
+### TabBar页面（4个）
+| 页面 | 路径 | 核心功能 |
+|------|------|---------|
+| 首页 | pages/index/index | 轮播图、8功能入口、热门推荐、天气 |
+| 景点导览 | pages/scenic/scenic | 7大景点、分类筛选、老人友好评分 |
+| 安全防护 | pages/safety/safety | 天气预警、路滑评估、SOS求助 |
+| 个人中心 | pages/user/user | 登录、订单、收藏、语音/字体/语言设置 |
+
+### 辅助功能 + 电商页面（14个）
+地图导览、桂林美食、交通出行、实时路况、健康记录、紧急联系人、
+智能助手、分类浏览、商品搜索、商品列表、商品详情、购物车、订单列表、地址管理
+
+
+## API接口列表（20+端点）
+
+### 商品模块
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/categories | 分类列表(5分钟缓存) |
+| GET | /api/products | 商品列表(分类/搜索/排序/分页) |
+| GET | /api/products/:id | 商品详情 |
+
+### 用户模块
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /api/users/wxlogin | 微信code登录换openid |
+| POST | /api/users/login | 登录/注册 |
+| GET | /api/users/:openid | 用户详情 |
+
+### 购物车 & 订单
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/cart | 查看购物车 |
+| POST | /api/cart | 添加购物车 |
+| PUT | /api/cart/:itemId | 修改数量 |
+| DELETE | /api/cart/:itemId | 删除商品 |
+| POST | /api/cart/clear | 清空购物车 |
+| GET | /api/orders | 订单列表 |
+| POST | /api/order/create | 创建订单 |
+| POST | /api/orders/:id/paid | 模拟支付 |
+
+### 地址 · 天气 · 联系人 · 健康 · SOS
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET/POST | /api/addresses | 地址列表/创建 |
+| GET | /api/weather | 实时天气 |
+| GET | /api/weather/forecast | 天气预报 |
+| POST | /api/emergency-contacts/create | 添加紧急联系人 |
+| GET/PUT/DELETE | /api/emergency-contacts/:id | 查看/修改/删除 |
+| GET/POST | /api/health-records | 健康记录 |
+| POST | /api/sos/alert | SOS求助 |
+
+
+## 银发友好特性
+
+- **三档字体缩放**：标准(1x) / 较大(1.2x) / 超大(1.5x)，CSS变量全局响应
+- **全程语音播报**：WechatSI插件(主) → 有道TTS(备) → 静默降级，支持4语种
+- **语言辅助切换**：中文 / English / 日本語 / 한국어
+- **老人友好评分**：综合步行距离、台阶数、休息区打分
+- **安全防护6层**：天气监测 → 路滑评估 → 出行建议 → 安全提示 → 健康提醒 → SOS求助
+
+
+## 安全体系
+
+| 层级 | 措施 |
+|------|------|
+| HTTP | Helmet安全头 + CORS + gzip压缩 |
+| 速率 | Rate Limit: 100次/15分钟/IP |
+| 参数 | Zod 7个验证Schema + 手机号正则验证 |
+| SQL | 参数化查询(prepare+bind) + 路径净化 |
+| 审计 | 审计日志(login/create_order/create_address) |
+| 防护 | SOS防重复点击锁 + GPS多级Fallback |
+
+
+## 部署架构
+
+### Railway 部署
+- **构建命令**: `cd yinfa-ts/backend/server && npm install && npx tsc`
+- **启动命令**: `cd yinfa-ts/backend/server && node dist/index.js`
+- **持久化**: 数据目录挂载 `/data` 持久化卷
+- **健康检查**: `/health` 端点
+- **优雅关停**: SIGTERM/SIGINT → stopBackupTimer() → exit(0)
+
+### 环境变量
+| 变量名 | 说明 |
+|--------|------|
+| NODE_ENV | 运行环境(production/development) |
+| PORT | 服务端口(8000) |
+| WECHAT_APPID | 微信小程序AppID |
+| WECHAT_SECRET | 微信小程序Secret |
+| WECHAT_MCHID | 微信商户号(可选) |
+| WECHAT_API_KEY | 微信支付API Key(可选) |
+| AMAP_KEY | 高德地图API Key |
+| ALLOWED_ORIGINS | CORS允许域名 |
+| LVYOU_AGI_URL | 旅游AI代理地址 |
+| LVYOU_AGI_API_KEY | 旅游AI代理Key |
+| AGENT_BASE_URL | Agent基础URL |
+| DATABASE_URL | PostgreSQL连接串(可选) |
+
+### CI/CD (GitHub Actions)
+- **触发**: main/master 分支 push
+- **Job 1**: TypeScript类型检查 → 编译构建
+- **Job 2**: 部署到Railway (有Railway CLI + RAILWAY_TOKEN Secret)
+
+### 数据库备份
+- 每小时自动备份到 `backups/shop_backup_YYYY-MM-DDTHH-MM-SS.db`
+- 保留最近24份备份
+- 灾难恢复：主库损坏时自动从最新备份恢复
+
+
+## 目录结构
+
+```
+yinfa/
+├── yinfa-ts/                      # 微信小程序主目录
+│   ├── pages/                     # 18个页面
+│   ├── components/                # 4个组件（banner/loading/error/empty）
+│   ├── utils/                     # 6个工具模块
+│   ├── custom-tab-bar/            # 自定义TabBar
+│   ├── frontend/                  # Vue 3 Web管理后台
+│   ├── backend/                   # 后端服务
+│   │   ├── .env.template          # 环境变量模板
+│   │   └── server/
+│   │       ├── package.json       # 后端依赖
+│   │       ├── tsconfig.json      # TypeScript配置
+│   │       ├── src/
+│   │       │   ├── index.ts       # 服务入口
+│   │       │   ├── database.ts    # SQL.js数据库
+│   │       │   ├── db-pg.ts       # PostgreSQL适配器
+│   │       │   ├── logger.ts      # Winston日志
+│   │       │   ├── migrate.ts     # 数据库迁移
+│   │       │   ├── middleware/    # 中间件
+│   │       │   ├── routes/        # API路由
+│   │       │   ├── types/         # TS类型定义
+│   │       │   └── migrations/    # SQL迁移脚本
+│   │       └── dist/              # 编译输出(构建产物)
+│   ├── image/                     # 图片资源
+│   ├── PROJECT_SUMMARY.md         # 本文件
+│   └── README.md                  # 项目README
+├── .github/workflows/deploy.yml   # GitHub Actions CI/CD
+├── railway.json                   # Railway部署配置
+├── Procfile                       # Heroku兼容部署
+└── README.md                      # 根目录README
+```
+
+---
+
+## 技术亮点
+
+1. **Fallback-First渲染**：地图/api/图片三重兜底，杜绝白屏
+2. **状态广播机制**：字体/语言/语音变更 → getCurrentPages()遍历 → setData同步
+3. **CSS变量系统**：统一Design Token + 硬值fallback兼容老旧设备
+4. **组件的状态机模式**：loading→error→empty→data 统一管理
+5. **多级API Fallback**：天气(Open-Meteo→高德→本地) / TTS(WechatSI→有道→静默)
+6. **SQL.js嵌入式数据库**：零配置、WASM运行、自动每小时备份
+7. **双数据库支持**：SQL.js(主) + PostgreSQL(可选)，通过适配器层切换
+
+---
+
+**2026年5月 · 桂林**

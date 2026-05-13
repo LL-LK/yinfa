@@ -59,7 +59,7 @@ var BASE = {
 
   setTabBar: function (idx) {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({ current: idx })
+      this.getTabBar().setData({ selected: idx })
     }
   },
 

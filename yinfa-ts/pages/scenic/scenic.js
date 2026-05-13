@@ -23,6 +23,9 @@ Page({
   onShow: function () {
     base.refreshFontMode.call(this)
     base.setTabBar.call(this, 1)
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 })
+    }
     if (base.needLoad.call(this)) this.loadScenicSpots()
   },
 

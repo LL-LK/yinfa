@@ -40,11 +40,27 @@ Page({
     menuItems: MENU_ITEMS
   },
 
-  onLoad: function () { this.refreshState() },
+  onLoad: function () { this._debouncedRefresh() },
 
-  onShow: function () { this.refreshState() },
+  onShow: function () {
+    this._debouncedRefresh()
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 3 })
+    }
+  },
 
-  onTabItemTap: function () { this.refreshState() },
+  onTabItemTap: function () { this._debouncedRefresh() },
+
+  _debouncedRefresh: function () {
+    if (this._refreshPending) return
+    this._refreshPending = true
+    clearTimeout(this._refreshTimer)
+    var self = this
+    this._refreshTimer = setTimeout(function() {
+      self._refreshPending = false
+      self._doRefresh()
+    }, 80)
+  },
 
   computeLangClasses: function (lang) {
     return {
@@ -55,7 +71,7 @@ Page({
     }
   },
 
-  refreshState: function () {
+  _doRefresh: function () {
     var self = this
     var g = app.globalData
     var userInfo = g.userInfo
@@ -72,23 +88,32 @@ Page({
     base.voiceEnabled = g.voiceEnabled !== false
     base.langAssistEnabled = g.langAssistEnabled || false
     base.currentLang = lang
+    base.orderCount = isLoggedIn ? (wx.getStorageSync('orderCount') || 0) : 0
+
+    self.setData(base)
 
     if (isLoggedIn) {
       var openid = userInfo.openid
-      self.fetchOrderCount(openid)
       api.getCart(openid).then(function(cart) {
-        base.orderCount = cart && cart.items ? cart.items.length : 0
-        self.setData(base)
+        var count = cart && cart.items ? cart.items.length : 0
+        wx.setStorageSync('orderCount', count)
+        self.setData({ orderCount: count })
       }).catch(function() {
-        base.orderCount = 0
-        self.setData(base)
+        self.setData({ orderCount: 0 })
       })
-    } else {
-      base.orderCount = 0
-      self.setData(base)
-    }
 
-    self.setData(base)
+      api.request({
+        url: '/orders',
+        method: 'GET',
+        data: { openid: openid },
+        showLoading: false,
+        timeout: 5000
+      }).then(function(orders) {
+        var cnt = Array.isArray(orders) ? orders.length : 0
+        wx.setStorageSync('orderCount', cnt)
+        self.setData({ orderCount: cnt })
+      }).catch(function() {})
+    }
   },
 
   fetchOrderCount: function (openid) {
@@ -128,7 +153,7 @@ Page({
           wx.setStorageSync('openid', user.openid)
           wx.showToast({ title: '登录成功', icon: 'success' })
           voice.speak('登录成功，欢迎回来')
-          self.refreshState()
+          self._debouncedRefresh()
         }).catch(function () {
           wx.hideLoading()
           wx.showToast({ title: '登录失败，请重试', icon: 'none' })
@@ -154,7 +179,7 @@ Page({
           wx.removeStorageSync('openid')
           wx.showToast({ title: '已退出登录', icon: 'none' })
           voice.speak('已退出登录')
-          self.refreshState()
+          self._debouncedRefresh()
         }
       }
     })
@@ -199,7 +224,7 @@ Page({
         if (res.confirm) {
           saveFavorites([])
           wx.showToast({ title: '已清空收藏', icon: 'none' })
-          this.refreshState && this.refreshState()
+          this._debouncedRefresh && this._debouncedRefresh()
         }
       }.bind(this)
     })

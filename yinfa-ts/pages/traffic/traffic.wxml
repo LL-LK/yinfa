@@ -1,44 +1,66 @@
 <view class="traffic font-mode-{{fontSizeMode}}">
   <view class="banner">
     <text class="banner-icon">🚦</text>
-    <text class="banner-title">实时路况</text>
-    <text class="banner-desc">桂林市区交通快报</text>
+    <view class="banner-info">
+      <text class="banner-title">实时路况</text>
+      <text class="banner-desc">桂林市区交通快报 {{lastUpdate ? '· ' + lastUpdate + '更新' : ''}}</text>
+    </view>
   </view>
 
-  <view wx:if="{{loading}}" class="loading-spinner">
-    <view class="loading-dot"></view>
-    <view class="loading-dot"></view>
-    <view class="loading-dot"></view>
+  <view wx:if="{{loading}}" class="loading-box">
+    <view class="loading-pulse"></view>
+    <text class="loading-label">正在获取路况数据...</text>
   </view>
 
-  <view wx:elif="{{error}}" class="error-state">
-    <text class="error-icon">😵</text>
-    <text class="error-text">路况加载失败</text>
-    <text class="btn-primary" bindtap="loadTraffic" style="padding:12rpx 48rpx;font-size:28rpx;min-height:64rpx;line-height:64rpx;">重新加载</text>
+  <view wx:elif="{{error}}" class="error-box">
+    <text class="error-emoji">😵</text>
+    <text class="error-label">路况加载失败</text>
+    <view class="retry-btn" bindtap="loadTraffic">重新加载</view>
   </view>
 
   <view wx:else>
     <view class="road-list">
-      <view class="road-item road-{{item.status === '畅通' ? 'smooth' : item.status === '缓行' ? 'slow' : 'congested'}}"
-            wx:for="{{roads}}" wx:key="name">
-        <text class="road-icon">{{item.status === '畅通' ? '🟢' : item.status === '缓行' ? '🟡' : '🔴'}}</text>
+      <view class="road-item road-{{item.status}}"
+            wx:for="{{roads}}" wx:key="name"
+            bindtap="goAmapApp" data-name="{{item.name}}">
+        <view class="road-status-dot {{item.status}}-dot"></view>
         <view class="road-info">
-          <text class="road-name">{{item.name}}</text>
-          <text class="road-detail">{{item.detail}}</text>
+          <view class="road-name-row">
+            <text class="road-name">{{item.name}}</text>
+            <text class="road-status-tag {{item.status}}-tag">{{item.statusText}}</text>
+          </view>
+          <text class="road-detail">{{item.from}} → {{item.to}}</text>
+          <view class="road-metrics">
+            <text class="metric">{{item.speed || '?'}} km/h</text>
+            <text class="metric-sep">|</text>
+            <text class="metric">{{item.duration || '?'}} 分钟</text>
+            <text class="metric-sep">|</text>
+            <text class="metric">{{item.distanceText}}</text>
+          </view>
+          <text class="road-extra">{{item.detail}}</text>
         </view>
-        <text class="road-status">{{item.status}}</text>
+        <text class="road-nav-arrow">导航</text>
       </view>
     </view>
 
-    <view class="tips-list">
-      <view class="tl-item" wx:for="{{tips}}" wx:key="index">
-        <text class="tl-icon">{{item.icon}}</text>
-        <text class="tl-text">{{item.text}}</text>
+    <view class="tips-section">
+      <text class="tips-title">💡 出行建议</text>
+      <view class="tips-grid">
+        <view class="tl-item" wx:for="{{tips}}" wx:key="index">
+          <text class="tl-icon">{{item.icon}}</text>
+          <text class="tl-text">{{item.text}}</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <view class="back-btn" bindtap="goBack">
-    <text>← 返回交通出行</text>
+  <view class="bottom-bar">
+    <view class="bb-btn" bindtap="loadTraffic">
+      <text class="bb-icon">🔄</text>
+      <text>刷新路况</text>
+    </view>
+    <view class="bb-btn bb-btn-primary" bindtap="goBack">
+      <text>← 返回交通出行</text>
+    </view>
   </view>
 </view>

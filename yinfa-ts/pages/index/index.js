@@ -35,7 +35,10 @@ Page({
   onShow: function () {
     base.refreshFontMode.call(this)
     base.setTabBar.call(this, 0)
-    weatherUtil.getWeather(weather => { this.setData({ weather }) })
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
+    }
+    weatherUtil.getWeather('桂林').then(weather => { this.setData({ weather }) })
   },
 
   onSwiperImgError: function (e) {
@@ -45,7 +48,7 @@ Page({
   },
 
   loadWeather: function () {
-    weatherUtil.getWeather(weather => { this.setData({ weather }) })
+    weatherUtil.getWeather('桂林').then(weather => { this.setData({ weather }) })
   },
 
   loadHotProducts: function () {
@@ -67,11 +70,11 @@ Page({
         loadingHot: false,
         hotProducts: [
           { id: 1, name: '漓江精华游船票', price: 215, image: IMG.SCENIC.b1, tag: '热门', tagColor: TAG_COLORS[0] },
-          { id: 2, name: '象鼻山公园门票', price: 55, image: IMG.SCENIC.b2, tag: '必去', tagColor: TAG_COLORS[1] },
-          { id: 3, name: '桂林米粉套餐', price: 38, image: IMG.FOOD[72], tag: '推荐', tagColor: TAG_COLORS[2] },
-          { id: 4, name: '阳朔西街一日游', price: 168, image: IMG.SCENIC.b3, tag: '特惠', tagColor: TAG_COLORS[3] },
-          { id: 5, name: '龙脊梯田观光', price: 180, image: IMG.MODULE[41], tag: '新品', tagColor: TAG_COLORS[4] },
-          { id: 6, name: '两江四湖夜游', price: 220, image: IMG.MODULE[42], tag: '经典', tagColor: TAG_COLORS[5] }
+          { id: 2, name: '象鼻山公园（免票）', price: 0, image: IMG.SCENIC.b2, tag: '免费', tagColor: TAG_COLORS[1] },
+          { id: 3, name: '桂林米粉银发套餐', price: 28, image: IMG.FOOD[72], tag: '推荐', tagColor: TAG_COLORS[2] },
+          { id: 4, name: '阳朔西街一日游', price: 158, image: IMG.SCENIC.b3, tag: '特惠', tagColor: TAG_COLORS[3] },
+          { id: 5, name: '龙脊梯田观光', price: 80, image: IMG.SCENIC.C2, tag: '新品', tagColor: TAG_COLORS[4] },
+          { id: 6, name: '两江四湖夜游', price: 210, image: IMG.SCENIC.c1, tag: '经典', tagColor: TAG_COLORS[5] }
         ],
         hotError: false
       })
@@ -86,6 +89,8 @@ Page({
   goHealth: function () { nav.go('/pages/health/health', '健康记录') },
   goEmergency: function () { nav.go('/pages/emergency/emergency', '紧急求助') },
   goCart: function () { nav.go('/pages/cart/cart', '全部商品') },
+  goTraffic: function () { nav.go('/pages/traffic/traffic', '实时路况') },
+  goAssistant: function () { nav.go('/pages/assistant/assistant', '智能助手') },
 
   goModule: function (e) {
     const { url, voice: label } = e.currentTarget.dataset
