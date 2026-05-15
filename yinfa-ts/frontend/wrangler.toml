@@ -1,0 +1,8 @@
+name = "yinfa-frontend"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+compatibility_date = "2024-01-01"
+
+[vars]
+# 前端调用的 API 地址（ Railway 后端地址，需要改成实际地址）
+API_BASE_URL = "https://your-railway-backend.railway.app/api"
