@@ -9,42 +9,14 @@ const router = createRouter({
       component: () => import('../views/Home.vue')
     },
     {
-      path: '/address',
-      name: 'Address',
-      component: () => import('../views/Address.vue'),
-      meta: { requiresAuth: true }
+      path: '/scenic',
+      name: 'Scenic',
+      component: () => import('../views/Scenic.vue')
     },
     {
-      path: '/cart',
-      name: 'Cart',
-      component: () => import('../views/Cart.vue'),
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/category',
-      name: 'Category',
-      component: () => import('../views/Category.vue')
-    },
-    {
-      path: '/details',
-      name: 'Details',
-      component: () => import('../views/Details.vue')
-    },
-    {
-      path: '/list',
-      name: 'List',
-      component: () => import('../views/List.vue')
-    },
-    {
-      path: '/orders',
-      name: 'Orders',
-      component: () => import('../views/Orders.vue'),
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/search',
-      name: 'Search',
-      component: () => import('../views/Search.vue')
+      path: '/safety',
+      name: 'Safety',
+      component: () => import('../views/Safety.vue')
     },
     {
       path: '/user',
@@ -52,9 +24,74 @@ const router = createRouter({
       component: () => import('../views/User.vue')
     },
     {
+      path: '/category',
+      name: 'Category',
+      component: () => import('../views/Category.vue')
+    },
+    {
+      path: '/cart',
+      name: 'Cart',
+      component: () => import('../views/Cart.vue')
+    },
+    {
+      path: '/details',
+      name: 'Details',
+      component: () => import('../views/Details.vue')
+    },
+    {
+      path: '/orders',
+      name: 'Orders',
+      component: () => import('../views/Orders.vue')
+    },
+    {
+      path: '/address',
+      name: 'Address',
+      component: () => import('../views/Address.vue')
+    },
+    {
       path: '/map',
       name: 'Map',
       component: () => import('../views/Map.vue')
+    },
+    {
+      path: '/list',
+      name: 'List',
+      component: () => import('../views/List.vue')
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: () => import('../views/Search.vue')
+    },
+    {
+      path: '/food',
+      name: 'Food',
+      component: () => import('../views/Food.vue')
+    },
+    {
+      path: '/transport',
+      name: 'Transport',
+      component: () => import('../views/Transport.vue')
+    },
+    {
+      path: '/assistant',
+      name: 'Assistant',
+      component: () => import('../views/Assistant.vue')
+    },
+    {
+      path: '/emergency',
+      name: 'Emergency',
+      component: () => import('../views/Emergency.vue')
+    },
+    {
+      path: '/health',
+      name: 'Health',
+      component: () => import('../views/Health.vue')
+    },
+    {
+      path: '/traffic',
+      name: 'Traffic',
+      component: () => import('../views/Traffic.vue')
     }
   ]
 })

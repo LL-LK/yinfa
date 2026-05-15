@@ -1,21 +1,30 @@
 <template>
-  <div id="app">
-    <h1>旅游小程序</h1>
-    <router-view />
+  <div :class="['app-container', 'font-mode-' + appStore.fontSizeMode]">
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+    <TabBar v-if="showTabBar" />
   </div>
 </template>
 
 <script setup lang="ts">
-// App component
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAppStore } from './stores/app'
+import TabBar from './components/TabBar.vue'
+
+const route = useRoute()
+const appStore = useAppStore()
+
+const tabRoutes = ['/', '/scenic', '/safety', '/user']
+const showTabBar = computed(() => tabRoutes.includes(route.path))
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.app-container {
+  min-height: 100vh;
+  position: relative;
 }
 </style>

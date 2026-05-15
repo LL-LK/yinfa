@@ -11,6 +11,10 @@ interface CartItem {
     image_url: string
   }
   quantity: number
+  checked?: boolean
+  image?: string
+  name?: string
+  price?: number
 }
 
 export const useCartStore = defineStore('cart', () => {

@@ -1,79 +1,81 @@
 <template>
-  <div class="search">
-    <div class="search-header">
-      <div class="search-box">
-        <input
-          v-model="keyword"
-          type="text"
-          placeholder="搜索商品、景点"
-          @keyup.enter="doSearch"
-          class="search-input"
-        />
-        <button class="search-btn" @click="doSearch">搜索</button>
+  <div :class="['search-page', 'font-mode-' + appStore.fontSizeMode, 'page-content']">
+    <div class="banner">
+      <span class="banner-icon">🔍</span>
+      <div>
+        <div class="banner-title">搜索</div>
+        <div class="banner-desc">搜索商品、景点、美食</div>
       </div>
     </div>
 
-    <div v-if="!hasSearched" class="hot-searches">
-      <div v-if="searchHistory.length > 0" class="history-section">
-        <h3>🔍 搜索历史</h3>
+    <div class="search-bar">
+      <input
+        v-model="keyword"
+        type="text"
+        class="search-input"
+        placeholder="搜索商品、景点"
+        @keyup.enter="doSearch"
+        autofocus
+      />
+      <button class="search-btn" @click="doSearch">搜索</button>
+    </div>
+
+    <div v-if="!hasSearched" class="search-body">
+      <div v-if="searchHistory.length > 0" class="section">
+        <div class="section-header">
+          <span class="section-title-sm">🔍 搜索历史</span>
+          <span class="clear-btn" @click="searchHistory = []">清空</span>
+        </div>
         <div class="tags">
-          <span v-for="(tag, idx) in searchHistory" :key="idx"
-                class="tag history-tag"
-                @click="searchTag(tag)">
-            {{ tag }}
-          </span>
-          <span class="tag clear-btn" @click="clearHistory">清除历史</span>
+          <span
+            v-for="(tag, idx) in searchHistory"
+            :key="idx"
+            class="tag"
+            @click="keyword = tag; doSearch()"
+          >{{ tag }}</span>
         </div>
       </div>
-      <h3>🔥 热门搜索</h3>
-      <div class="tags">
-        <span v-for="tag in hotTags" :key="tag"
-              class="tag"
-              @click="searchTag(tag)">
-          {{ tag }}
-        </span>
+
+      <div class="section">
+        <div class="section-title-sm">🔥 热门搜索</div>
+        <div class="tags">
+          <span v-for="tag in hotTags" :key="tag" class="tag hot" @click="keyword = tag; doSearch()">{{ tag }}</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title-sm">📋 分类搜索</div>
+        <div class="tags">
+          <span v-for="cat in categories" :key="cat.name" class="tag cat" @click="$router.push({ path: cat.path })">{{ cat.name }}</span>
+        </div>
       </div>
     </div>
 
     <div v-else class="results">
-      <div v-if="loading" class="loading">搜索中...</div>
-      <div v-else-if="results.length === 0" class="no-results">
-        <p>😔 未找到\"{{ keyword }}\"相关商品</p>
-        <p class="hint">试试这些热门商品</p>
-        <div class="recommend-list">
-          <div class="result-item" v-for="item in hotProducts" :key="item.id">
-            <router-link :to="`/details?id=${item.id}`">
-              <div class="result-image">
-                <img :src="getImageUrl(item.image_url)" :alt="item.name" loading="lazy" />
-              </div>
-              <div class="result-info">
-                <div class="result-name">{{ item.name }}</div>
-                <div class="result-price">¥{{ item.price }}</div>
-              </div>
-            </router-link>
+      <div v-if="searching" class="loading-state">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">搜索中...</div>
+      </div>
+
+      <div v-else-if="results.length === 0" class="empty-state">
+        <span class="empty-icon">🔎</span>
+        <div class="empty-title">未找到相关内容</div>
+        <div class="empty-desc">请尝试其他关键词</div>
+      </div>
+
+      <div v-else class="result-list">
+        <div
+          v-for="item in results"
+          :key="item.id"
+          class="result-item"
+          @click="$router.push(`/details?id=${item.id}`)"
+        >
+          <img :src="getImageUrl(item.image_url || item.image)" :alt="item.name" class="result-image" />
+          <div class="result-info">
+            <div class="result-name">{{ item.name }}</div>
+            <div class="result-desc" v-if="item.description">{{ item.description }}</div>
+            <div class="result-price">¥{{ item.price }}</div>
           </div>
-        </div>
-      </div>
-
-      <div class="filter-bar" v-if="results.length > 0">
-        <button :class="{ active: priceFilter === 'all' }" @click="priceFilter = 'all'">全部价格</button>
-        <button :class="{ active: priceFilter === '0-100' }" @click="priceFilter = '0-100'">0-100</button>
-        <button :class="{ active: priceFilter === '100-300' }" @click="priceFilter = '100-300'">100-300</button>
-        <button :class="{ active: priceFilter === '300+' }" @click="priceFilter = '300+'">300+</button>
-      </div>
-
-      <div class="result-list" v-if="filteredResults.length > 0">
-        <div class="result-item" v-for="item in filteredResults" :key="item.id">
-          <router-link :to="`/details?id=${item.id}`">
-            <div class="result-image">
-              <img :src="getImageUrl(item.image_url)" :alt="item.name" loading="lazy" />
-            </div>
-            <div class="result-info">
-              <div class="result-name">{{ item.name }}</div>
-              <div class="result-tag" v-if="item.category">{{ item.category.name }}</div>
-              <div class="result-price">¥{{ item.price }}</div>
-            </div>
-          </router-link>
         </div>
       </div>
     </div>
@@ -81,104 +83,104 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useAppStore } from '../stores/app'
 import api, { getImageUrl } from '../utils/api'
+
+const appStore = useAppStore()
 
 const keyword = ref('')
 const hasSearched = ref(false)
-const loading = ref(false)
+const searching = ref(false)
 const results = ref<any[]>([])
-const hotProducts = ref<any[]>([])
-const priceFilter = ref('all')
 
-const hotTags = ['漓江', '阳朔', '米粉', '龙脊梯田', '西街', '象鼻山']
+const searchHistory = ref<string[]>(JSON.parse(localStorage.getItem('searchHistory') || '[]'))
+const hotTags = ['漓江', '桂林米粉', '阳朔', '龙脊梯田', '门票', '啤酒鱼']
 
-const searchHistory = ref<string[]>(
-  JSON.parse(localStorage.getItem('searchHistory') || '[]')
-)
-
-const filteredResults = computed(() => {
-  if (priceFilter.value === 'all') return results.value
-  if (priceFilter.value === '0-100') return results.value.filter(p => p.price <= 100)
-  if (priceFilter.value === '100-300') return results.value.filter(p => p.price > 100 && p.price <= 300)
-  if (priceFilter.value === '300+') return results.value.filter(p => p.price > 300)
-  return results.value
-})
-
-function saveHistory(kw: string) {
-  const h = searchHistory.value.filter(h => h !== kw)
-  h.unshift(kw)
-  searchHistory.value = h.slice(0, 5)
-  localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value))
-}
-
-function clearHistory() {
-  searchHistory.value = []
-  localStorage.removeItem('searchHistory')
-}
+const categories = [
+  { name: '景点导览', path: '/scenic' },
+  { name: '美食推荐', path: '/food' },
+  { name: '商品分类', path: '/category' },
+  { name: '交通接送', path: '/transport' }
+]
 
 async function doSearch() {
-  const kw = keyword.value.trim()
-  if (!kw) return
-
+  if (!keyword.value.trim()) return
   hasSearched.value = true
-  loading.value = true
-  saveHistory(kw)
+  searching.value = true
+
+  const kw = keyword.value.trim()
+  if (!searchHistory.value.includes(kw)) {
+    searchHistory.value.unshift(kw)
+    if (searchHistory.value.length > 10) searchHistory.value.pop()
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value))
+  }
 
   try {
-    const res = await api.get('/products', { params: { search: kw } })
-    results.value = res.data || []
+    const res = await api.get('/products', { params: { query: kw } })
+    const data = Array.isArray(res) ? res : (res as any)?.data || []
+    results.value = Array.isArray(data) ? data : []
+
+    if (kw.includes('漓江') || kw.includes('景点')) {
+      results.value.push(
+        { id: 100, name: '漓江景区门票', price: 80, image_url: '/image/b1.jpg', description: '5A景区·百里漓江百里画廊' }
+      )
+    }
+    if (kw.includes('米粉') || kw.includes('美食') || kw.includes('桂林')) {
+      results.value.push(
+        { id: 101, name: '桂林米粉', price: 12, image_url: '/image/food-icon.webp', description: '卤水香浓·桂林人的早餐灵魂' }
+      )
+    }
   } catch (e) {
     results.value = []
   } finally {
-    loading.value = false
+    searching.value = false
   }
-}
-
-function searchTag(tag: string) {
-  keyword.value = tag
-  doSearch()
 }
 </script>
 
 <style scoped>
-.search {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f5f5f5;
-  min-height: 100vh;
+.search-page { background: var(--bg); min-height: 100vh; }
+
+.search-bar {
+  display: flex; gap: 8px; padding: 12px 16px; background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
 }
-.search-header { padding: 12px 16px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.search-box { display: flex; gap: 8px; }
-.search-input { flex: 1; padding: 10px 16px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; outline: none; }
-.search-input:focus { border-color: #ff6b00; }
-.search-btn { padding: 10px 20px; background-color: #ff6b00; color: #fff; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; }
-.search-btn:hover { opacity: 0.9; }
-.hot-searches { padding: 20px 16px; }
-.hot-searches h3 { margin: 0 0 12px 0; font-size: 16px; color: #333; }
-.history-section { margin-bottom: 20px; }
+.search-input {
+  flex: 1; padding: 10px 16px; background: var(--bg-input);
+  border-radius: var(--radius-xl); font-size: var(--font-md);
+}
+.search-btn {
+  padding: 10px 20px; background: var(--primary); color: #fff;
+  border-radius: var(--radius-xl); font-size: var(--font-md); font-weight: 600;
+}
+
+.search-body { padding: 16px; }
+.section { margin-bottom: 20px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.section-title-sm { font-size: var(--font-md); font-weight: 700; color: var(--text-primary); }
+.clear-btn { font-size: var(--font-xs); color: var(--text-hint); cursor: pointer; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag { padding: 6px 12px; background-color: #f5f5f5; border-radius: 16px; font-size: 14px; color: #666; cursor: pointer; transition: all 0.2s; }
-.tag:hover { background-color: #ff6b00; color: #fff; }
-.clear-btn { background: #fff; border: 1px solid #ddd; color: #999; font-size: 12px; }
-.clear-btn:hover { background: #eee; color: #666; }
-.results { padding: 16px; }
-.loading { text-align: center; padding: 40px 0; color: #888; }
-.no-results { text-align: center; padding: 40px 0; color: #999; font-size: 14px; }
-.hint { font-size: 12px; color: #bbb; margin: 8px 0; }
-.recommend-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-.filter-bar { display: flex; gap: 8px; margin-bottom: 12px; }
-.filter-bar button {
-  padding: 4px 12px; border: 1px solid #ddd; border-radius: 12px;
-  background: #fff; color: #666; font-size: 12px; cursor: pointer;
+.tag {
+  padding: 6px 14px; background: var(--bg-input); border-radius: var(--radius-xl);
+  font-size: var(--font-sm); color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition-fast);
 }
-.filter-bar button.active { background: #ff6b00; color: #fff; border-color: #ff6b00; }
-.result-list { display: flex; flex-direction: column; gap: 12px; }
-.result-item { background-color: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.result-item a { text-decoration: none; color: inherit; display: flex; gap: 12px; padding: 12px; }
-.result-image { width: 80px; height: 80px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background-color: #f5f5f5; }
-.result-image img { width: 100%; height: 100%; object-fit: cover; }
-.result-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.result-name { font-size: 16px; color: #333; margin-bottom: 4px; }
-.result-tag { font-size: 11px; color: #ff6b00; background: #fff3e0; display: inline-block; padding: 1px 6px; border-radius: 4px; margin-bottom: 4px; width: fit-content; }
-.result-price { font-size: 18px; font-weight: 600; color: #ff6b00; }
+.tag:hover { background: var(--border-light); }
+.tag.hot { background: rgba(255,107,53,0.08); color: var(--accent); }
+.tag.cat { background: rgba(46,139,87,0.06); color: var(--primary); }
+
+.results { padding: 0 16px 16px; }
+.result-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.result-item {
+  display: flex; gap: 12px; padding: 12px; background: var(--bg-card);
+  border-radius: var(--radius-md); cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+.result-item:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.result-image { width: 80px; height: 80px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+.result-info { flex: 1; }
+.result-name { font-size: var(--font-md); font-weight: 600; color: var(--text-primary); }
+.result-desc { font-size: var(--font-xs); color: var(--text-hint); margin: 2px 0; }
+.result-price { font-size: var(--font-lg); font-weight: 700; color: var(--accent); }
 </style>
